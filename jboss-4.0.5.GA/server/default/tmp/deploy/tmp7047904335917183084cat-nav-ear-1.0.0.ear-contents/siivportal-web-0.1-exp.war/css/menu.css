@@ -1,0 +1,38 @@
+body {
+    font-family: Verdana, Arial, helvetica, san-serif;
+    font-size: 9pt;
+    color: #000000;
+}
+
+td {
+    font-family: Verdana, Arial, helvetica, san-serif;
+    font-size: 9pt;
+    color: #000000;
+}
+
+div {
+    font-family: Verdana, Arial, helvetica, san-serif;
+    font-size: 9pt;
+    color: #000000;
+}
+
+.bordered {
+    border-color: #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.headertext {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.tableDesc {
+    background-color: #999999;
+}
+
+.tableHeader {
+    font-size: x-small;
+    font-weight: bold;
+    background-color: #CCCCCC;
+    text-align: left;
+}

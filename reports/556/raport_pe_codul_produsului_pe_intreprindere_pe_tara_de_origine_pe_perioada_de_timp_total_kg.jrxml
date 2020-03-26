@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="raport_pe_codul_produsului_pe_intreprindere_pe_tara_de_origine_pe_perioada_de_timp_total_kg"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="814"
+		 columnSpacing="0"
+		 leftMargin="14"
+		 rightMargin="14"
+		 topMargin="14"
+		 bottomMargin="14"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SAD_ITEM.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="operators" value="0;5;" />
+		<parameterDescription><![CDATA[Data inregistrare]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_ITEM.IDE_REG_DAT BETWEEN TO_DATE('01/04/2005','dd/mm/yyyy') AND TO_DATE('09/04/2009','dd/mm/yyyy') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.TAR_HSC_NB" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Cod marfa]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_ITEM.TAR_HSC_NB='1604139000' "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.GDS_ORG_CTY" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Ţara de origine]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_ITEM.GDS_ORG_CTY='QM' "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.CMP_FIS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;" />
+		<parameterDescription><![CDATA[Cod fiscal]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_ITEM.CMP_FIS_COD='1002600006034' "]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+	NOMENCLATOARE.MDGDSDSC.COD COD_PRODUS,
+	NOMENCLATOARE.MDGDSDSC.PARENT_DSC1 || '/' || NOMENCLATOARE.MDGDSDSC.PARENT_DSC2 || '/' || NOMENCLATOARE.MDGDSDSC.PARENT_DSC4 || '/' || 
+	NOMENCLATOARE.MDGDSDSC.PARENT_DSC6 ||  '/' || NOMENCLATOARE.MDGDSDSC.DSC as DESCRIERE_PRODUS,
+	SAD_ITEM.CMP_FIS_COD, without_chr1013(SAD_ITEM.CMP_FIS_NAM),
+	SUM(ST.SAD_ITEM.VIT_WGT_NET) as Netto,
+	SUM(ST.SAD_ITEM.VIT_WGT_GRS) as Brutto
+FROM
+  ST.SAD_ITEM left join ST.SAD_GENERAL_SEGMENT on ST.SAD_GENERAL_SEGMENT.INSTANCEID = ST.SAD_ITEM.INSTANCEID
+  left join ST.SAD_ATTACHED_DOCUMENTS on ST.SAD_ITEM.INSTANCEID = ST.SAD_ATTACHED_DOCUMENTS.INSTANCEID
+  join VET_MRF_CONTROL ON ST.SAD_ITEM.TAR_HSC_NB LIKE(VET_MRF_CONTROL.HS_COD||'%')
+  join NOMENCLATOARE.MDGDSDSC on NOMENCLATOARE.MDGDSDSC.COD=ST.SAD_ITEM.TAR_HSC_NB
+WHERE 1=1  
+	$P!{SAD_ITEM.IDE_REG_DAT}
+	$P!{SAD_ITEM.TAR_HSC_NB}
+	$P!{SAD_ITEM.CMP_FIS_COD}
+	$P!{SAD_ITEM.GDS_ORG_CTY}
+GROUP BY NOMENCLATOARE.MDGDSDSC.COD, NOMENCLATOARE.MDGDSDSC.PARENT_DSC1, NOMENCLATOARE.MDGDSDSC.PARENT_DSC2, 
+NOMENCLATOARE.MDGDSDSC.PARENT_DSC4, NOMENCLATOARE.MDGDSDSC.PARENT_DSC6, NOMENCLATOARE.MDGDSDSC.DSC, SAD_ITEM.CMP_FIS_COD,  without_chr1013(SAD_ITEM.CMP_FIS_NAM),
+	SAD_ITEM.GDS_ORG_CTY]]></queryString>
+
+	<field name="COD_PRODUS" class="java.lang.String"/>
+	<field name="DESCRIERE_PRODUS" class="java.lang.String"/>
+	<field name="CMP_FIS_COD" class="java.lang.String"/>
+	<field name="WITHOUT_CHR1013(SAD_ITEM.CMP_FIS_NAM)" class="java.lang.String"/>
+	<field name="NETTO" class="java.math.BigDecimal"/>
+	<field name="BRUTTO" class="java.math.BigDecimal"/>
+
+	<variable name="var_SAD_ITEM.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.IDE_REG_DAT}.length() > 0 ? 
+
+	($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+		
+		($P{SAD_ITEM.IDE_REG_DAT}.substring($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+		+ " - " +
+		$P{SAD_ITEM.IDE_REG_DAT}.substring($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19)  
+		)
+		: 
+		($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+			($P{SAD_ITEM.IDE_REG_DAT}.substring($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19))
+			:
+			($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+				"este null" 
+				:($P{SAD_ITEM.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+					"nu este null"					 
+					: $P{SAD_ITEM.IDE_REG_DAT}.substring($P{SAD_ITEM.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_ITEM.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+				)
+				
+			)
+	
+		)
+	):
+ 	"n-a fost indicat"
+)]]></initialValueExpression>
+	</variable>
+	<variable name="var_SAD_ITEM.GDS_ORG_CTY" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.GDS_ORG_CTY}.length() > 0 ? 
+
+	($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+		
+		($P{SAD_ITEM.GDS_ORG_CTY}.substring($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("TO_DATE")+19)  
+		+ " - " +
+		$P{SAD_ITEM.GDS_ORG_CTY}.substring($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().lastIndexOf("TO_DATE")+19)  
+		)
+		: 
+		($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+			($P{SAD_ITEM.GDS_ORG_CTY}.substring($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("TO_DATE")+19))
+			:
+			($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+				"este null" 
+				:($P{SAD_ITEM.GDS_ORG_CTY}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+					"nu este null"					 
+					: $P{SAD_ITEM.GDS_ORG_CTY}.substring($P{SAD_ITEM.GDS_ORG_CTY}.indexOf("'")+1,$P{SAD_ITEM.GDS_ORG_CTY}.lastIndexOf("'")).replaceAll("'","")
+				)
+				
+			)
+	
+		)
+	):
+ 	"n-a fost indicat"
+)]]></initialValueExpression>
+	</variable>
+	<variable name="var_SAD_ITEM.CMP_FIS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.CMP_FIS_COD}.length() > 0 ? 
+
+	($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+		
+		($P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+		+ " - " +
+		$P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)  
+		)
+		: 
+		($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+			($P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19))
+			:
+			($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+				"este null" 
+				:($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+					"nu este null"					 
+					: $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf("'")+1,$P{SAD_ITEM.CMP_FIS_COD}.lastIndexOf("'")).replaceAll("'","")
+				)
+				
+			)
+	
+		)
+	):
+ 	"n-a fost indicat"
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="91"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="814"
+						height="26"
+						key="staticText"/>
+					<box>					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Raport pe codul produsului pe perioadă de timp (total kg)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="152"
+						y="30"
+						width="662"
+						height="13"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="30"
+						width="149"
+						height="13"
+						key="staticText-10"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="152"
+						y="43"
+						width="662"
+						height="13"
+						key="textField-32"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{var_SAD_ITEM.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="44"
+						width="149"
+						height="13"
+						key="staticText-41"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Perioada de timp:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="57"
+						width="149"
+						height="13"
+						key="staticText-60"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[IDNO:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="152"
+						y="56"
+						width="662"
+						height="13"
+						key="textField-50"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{var_SAD_ITEM.CMP_FIS_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="71"
+						width="149"
+						height="16"
+						key="staticText-61"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Tara de origine:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="152"
+						y="71"
+						width="662"
+						height="17"
+						key="textField-51"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{var_SAD_ITEM.GDS_ORG_CTY}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="25"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="1"
+						width="814"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="814"
+						height="25"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="57"
+						y="0"
+						width="309"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-50"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Descriere marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="650"
+						y="0"
+						width="164"
+						height="12"
+						forecolor="#FFFFFF"
+						key="staticText-54"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Cantitatea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="650"
+						y="12"
+						width="88"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-55"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Netto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="738"
+						y="12"
+						width="75"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-56"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Brutto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="56"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-57"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Cod marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="423"
+						y="0"
+						width="227"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-58"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Denumire agent economic]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="366"
+						y="0"
+						width="52"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-59"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[IDNO]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="57"
+						height="10"
+						forecolor="#000000"
+						key="textField-43"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COD_PRODUS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="57"
+						y="0"
+						width="309"
+						height="10"
+						forecolor="#000000"
+						key="textField-44"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DESCRIERE_PRODUS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="650"
+						y="0"
+						width="88"
+						height="10"
+						forecolor="#000000"
+						key="textField-46"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{NETTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="738"
+						y="0"
+						width="75"
+						height="10"
+						forecolor="#000000"
+						key="textField-47"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{BRUTTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="423"
+						y="0"
+						width="227"
+						height="10"
+						forecolor="#000000"
+						key="textField-48"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{WITHOUT_CHR1013(SAD_ITEM.CMP_FIS_NAM)}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="366"
+						y="0"
+						width="57"
+						height="10"
+						forecolor="#000000"
+						key="textField-49"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.25" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CMP_FIS_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="26"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="587"
+						y="4"
+						width="188"
+						height="19"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="778"
+						y="4"
+						width="36"
+						height="19"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="814"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="6"
+						width="381"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-1"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="20"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

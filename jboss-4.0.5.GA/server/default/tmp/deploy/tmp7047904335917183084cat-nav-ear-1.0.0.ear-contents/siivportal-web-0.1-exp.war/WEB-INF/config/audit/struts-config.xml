@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+        "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<!--
+ # Module   : audit
+ # File     : WEB-INF/config/audit/struts-config.xml
+ # Creation : 07.02.2006
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+
+    <form-beans>
+
+        <form-bean name="form_AuditForm"
+                   type="ro.uti.jpf.waf.components.audit.command.AuditForm">
+        </form-bean>
+
+    </form-beans>
+
+    <global-forwards type="org.apache.struts.action.ActionForward">
+        <forward redirect="true" path="/userservice/tbl_appl_user_session.do" name="/sw" contextRelative="true"/>
+    </global-forwards>
+
+    <action-mappings>
+
+        <action path="/audit"
+                type="ro.uti.jpf.waf.components.audit.command.AuditAction"
+                name="form_AuditForm"
+                attribute="form_AuditForm"
+                className="ro.uti.waf.web.security.StrutsPermissionMapping"
+                scope="request"
+                parameter="method"
+                validate="false">
+            <forward name="showAdd" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/add_audit"/>
+            <forward name="showPrint" contextRelative="true"
+                     path="/template_print.jsp?page=web/components/audit/print_audit"/>
+            <forward name="showDelete" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/del_audit"/>
+            <forward name="showEdit" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/add_audit"/>
+            <forward name="failure" contextRelative="true"
+                     path="/template.jsp?page=error"/>
+            <forward name="default" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/list_audit"/>
+            <forward name="showList" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/list_audit"/>
+            <forward name="showRecord" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/view_audit"/>
+            <forward name="showXmlDesc" contextRelative="true"
+                     path="/template.jsp?page=web/components/audit/show_xml_desc"/>
+        </action>
+
+    </action-mappings>
+
+    <message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property property="pathnames"
+                      value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/audit/validation.xml"/>
+    </plug-in>
+
+</struts-config>

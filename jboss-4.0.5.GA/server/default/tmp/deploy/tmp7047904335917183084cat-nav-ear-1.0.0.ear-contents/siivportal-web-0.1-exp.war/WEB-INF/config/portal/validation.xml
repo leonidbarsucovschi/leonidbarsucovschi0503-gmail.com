@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE form-validation PUBLIC
+		"-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
+		"http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
+
+<!--
+ # Module   : portal
+ # File     : WEB-INF/portal/validation.xml
+ # Creation : 
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<form-validation>
+	<formset>
+		<!-- FORMA  stire -->
+		<form name="form_StireForm">
+			<field property="values.titlu" depends="required,maxlength,mask">
+				<arg position="0" bundle="stire" key="stire.prompt.link_titlu"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>150</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[\w\s\.\?!"\,-:%]*$</var-value>
+				</var>
+			</field>
+			<field property="values.obs_scurta" depends="maxlength">
+				<arg position="0" bundle="stire"
+					 key="stire.prompt.link_obs_scurta"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<field property="values.continut" depends="required">
+				<arg position="0" bundle="stire"
+					 key="stire.prompt.link_continut"/>
+			</field>
+			<field property="values.data_expirariiString"
+				   depends="required,date">
+				<arg position="0" bundle="stire"
+					 key="stire.prompt.data_expirarii"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>7</var-value>
+				</var>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+			<field property="values.tip_stire" depends="required,integer">
+				<arg position="0" bundle="stire" key="stire.prompt.tip_stire"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.id_limba" depends="required,integer">
+				<arg position="0" bundle="stire" key="stire.prompt.nom_limba"/>
+			</field>
+			<field property="values.pozitie_afisare"
+				   depends="maxlength,integer">
+				<arg position="0" bundle="stire"
+					 key="stire.prompt.pozitie_afisare"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>3</var-value>
+				</var>
+			</field>
+		</form>
+
+        <!-- FORMA  mesaj_site -->
+		<form name="form_MesajSiteForm">
+
+			<field property="values.nume" depends="maxlength,required">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.nume"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+
+			<field property="values.prenume" depends="maxlength,required">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.prenume"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+
+			<field property="values.email_utilizator"
+				   depends="maxlength,required,email">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.email_utilizator"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+
+			<field property="values.titlu_mesaj" depends="maxlength,required">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.titlu_mesaj"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>300</var-value>
+				</var>
+			</field>
+
+			<field property="values.continut_mesaj"
+				   depends="maxlength,required">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.continut_mesaj"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>1000</var-value>
+				</var>
+			</field>
+
+
+		</form>
+
+		<form name="form_MesajFwForm">
+			<field property="lista_adrese_forward"
+				   depends="maxlength,required,mask">
+				<msg name="maxlength" bundle="mesajsite"
+					 key="mesaj_site.maxlength.lista_adrese_forward"/>
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.lista_adrese_forward"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>[A-Za-z0-9._-]+@[^.]+\..+</var-value>
+				</var>
+			</field>
+
+			<field property="forward_text" depends="maxlength,required">
+				<msg name="maxlength" bundle="mesajsite"
+					 key="mesaj_site.maxlength.forward_text"/>
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.forward_text"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+			</field>
+		</form>
+
+        <form name="form_MesajArForm">
+			<field property="archive_text" depends="maxlength,required">
+				<msg name="maxlength" bundle="mesajsite"
+					 key="mesaj_site.maxlength.archive_text"/>
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.archive_text"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+			</field>
+		</form>
+
+        <form name="form_MesajReForm">
+			<field property="reply_text" depends="maxlength,required">
+				<msg name="maxlength" bundle="mesajsite"
+					 key="mesaj_site.maxlength.reply_text"/>
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.reply_text"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+			</field>
+		</form>
+
+        <!-- FORMA  mesaj cautare -->
+		<form name="form_MesajSearchForm">
+			<field property="data_start" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_start_introducere"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+			<field property="data_end" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_end_introducere"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+		</form>
+
+        <!-- FORMA  mesaj arh cautare -->
+		<form name="form_MesajSearchArhForm">
+			<field property="data_start" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_start_introducere"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+			<field property="data_end" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_end_introducere"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+			<field property="data_startArh" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_end_arhivare"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+			<field property="data_endArh" depends="date">
+				<arg position="0" bundle="mesajsite"
+					 key="mesaj_site.prompt.data_end_arhivare"/>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+		</form>
+	</formset>
+</form-validation>
+

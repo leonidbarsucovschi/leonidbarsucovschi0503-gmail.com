@@ -1,0 +1,193 @@
+TABLE.report_nofixed {
+	width:100%;
+	vertical-align:top;
+	font-family:Arial, Helvetica, sans-serif;
+    color:#444444;
+	font-size:11px;
+	background-color: #ffffff;
+}
+
+TABLE.report_nofixed TD {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#696969;
+	padding-left:2px;
+	padding-right:2px;
+}
+
+TABLE.report_nofixed TH {
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+TABLE.report_nofixed TR.even {
+	background-color:#F5F5F5;
+	FONT-FAMILY:Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: normal;
+	color:#444444;
+}
+
+TABLE.report_nofixed TR.odd {
+	background-color:#FFFFFF;
+	FONT-FAMILY:Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: normal;
+	color:#444444;
+}
+
+TABLE.report_nofixed TR.selected {
+	FONT-SIZE: 11px;
+	COLOR: #696969;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #F9F7F4;
+}
+
+TABLE.report {
+	width:100%;
+	vertical-align:top;
+	/*align: left;*/
+	font-family:Arial, Helvetica, sans-serif;
+	color:#444444;
+	font-size:11px;
+	background-color: #ffffff;
+}
+.table-th {
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+TABLE.pagebannertable {
+	MARGIN: 10px 0 0 3px;
+	background-color:#ffffff;
+}
+
+TABLE.report TD {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#696969;
+	padding-left:2px;
+	padding-right:2px;
+}
+
+TABLE.report TH {
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+.odd {
+    background-color:#FFFFFF;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+.even {
+    background-color:#F5F5F5;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+TABLE.report TR.even {
+	background-color:#F5F5F5;
+	FONT-FAMILY:Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: normal;
+	color:#444444;
+}
+
+TABLE.report TR.odd {
+	background-color:#FFFFFF;
+	FONT-FAMILY:Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: normal;
+	color:#444444;
+}
+
+TABLE.report TR.selected {
+	FONT-SIZE: 11px;
+	COLOR: #696969;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #F9F7F4;
+}
+
+/** width: 100%;   display: block;*/
+table.report th.sorted a, th.sortable a {
+    background-position: right;
+    background-repeat:no-repeat;
+    display: block;
+}
+
+TABLE.report TH.sortable A {
+	BACKGROUND-IMAGE: url(../images/navigator/arrow_off.png);
+	color:#444444;
+}
+
+TABLE.report TH.sortable A:hover {
+	BACKGROUND-IMAGE: url(../images/navigator/arrow_off.png);
+	color:#000000;
+}
+
+TABLE.report TH.order1 A {
+	BACKGROUND-IMAGE: url(../images/navigator/arrow_down.png)
+}
+
+TABLE.report TH.order2 A {
+	BACKGROUND-IMAGE: url(../images/navigator/arrow_up.png)
+}
+
+SPAN.pagebanner {
+	WIDTH: 100%;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#000000;
+	vertical-align:middle;
+	background-color:#ffffff;
+}
+
+SPAN.pagelinks {
+	WIDTH: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#000000;
+	vertical-align:middle;
+	background-color:#ffffff;
+}
+
+.tablink{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#0066CC;
+    text-decoration:none;
+}
+.tablink:hover{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#444444;
+    text-decoration:underline;
+    background-color:#FFF9EF
+}
+
+.selectboxTag {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
+
+.aTag {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#000000;
+    text-decoration:underline;
+}

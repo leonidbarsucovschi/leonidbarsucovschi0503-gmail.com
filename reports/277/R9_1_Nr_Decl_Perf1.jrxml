@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="R9_1_Nr_Decl_Perf1"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="532"
+		 pageHeight="842"
+		 columnWidth="532"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[Perioada de inregistrare]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_GENERAL_SEGMENT.IDE_REG_DAT BETWEEN TO_DATE('01/12/2005','dd/mm/yyyy') AND TO_DATE('31/12/2005','dd/mm/yyyy') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UNCTYTAB.CTY_COD" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[Tara]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UNCUOTAB.CUO_COD" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_DataI" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["01/12/2005"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_DataF" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["31/12/2005"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select t1.* from 
+(select Tara_Cod,Tara_Nume,
+    Impt,
+    Expt,
+    Tranz,
+    Total,
+    sum(Impt) over () Impt_Tot,
+    sum(Expt) over () Expt_Tot,
+    sum(Tranz) over () Tranz_Tot,
+    sum(Total) over () Total_Tot,
+    IDE_CUO_COD,
+    IDE_CUO_NAM,
+    luna,
+    luna_nr,
+    anul_nr
+from (
+select Tara_Cod,Tara_Nume,
+sum(Impt) Impt,
+sum(Expt) Expt,
+sum(Tranz) Tranz,
+sum(Tranz) + sum(Impt) + sum(Expt) Total,
+IDE_CUO_COD,
+IDE_CUO_NAM,
+luna,
+luna_nr,
+anul_nr
+From
+(
+select
+--decode(SAD_GENERAL_SEGMENT.IDE_TYP_SAD,'EX','Export','IM','Import') Tip_Operatie,
+decode(IDE_TYP_SAD,'EX',GEN_CTY_DES_COD,'IM',GEN_CTY_EPT_COD,null) Tara_Cod,
+decode(IDE_TYP_SAD,'EX',GEN_CTY_DES_NAM,'IM',GEN_CTY_EPT_NAM,null) Tara_Nume, 
+decode(SAD_GENERAL_SEGMENT.IDE_TYP_SAD,'IM',count (*),0) Impt, 
+decode(SAD_GENERAL_SEGMENT.IDE_TYP_SAD,'EX',count (*),0) Expt, 
+0 Tranz,
+substr(SAD_GENERAL_SEGMENT.IDE_CUO_COD,1,2)||'00' IDE_CUO_COD, --cod birou vamal
+(select UNCUOTAB.CUO_NAM FROM UNCUOTAB WHERE UNCUOTAB.CUO_COD = substr(SAD_GENERAL_SEGMENT.IDE_CUO_COD,1,2)||'00') IDE_CUO_NAM,
+decode(to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),1,'Ianuarie',
+                                                                2,'Februarie',
+                                                                3,'Martie',
+                                                                4,'Aprilie',
+                                                                5,'Mai',
+                                                                6,'Iunie',
+                                                                7,'Iulie',
+                                                                8,'August',
+                                                                9,'Septembrie',
+                                                                10,'Octombrie',
+                                                                11,'Noiembrie',
+                                                                12,'Decembrie') luna,
+to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'MM')) luna_nr,
+to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'RRRR')) anul_nr
+from SAD_GENERAL_SEGMENT
+where 1=1
+AND SAD_GENERAL_SEGMENT.STATUS IN ('Assessed','Paid')
+AND SAD_GENERAL_SEGMENT.IDE_REG_DAT BETWEEN TO_DATE($P{P_DataI},'dd/mm/yyyy') AND TO_DATE($P{P_DataF},'dd/mm/yyyy')
+group by
+    decode(IDE_TYP_SAD,'EX',GEN_CTY_DES_COD,'IM',GEN_CTY_EPT_COD,null),
+    decode(IDE_TYP_SAD,'EX',GEN_CTY_DES_NAM,'IM',GEN_CTY_EPT_NAM,null), 
+    SAD_GENERAL_SEGMENT.IDE_CUO_COD, 
+    SAD_GENERAL_SEGMENT.IDE_CUO_COD||' '||SAD_GENERAL_SEGMENT.IDE_CUO_NAM, 
+    SAD_GENERAL_SEGMENT.IDE_TYP_SAD,
+    to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'RRRR')),
+    to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),
+decode(to_number(to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),1,'Ianuarie',
+                                                                2,'Februarie',
+                                                                3,'Martie',
+                                                                4,'Aprilie',
+                                                                5,'Mai',
+                                                                6,'Iunie',
+                                                                7,'Iulie',
+                                                                8,'August',
+                                                                9,'Septembrie',
+                                                                10,'Octombrie',
+                                                                11,'Noiembrie',
+                                                                12,'Decembrie')
+union all
+select 
+--'Tranzit' Tip_Operatie,
+T1_GENERAL_SEGMENT.GEN_CTY_DES_COD Tara_cod,
+T1_GENERAL_SEGMENT.GEN_CTY_DES_NAM Tara_Nume,
+0 Impt,
+0 Expt,
+count(*) Tranz,
+substr(T1_GENERAL_SEGMENT.IDE_CUO_DPA_COD,1,2)||'00' IDE_CUO_COD, --cod birou vamal
+(select UNCUOTAB.CUO_NAM FROM UNCUOTAB WHERE UNCUOTAB.CUO_COD = substr(T1_GENERAL_SEGMENT.IDE_CUO_DPA_COD,1,2)||'00') IDE_CUO_NAM,
+--T1_GENERAL_SEGMENT.IDE_CUO_COD||' '||T1_GENERAL_SEGMENT.IDE_CUO_NAM CUO,
+decode(to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),1,'Ianuarie',
+                                                                2,'Februarie',
+                                                                3,'Martie',
+                                                                4,'Aprilie',
+                                                                5,'Mai',
+                                                                6,'Iunie',
+                                                                7,'Iulie',
+                                                                8,'August',
+                                                                9,'Septembrie',
+                                                                10,'Octombrie',
+                                                                11,'Noiembrie',
+                                                                12,'Decembrie') luna,
+to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'MM')) luna_nr,
+to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'RRRR')) anul_nr
+from T1_GENERAL_SEGMENT
+where 1=1
+--AND T1_GENERAL_SEGMENT.STATUS IN ('Assessed','Paid')
+and T1_GENERAL_SEGMENT.GEN_CTY_EPT_COD <> 'MD'
+and T1_GENERAL_SEGMENT.GEN_CTY_DES_COD <> 'MD'
+AND T1_GENERAL_SEGMENT.IDE_REG_DAT BETWEEN TO_DATE($P{P_DataI},'dd/mm/yyyy') AND TO_DATE($P{P_DataF},'dd/mm/yyyy')
+group by
+T1_GENERAL_SEGMENT.GEN_CTY_DES_COD,
+T1_GENERAL_SEGMENT.GEN_CTY_DES_NAM,
+T1_GENERAL_SEGMENT.IDE_CUO_DPA_COD,
+T1_GENERAL_SEGMENT.IDE_CUO_DPA_NAM,
+to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'RRRR')),
+to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),
+decode(to_number(to_char(T1_GENERAL_SEGMENT.IDE_REG_DAT,'MM')),1,'Ianuarie',
+                                                                2,'Februarie',
+                                                                3,'Martie',
+                                                                4,'Aprilie',
+                                                                5,'Mai',
+                                                                6,'Iunie',
+                                                                7,'Iulie',
+                                                                8,'August',
+                                                                9,'Septembrie',
+                                                                10,'Octombrie',
+                                                                11,'Noiembrie',
+                                                                12,'Decembrie')  
+)
+group by
+Tara_Cod,Tara_Nume, 
+IDE_CUO_COD,
+IDE_CUO_NAM,
+anul_nr,
+luna_nr,
+luna)
+) t1, UNCTYTAB,UNCUOTAB
+where t1.Tara_Cod =  UNCTYTAB.CTY_COD
+and t1.IDE_CUO_COD = UNCUOTAB.CUO_COD
+$P!{UNCTYTAB.CTY_COD} -- pentru codul tarii
+$P!{UNCUOTAB.CUO_COD}]]></queryString>
+
+	<field name="TARA_COD" class="java.lang.String"/>
+	<field name="TARA_NUME" class="java.lang.String"/>
+	<field name="IMPT" class="java.math.BigDecimal"/>
+	<field name="EXPT" class="java.math.BigDecimal"/>
+	<field name="TRANZ" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<field name="IMPT_TOT" class="java.math.BigDecimal"/>
+	<field name="EXPT_TOT" class="java.math.BigDecimal"/>
+	<field name="TRANZ_TOT" class="java.math.BigDecimal"/>
+	<field name="TOTAL_TOT" class="java.math.BigDecimal"/>
+	<field name="IDE_CUO_COD" class="java.lang.String"/>
+	<field name="IDE_CUO_NAM" class="java.lang.String"/>
+	<field name="LUNA" class="java.lang.String"/>
+	<field name="LUNA_NR" class="java.math.BigDecimal"/>
+	<field name="ANUL_NR" class="java.math.BigDecimal"/>
+
+	<variable name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="Sum_Impt_CUO_COD" class="java.math.BigDecimal" resetType="Group" resetGroup="IDE_CUO_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPT}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Expt_CUO_COD" class="java.math.BigDecimal" resetType="Group" resetGroup="IDE_CUO_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{EXPT}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Tranz_CUO_COD" class="java.math.BigDecimal" resetType="Group" resetGroup="IDE_CUO_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{TRANZ}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Impt_RM" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPT_TOT}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Impt_Tara" class="java.math.BigDecimal" resetType="Group" resetGroup="TARA_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPT}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Expt_Tara" class="java.math.BigDecimal" resetType="Group" resetGroup="TARA_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{EXPT}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Tranz_Tara" class="java.math.BigDecimal" resetType="Group" resetGroup="TARA_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{TRANZ}]]></variableExpression>
+	</variable>
+	<variable name="UNCTYTAB.CTY_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{UNCTYTAB.CTY_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNCTYTAB.CTY_COD}.indexOf("'") >= 0 ?
+            $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("'")+1,$P{UNCTYTAB.CTY_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNCTYTAB.CTY_COD}.indexOf(">=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("<=") > 0 ?
+              $P{UNCTYTAB.CTY_COD}.substring( $P{UNCTYTAB.CTY_COD}.indexOf(">=")+2, $P{UNCTYTAB.CTY_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.lastIndexOf("<=")+2, $P{UNCTYTAB.CTY_COD}.length() )
+              : ( $P{UNCTYTAB.CTY_COD}.indexOf(">") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("<") < 0 ?
+                $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf(">="),$P{UNCTYTAB.CTY_COD}.length() )
+                : ( $P{UNCTYTAB.CTY_COD}.indexOf("<") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf(">") < 0 ?
+                  $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("<="),$P{UNCTYTAB.CTY_COD}.length() ) 
+                  : ( $P{UNCTYTAB.CTY_COD}.indexOf(">") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") < 0 ?
+                    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf(">"),$P{UNCTYTAB.CTY_COD}.length() )
+                    : ($P{UNCTYTAB.CTY_COD}.indexOf("<") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") < 0 ?
+                      $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("<"), $P{UNCTYTAB.CTY_COD}.length() )
+                      : ( $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 ?
+                        $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("=")+1, $P{UNCTYTAB.CTY_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{UNCTYTAB.CTY_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNCTYTAB.CTY_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNCTYTAB.CTY_COD}.indexOf("'") >= 0 ?
+            $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("'")+1,$P{UNCTYTAB.CTY_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNCTYTAB.CTY_COD}.indexOf(">=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("<=") > 0 ?
+              $P{UNCTYTAB.CTY_COD}.substring( $P{UNCTYTAB.CTY_COD}.indexOf(">=")+2, $P{UNCTYTAB.CTY_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.lastIndexOf("<=")+2, $P{UNCTYTAB.CTY_COD}.length() )
+              : ( $P{UNCTYTAB.CTY_COD}.indexOf(">") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("<") < 0 ?
+                $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf(">="),$P{UNCTYTAB.CTY_COD}.length() )
+                : ( $P{UNCTYTAB.CTY_COD}.indexOf("<") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf(">") < 0 ?
+                  $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("<="),$P{UNCTYTAB.CTY_COD}.length() ) 
+                  : ( $P{UNCTYTAB.CTY_COD}.indexOf(">") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") < 0 ?
+                    $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf(">"),$P{UNCTYTAB.CTY_COD}.length() )
+                    : ($P{UNCTYTAB.CTY_COD}.indexOf("<") > 0 && $P{UNCTYTAB.CTY_COD}.indexOf("=") < 0 ?
+                      $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("<"), $P{UNCTYTAB.CTY_COD}.length() )
+                      : ( $P{UNCTYTAB.CTY_COD}.indexOf("=") > 0 ?
+                        $P{UNCTYTAB.CTY_COD}.substring($P{UNCTYTAB.CTY_COD}.indexOf("=")+1, $P{UNCTYTAB.CTY_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_TOTAL_1" class="java.math.BigDecimal" resetType="Group" resetGroup="IDE_CUO_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOTAL_2" class="java.math.BigDecimal" resetType="Group" resetGroup="TARA_COD" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<variable name="SUM_IMPT_1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPT}]]></variableExpression>
+	</variable>
+	<variable name="SUM_EXPT_1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{EXPT}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TRANZ_1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{TRANZ}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TOTAL_3" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+
+		<group  name="TARA_COD" >
+			<groupExpression><![CDATA[$F{TARA_COD}]]></groupExpression>
+			<groupHeader>
+			<band height="17"  isSplitAllowed="true" >
+				<rectangle radius="0" >
+					<reportElement
+						x="4"
+						y="0"
+						width="528"
+						height="15"
+						forecolor="#8080FF"
+						backcolor="#FFFFFF"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="4"
+						y="1"
+						width="24"
+						height="14"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Tara:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="30"
+						y="0"
+						width="417"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TARA_NUME}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="15"
+						width="532"
+						height="2"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="0"
+						width="220"
+						height="15"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Total "+ $F{TARA_NUME}+ ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="258"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Impt_Tara}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Expt_Tara}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="390"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Tranz_Tara}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="456"
+						y="0"
+						width="76"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_TOTAL_2}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="14"
+						width="532"
+						height="2"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="IDE_CUO_COD" >
+			<groupExpression><![CDATA[$F{IDE_CUO_COD}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="15"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="0"
+						width="220"
+						height="15"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Total birou vamal "+ $F{IDE_CUO_NAM}+ ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="258"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Impt_CUO_COD}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Expt_CUO_COD}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="390"
+						y="0"
+						width="64"
+						height="15"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Sum_Tranz_CUO_COD}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="456"
+						y="0"
+						width="76"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_TOTAL_1}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="13"
+						width="532"
+						height="2"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="ANUL_NR" >
+			<groupExpression><![CDATA[$F{ANUL_NR}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="LUNA_NR" >
+			<groupExpression><![CDATA[$F{LUNA_NR}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="24"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="532"
+						height="17"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="2"
+						y="0"
+						width="141"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Birou vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="145"
+						y="0"
+						width="111"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Luna]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="258"
+						y="0"
+						width="64"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Import]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="324"
+						y="0"
+						width="64"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Export]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="390"
+						y="0"
+						width="64"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Tranzit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="456"
+						y="0"
+						width="76"
+						height="17"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Total]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="0"
+						width="141"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{IDE_CUO_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="145"
+						y="0"
+						width="111"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{LUNA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="258"
+						y="0"
+						width="64"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{IMPT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="0"
+						width="64"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{EXPT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="390"
+						y="0"
+						width="64"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TRANZ}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="456"
+						y="0"
+						width="76"
+						height="15"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TOTAL}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="14"
+						width="532"
+						height="2"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="30"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="258"
+						y="0"
+						width="64"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_IMPT_1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="0"
+						width="64"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_EXPT_1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="456"
+						y="0"
+						width="76"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_TOTAL_3}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="2"
+						y="1"
+						width="127"
+						height="14"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[TOTAL GENERAL:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="390"
+						y="0"
+						width="64"
+						height="15"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_TRANZ_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</summary>
+</jasperReport>

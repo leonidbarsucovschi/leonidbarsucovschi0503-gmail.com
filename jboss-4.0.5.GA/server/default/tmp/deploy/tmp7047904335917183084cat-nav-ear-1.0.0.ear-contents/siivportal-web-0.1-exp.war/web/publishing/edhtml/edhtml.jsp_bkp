@@ -1,0 +1,125 @@
+<%@ page contentType="text/html; charset=iso-8859-2" %>
+<%@ page language="java" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+
+<!--java script -->
+
+<script type="text/javascript">
+  _editor_url = "/apmc/htmlarea";
+  _editor_lang = "en";
+ </script>
+ <script type="text/javascript" src="/apmc/htmlarea/htmlarea.js"></script>
+ <script type="text/javascript" src="/apmc/htmlarea/config-uti.js"></script>
+ <script type="text/javascript">
+  HTMLArea.loadPlugin("TableOperations");
+  HTMLArea.loadPlugin("CSS");
+  var editor = null;
+  function initEditor() {
+     editor = new HTMLArea("ta",getConfig());
+     editor.registerPlugin(TableOperations);
+     editor.registerPlugin(CSS, {
+          combos : [
+            { label: "CSS",
+                         // menu text       // CSS class
+              options: { "None"           : "",
+                         "Titlul pagina" : "page-title-header",
+                         "Text" : "news-table-content",
+                         "Text boldat" : "smallbodybold",
+                         "Text portlet" : "smallbodylite"
+                       },
+              context: ""
+            }
+          ]
+     });
+     editor.generate();
+     return false;
+  }
+ </script>
+ <script type="text/javascript" src="/apmc/script/edhtml.js"></script>
+  <table width="100%" border="0" cellpadding="0" cellspacing="1">
+    <tr class="page-title-header">
+      <td width="100%" valign="top" class="bottom" align="left">
+        <!-- Titlul ferestrei pentru vizualizare. -->
+        <bean:message bundle="edhtml" key="edhtml.title"/>
+        <!-- END Sectiune de Titlu pagina. -->
+      </td>
+    </tr>
+    <tr>
+        <td>
+        &nbsp;
+        </td>
+    </tr>
+  </table>
+ <form onreset="javascript:initEditor();" >
+  <table width="100%">
+   <tr>
+     <td colspan="3" align="left" width="100%" class="text-label-bkwhite" >
+      <bean:message  bundle="edhtml" key="edhtml.label.directoare" />:
+      <select class="text-label-bkwhite"  id="dir" onChange="loadXMLDoc('/apmc/publishing/edit_static_content.do?method=load&root_dir='+this.value,'load')">
+        <option value=""><bean:message key="select.prompt" bundle="app" /></option>
+        <logic:iterate id="listItem" name="listaDirStatice">
+          <option value='<bean:write name="listItem"/>'><bean:write name="listItem"/></option>
+        </logic:iterate>
+      </select>
+     </td>
+   </tr>
+   <tr>
+    <td align="left" width="33%" class="text-label-bkwhite">
+     <bean:message bundle="edhtml" key="edhtml.label.pagini"/>:<br/>
+     <select id="html" size="5" style="width:100%">
+     </select>
+     <br/>
+<%-- <button  class="btn-generic"  onclick="javascript:incarcaPagHtml();">
+        <bean:message bundle="edhtml" key="edhtml.buton.edit" />
+    </button>&nbsp; --%>
+    <input type="button" class="btn-generic"  value='<bean:message bundle="edhtml" key="edhtml.buton.edit"/>' onclick="javascript:incarcaPagHtml();"/>&nbsp;
+
+<%--<button class="btn-generic" onclick="javascript:inserareLinkHtml();">
+        <bean:message bundle="edhtml" key="edhtml.buton.insert_link" />
+    </button>&nbsp;--%>
+   <input type="button" class="btn-generic" value='<bean:message bundle="edhtml" key="edhtml.buton.insert_link" />' onclick="javascript:inserareLinkHtml();"/>&nbsp;
+
+<%--    <button class="btn-generic" onclick="javascript:nouaPagina();">
+        <bean:message bundle="edhtml" key="edhtml.buton.pagina_noua" />
+    </button>&nbsp; --%>
+    <input type="button" class="btn-generic" name="new" value='<bean:message bundle="edhtml" key="edhtml.buton.pagina_noua" />' onclick="javascript:nouaPagina();"/>&nbsp;
+    </td>
+    <td align="left" width="33%" class="text-label-bkwhite">
+     <bean:message bundle="edhtml" key="edhtml.label.fisiere_img"/>:<br/>
+      <select id="img" size="5" style="width:100%">
+      </select>
+     <br/>
+     <%--<button class="btn-generic" onclick="javascript:inserareImagine();">
+        <bean:message bundle="edhtml" key="edhtml.buton.insert_img" />
+    </button>--%>
+    <input type="button" class="btn-generic" value='<bean:message bundle="edhtml" key="edhtml.buton.insert_img" />' onclick="javascript:inserareImagine();"/>
+    </td>
+    <td align="left" width="33%" class="text-label-bkwhite">
+     <bean:message bundle="edhtml" key="edhtml.label.fisiere_download"/>:<br/>
+      <select id="dld" size="5" style="width:100%">
+      </select>
+     <br/>
+<%-- <button class="btn-generic" onclick="javascript:inserareLinkDld();">
+        <bean:message bundle="edhtml" key="edhtml.buton.insert_link" />
+    </button>--%>
+   <input type="button" class="btn-generic" value='<bean:message bundle="edhtml" key="edhtml.buton.insert_link" />' onclick="javascript:inserareLinkDld();"/>
+    </td>
+   </tr>
+   <tr>
+    <td colspan="3" width="100%" bgcolor="black" align="center" id="tdta">
+     <textarea id="ta" name="ta" style="width:100%" rows="20" cols="80">
+    </textarea>
+<%--<button class="btn-generic" onclick="javascript:salvare();" name="save">
+        <bean:message bundle="edhtml" key="edhtml.buton.salveaza" />
+    </button>--%>
+    <input type="button" class="btn-generic" name="save" value='<bean:message bundle="edhtml" key="edhtml.buton.salveaza" />' onclick="javascript:salvare();"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="button" class="btn-generic" name="save_as" value='<bean:message bundle="edhtml" key="edhtml.buton.salveaza_as" />' onclick="javascript:salvare_as();"/>
+    </td>
+   </tr>
+  </table>
+  </form>
+ </body>
+</html>

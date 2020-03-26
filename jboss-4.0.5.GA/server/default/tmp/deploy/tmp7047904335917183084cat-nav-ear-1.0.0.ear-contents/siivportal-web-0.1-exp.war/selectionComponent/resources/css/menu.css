@@ -1,0 +1,45 @@
+body {  font-family: Verdana, Arial, helvetica, san-serif; font-size: 9pt; color: #000000; }
+
+td {  font-family: Verdana, Arial, helvetica, san-serif; font-size: 9pt; color: #000000;}
+
+div {  font-family: Verdana, Arial, helvetica, san-serif; font-size: 9pt; color: #000000;}
+
+.bordered {border-color: #E8E8E8; border-style: solid; border-width: 1px;}
+
+.headertext {font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+.usermessage {
+  font-family: Verdana, Arial, Helvetica, sans-serif; font-style:italic;
+  color: red; background-color: white;
+  text-align: left;
+}
+
+<!-- tab menu on the top of page{  }
+a:hover.tabmenusel {text-decoration: none; color: darkgreen; font-family: Verdana, Arial, helvetica, san-serif; font-weight: bold;}
+
+a.tabmenusel {text-decoration: none; color: blue; font-family: Verdana, Arial, helvetica, san-serif; font-weight: bold;}
+
+a:hover.tabmenu {text-decoration: none; color: darkgreen; font-family: Verdana, Arial, helvetica, san-serif; font-weight: bold;}
+
+.tabmenu {text-decoration: none; color: white; font-family: Verdana, Arial, helvetica, san-serif; font-weight: bold;}
+
+<!-- link menu for the active context{  }
+a:link.linkmenu {color: blue; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+
+a:visited.linkmenu {color: blue; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+
+a:hover.linkmenu {color: darkgreen; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+
+a:active.linkmenu {color: darkgreen; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+
+.linkmenu { font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+
+
+<!-- table for descriptions etc.{  }
+.tableDesc { background-color: #E1DBD1; }
+
+.tableHeader { font-size: x-small; font-weight: bold; background-color: #E8E8E8; text-align: left; }
+
+.tableDescHeader { font-size: x-small; font-weight: bold; background-color: #E1DBD1; text-align: left; }
+
+.tableDescData { font-size: x-small; font-weight: normal; background-color: white; text-align: left; }

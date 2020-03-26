@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasources>
+
+    <local-tx-datasource>
+        <jndi-name>ds/oracle/siiv</jndi-name>
+        <connection-url>jdbc:oracle:thin:@10.0.2.150:1521:asywdb</connection-url>
+        <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+        <user-name>portalsiiv</user-name>
+        <password>portalsiiv</password>    
+        <exception-sorter-class-name>
+            org.jboss.resource.adapter.jdbc.vendor.OracleExceptionSorter
+        </exception-sorter-class-name>
+    </local-tx-datasource>
+    
+    <local-tx-datasource>
+        <jndi-name>ds/oracle/siiv-ibatis</jndi-name>
+        <connection-url>jdbc:oracle:thin:@10.0.2.150:asywdb</connection-url>
+        <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+        <user-name>portalsiiv</user-name>
+        <password>portalsiiv</password>
+        <exception-sorter-class-name>
+            org.jboss.resource.adapter.jdbc.vendor.OracleExceptionSorter
+        </exception-sorter-class-name>
+    </local-tx-datasource>
+    
+    <mbean code="org.jboss.resource.adapter.jdbc.vendor.OracleXAExceptionFormatter" 
+           name="jboss.jca:service=OracleXAExceptionFormatter">
+        <depends optional-attribute-name="TransactionManagerService">
+            jboss:service=TransactionManager
+        </depends>
+    </mbean>
+</datasources>

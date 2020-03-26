@@ -1,0 +1,78 @@
+.tabcellactive{
+	background-color: #CCCDE1;		
+	text-align: center;	
+}
+.tabcellinactive{
+	background-color: #525B9A;
+	text-align: center;
+}
+
+
+.tabactive {
+	font-weight: bold;
+	font-size: 11px;
+	padding-top: 4px;
+	padding-bottom: 0px;
+}
+
+a.tabactive {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	color: #000066;
+	text-decoration: none;
+}
+a:hover.tabactive {
+	text-decoration: none;
+	color: #000066;
+}
+a:visited.tabactive {
+	color: #000066;		
+	text-decoration: none;
+}
+
+.tabinactive {
+	font-size: 11px;
+	background-position: bottom;
+	padding-top: 4px;
+	padding-bottom: 0px;
+
+}
+a.tabinactive {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	color: #FFFFFF;	
+	text-decoration: none;	
+}
+a:hover.tabinactive {
+	color: #FFFF99;		
+	text-decoration: none;
+}
+a:visited.tabinactive {
+	color: #FFFFFF;		
+	text-decoration: none;
+}
+a:visited:hover.tabinactive {
+	color: #FFFF99;		
+	text-decoration: none;
+}
+.tablink {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	/*font-weight: bold;*/
+	color: #000066;
+	font-size: 12px;
+}
+a.tablink {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: none;
+	font-size: 11px;
+}
+a:hover.tablink {
+	color: #000066;
+}
+a:visited.tablink {
+	color: #000066;		
+	text-decoration: none;
+}
+a:visited:hover.tablink {
+	color: #FFFF99;
+}

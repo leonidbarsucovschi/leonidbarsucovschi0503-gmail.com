@@ -1,0 +1,33 @@
+<taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>guicontrols</short-name>
+    <uri>gui/controls</uri>
+    <tag-file>
+        <name>back</name>
+        <path>/WEB-INF/tags/jportal/gui/back.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>news</name>
+        <path>/WEB-INF/tags/jportal/gui/news.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>portlet</name>
+        <path>/WEB-INF/tags/jportal/gui/portlet.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>menu</name>
+        <path>/WEB-INF/tags/jportal/gui/menu.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>fcache</name>
+        <path>/WEB-INF/tags/jportal/gui/flashcache.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>news_generic</name>
+        <path>/WEB-INF/tags/jportal/gui/news_generic.tag</path>
+    </tag-file>
+</taglib>

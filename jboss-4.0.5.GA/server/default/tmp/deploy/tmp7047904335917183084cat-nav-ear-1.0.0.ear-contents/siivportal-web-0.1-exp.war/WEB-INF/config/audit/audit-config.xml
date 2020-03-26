@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOCTYPE audit-entities SYSTEM "audit-config.dtd" -->
+<audit-entities>
+
+    <!-- resource path=""/ -->
+
+
+<!--############## Start  Entitate Intervale de acostare  #####################	-->
+
+	<!--
+
+        <entity>
+            <name value="Companie"/>
+            <class name="CompanySessionBean"/>
+            <primaryKeyGetter name="getId_companie"/>
+            <xsl-path value="xsl/company.xsl"/>
+            <xml-begin>
+                <![CDATA[
+                    <?xml version="1.0" encoding="ISO-8859-1"?>
+                    <entity name="company">
+                ]]>
+            </xml-begin>
+
+            <xml-end>
+                <![CDATA[
+                    </entity>
+                ]]>
+            </xml-end>
+
+            <methods>
+                <method name="addCompany" type="add" code="1">
+                    <end-audit>
+                        <select value="select name, cui, code, type from company_tbl, company_type_tbl where id=? and fk_type=?">
+                            <param getterName="getId" position="0"/>
+                            <param getterName="getFkType" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="company">
+                                        <row name="name" value="%name%"/>
+                                        <row name="cui" value="%cui%"/>
+                                        <row name="code" value="%code%"/>
+                                        <row name="type" value="%type%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select street, number, city, county from address where id_address=? and fk_address_type=?">
+                            <param getterName="getId_address" position="0"/>
+                            <param getterName="getFk_address_type" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="addresses">
+                                        <row name="street" value="%street%"/>
+                                        <row name="number" value="%number%"/>
+                                        <row name="city" value="%city%"/>
+                                        <row name="county" value="%county%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </end-audit>
+                </method>
+
+                <method name="updateCompany" type="update" code="2">
+                    <start-audit>
+                        <select value="select name, cui, code, type from company_tbl, company_type_tbl where id=? and fk_type=?">
+                            <param getterName="getId" position="0"/>
+                            <param getterName="getFkType" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="company">
+                                        <row name="name" value="%name%"/>
+                                        <row name="cui" value="%cui%"/>
+                                        <row name="code" value="%code%"/>
+                                        <row name="type" value="%type%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select street, number, city, county from address where id_address=? and fk_address_type=?">
+                            <param getterName="getId_address" position="0"/>
+                            <param getterName="getFk_address_type" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="addresses">
+                                        <row name="street" value="%street%"/>
+                                        <row name="number" value="%number%"/>
+                                        <row name="city" value="%city%"/>
+                                        <row name="county" value="%county%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select activity, activity_type from activity_tbl where e1=? and f1=?">
+                            <param getterName="getE1" position="0"/>
+                            <param getterName="getF1" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="activity" value="%activity"/>
+                                    <row name="activity_type" value="%activity_type"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select a2, b3, c4, d5 from table2 where e2=? and f2=?">
+                            <param getterName="getE2" position="0"/>
+                            <param getterName="getF2" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="activity" value="%activity"/>
+                                    <row name="activity_type" value="%activity_type"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </start-audit>
+
+                    <end-audit>
+                        <select value="select street, number, city, county from address where id_address=? and fk_address_type=?">
+                            <param getterName="getId_address" position="0"/>
+                            <param getterName="getFk_address_type" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="addresses">
+                                        <row name="street" value="%street%"/>
+                                        <row name="number" value="%number%"/>
+                                        <row name="city" value="%city%"/>
+                                        <row name="county" value="%county%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select a2, b3, c4, d5 from table2 where e2=? and f2=?">
+                            <param getterName="getE2" position="0"/>
+                            <param getterName="getF2" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="adresa">
+                                        <row name="strada" value="%strada%"/>
+                                        <row name="numarul" value="%numarul%"/>
+                                        <row name="localitatea" value="%localitatea%"/>
+                                        <row name="judetul" value="%judetul%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </end-audit>
+                </method>
+
+                <method name="deleteCompany" type="delete" code="3">
+                    <data-provider-class name="CompanyDataProvider"/>
+                </method>
+            </methods>
+
+            <key-attributes>
+                <key-attribute name="CUI" type="numeric" method-name="getCUI"/>
+                <key-attribute name="Holding" type="String" method-name="getHolding"/>
+            </key-attributes>
+        </entity>
+
+        <entity>
+            <name value="Persoana"/>
+            <class name="PersonSessionBean"/>
+            <primaryKeyGetter name="getId_persoana"/>
+            <xsl-path value="xsl/person.xsl"/>
+
+            <xml-begin>
+                <![CDATA[
+                    <?xml version="1.0" encoding="ISO-8859-1"?>
+                    <entity name="person">
+                ]]>
+            </xml-begin>
+
+            <xml-end>
+                <![CDATA[
+                    </entity>
+                ]]>
+            </xml-end>
+
+            <methods>
+                <method name="add" type="add" code="1">
+                    <end-audit>
+                        <select value="select first-name, last-name, cnp, birth_date, birth_city from person_tbl where id_person=?">
+                            <param getterName="getId_person" position="0"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="first_name" value="%first_name%"/>
+                                    <row name="last-name" value="%last-name%"/>
+                                    <row name="cnp" value="%cnp%"/>
+                                    <row name="birth_date" value="%birth_date%"/>
+                                    <row name="birth_city" value="%birth_city%"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </end-audit>
+                </method>
+
+                <method name="update" type="update" code="2">
+                    <start-audit>
+                        <select value="select first-name, last-name, cnp, birth_date, birth_city from person_tbl where id_person=?">
+                            <param getterName="getId_person" position="0"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="first_name" value="%first_name%"/>
+                                    <row name="last-name" value="%last-name%"/>
+                                    <row name="cnp" value="%cnp%"/>
+                                    <row name="birth_date" value="%birth_date%"/>
+                                    <row name="birth_city" value="%birth_city%"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select street, number, city, county from address where id_address=? and fk_address_type=?">
+                            <param getterName="getId_address" position="0"/>
+                            <param getterName="getFk_address_type" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="addresses">
+                                        <row name="street" value="%street%"/>
+                                        <row name="number" value="%number%"/>
+                                        <row name="city" value="%city%"/>
+                                        <row name="county" value="%county%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </start-audit>
+
+                    <end-audit>
+                        <select value="select first-name, last-name, cnp, birth_date, birth_city from person_tbl where id_person=?">
+                            <param getterName="getId_person" position="0"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="first_name" value="%first_name%"/>
+                                    <row name="last-name" value="%last-name%"/>
+                                    <row name="cnp" value="%cnp%"/>
+                                    <row name="birth_date" value="%birth_date%"/>
+                                    <row name="birth_city" value="%birth_city%"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+
+                        <select value="select street, number, city, county from address where id_address=? and fk_address_type=?">
+                            <param getterName="getId_address" position="0"/>
+                            <param getterName="getFk_address_type" position="1"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <section name="addresses">
+                                        <row name="street" value="%street%"/>
+                                        <row name="number" value="%number%"/>
+                                        <row name="city" value="%city%"/>
+                                        <row name="county" value="%county%"/>
+                                    </section>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </end-audit>
+                </method>
+
+                <method name="delete" type="delete" code="3">
+                    <start-audit>
+                        <select value="select first-name, last-name, cnp, birth_date, birth_city from person_tbl where id_person=?">
+                            <param getterName="getId_person" position="0"/>
+                            <xml-snippet>
+                                <![CDATA[
+                                    <row name="first_name" value="%first_name%"/>
+                                    <row name="last-name" value="%last-name%"/>
+                                    <row name="cnp" value="%cnp%"/>
+                                    <row name="birth_date" value="%birth_date%"/>
+                                    <row name="birth_city" value="%birth_city%"/>
+                                ]]>
+                            </xml-snippet>
+                        </select>
+                    </start-audit>
+                </method>
+            </methods>
+
+            <key-attributes>
+                <key-attribute name="CNP" type="numeric" method-name="getCNP"/>
+                <key-attribute name="Holding" type="String" method-name="getHolding"/>
+                <key-attribute name="Company" type="String" method-name="getCompany"/>
+            </key-attributes>
+        </entity>
+
+    -->
+</audit-entities>

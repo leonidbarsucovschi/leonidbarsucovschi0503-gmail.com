@@ -1,0 +1,37 @@
+div.weektitle { font-size: 12px;
+				font-family: verdana,geneva,helvetica, sans-serif;
+	 			font-weight: bold;
+				color: #000;
+				background-color: #ccc;
+				margin: 0.1em 0.5em 0.1em 0.7em;}
+div.weektext {padding: 0.5em 0.5em 0.1em 4em;}
+div.weektitle_noprint {		
+				font-size: 12px;
+				font-family: verdana,geneva,helvetica, sans-serif;
+	 			font-weight: bold;
+				color: #000;
+				background-color: #ccc;
+				margin: 0.1em 0.5em 0.1em 0.7em;
+				display:none
+		      }
+div.weektext {padding: 0.5em 0.5em 0.1em 4em;}
+ul.info { list-style : square;
+		color: #006460;
+		background-color: transparent;
+		font-size: 12px;
+		font-family: verdana,geneva,helvetica, sans-serif;
+	 	font-weight:normal;
+		padding-top: 0.7em;}
+
+.info a  {	color:#006460;
+            background-color: transparent;
+			padding: 0.1em;}
+div.info { color: #006460;
+		background-color: transparent;
+		font-size: 12px;
+		font-family: verdana,geneva,helvetica, sans-serif;
+	 	font-weight:normal;
+		padding: 0.1em 0.5em 0.1em 1.7em;}
+.gif{
+  display:none
+}

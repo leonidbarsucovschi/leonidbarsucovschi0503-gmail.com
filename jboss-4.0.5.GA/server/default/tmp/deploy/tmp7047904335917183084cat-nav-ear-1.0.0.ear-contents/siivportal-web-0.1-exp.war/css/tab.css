@@ -1,0 +1,45 @@
+.tab-normal {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+
+	color: #000000;
+	background: #E1DBD1;
+
+
+	cursor: pointer;
+    padding: 3px;
+
+	border-top: 0px solid #696969;
+	border-right:  2px solid #696969;
+	border-bottom: 2px solid #696969;
+	border-left: 0px solid #696969;
+}
+
+.tablink {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	/*font-weight: bold;*/
+	color: #000066;
+	font-size: 12px;
+}
+
+a.tablink {
+	font-family: Verdana, Arial, helvetica, san-serif;
+	font-weight: bold;
+	color: #000066;
+	text-decoration: none;
+	font-size: 11px;
+}
+
+a:hover.tablink {
+	color: #000066;
+}
+
+a:visited.tablink {
+	color: #000066;		
+	text-decoration: none;
+}
+
+a:visited:hover.tablink {
+	color: #FFFF99;
+}

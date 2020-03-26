@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE form-validation PUBLIC
+          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
+          "http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
+
+<!--
+ # Module   : audit
+ # File     : WEB-INF/audit/validation.xml
+ # Creation : 
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<form-validation>
+  <formset>
+  <!-- FORMA  audit -->
+      <form name="form_AuditForm">
+            <field property="values.id_scenariu" depends="required,maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.id_scenariu"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.pk_entitate" depends="required,integer">
+                <arg position="0" bundle="audit" key="audit.prompt.pk_entitate"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>22</var-value>
+              </var>
+        </field>
+            <field property="values.fk_user" depends="required,integer">
+                <arg position="0" bundle="audit" key="audit.prompt.fk_user"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>22</var-value>
+              </var>
+        </field>
+            <field property="values.ip" depends="required,maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.ip"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.cod_operatie" depends="required,integer">
+                <arg position="0" bundle="audit" key="audit.prompt.cod_operatie"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>22</var-value>
+              </var>
+        </field>
+            <field property="values.data_operatieString" depends="required
+                                            ,date
+                                        ">
+                <arg position="0" bundle="audit" key="audit.prompt.data_operatie"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>7</var-value>
+              </var>
+  <var>
+      <var-name>datePatternStrict</var-name>
+      <var-value>dd.MM.yyyy</var-value>
+    </var>      </field>
+            <field property="values.xml_description" depends="required,maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.xml_description"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.atribut1" depends="maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.atribut1"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.atribut2" depends="maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.atribut2"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.atribut3" depends="maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.atribut3"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.atribut4" depends="maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.atribut4"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+            <field property="values.atribut5" depends="maxlength">
+                <arg position="0" bundle="audit" key="audit.prompt.atribut5"/>
+                <arg position="1" key="${var:maxlength}" name="maxlength" />
+                <var>
+              <var-name>maxlength</var-name>
+              <var-value>4000</var-value>
+              </var>
+        </field>
+    </form>
+</formset>
+</form-validation>

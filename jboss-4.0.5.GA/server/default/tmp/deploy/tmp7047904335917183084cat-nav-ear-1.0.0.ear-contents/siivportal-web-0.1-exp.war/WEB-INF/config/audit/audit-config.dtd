@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- root-ul xml-ului
+       fisierul de configurare este o colectie de entitati
+-->
+<!ELEMENT audit-entities (resource*, entity*)>
+
+<!-- calea catre un fisier de configurare -->
+<!ELEMENT resource EMPTY>
+<!ATTLIST resource
+    path CDATA #REQUIRED
+>
+
+<!-- reprezinta o entitate pe care se face audit -->
+<!ELEMENT entity (name, class, primaryKeyGetter, xsl-path, xml-begin, xml-end, methods, key-attributes)>
+
+<!-- id-ul UNIC al scenariului de auditare -->
+<!ELEMENT name EMPTY>
+<!ATTLIST name
+    value CDATA #REQUIRED
+>
+
+<!-- numele clasei entitatii auditate -->
+<!ELEMENT class EMPTY>
+<!ATTLIST class
+    name CDATA #REQUIRED
+>
+
+<!-- numele metodei care returneaza id-ul entitatii auditate -->
+<!ELEMENT primaryKeyGetter EMPTY>
+<!ATTLIST primaryKeyGetter
+    name CDATA #REQUIRED
+>
+
+<!-- calea catre xsl-ul care se aplica xml-ului -->
+<!ELEMENT xsl-path EMPTY>
+<!ATTLIST xsl-path
+    value CDATA #REQUIRED
+>
+
+<!-- inceputul xml-ului ce trebuie salvat in baza -->
+<!ELEMENT xml-begin (#PCDATA)>
+
+<!-- sfarsitul xml-ului ce trebuie salvat in baza -->
+<!ELEMENT xml-end  (#PCDATA)>
+
+<!-- sectiunea metodelor auditate -->
+<!ELEMENT methods (method+)>
+
+<!-- metoda auditata
+     are nume, tip si cod
+     codul reprezinta codul operatiei efectuate de metoda, cese va salva in baza
+     tipul e din multimea (add, update, delete)
+-->
+<!ELEMENT method (data-provider-class | (start-audit?, end-audit?))>
+<!ATTLIST method
+    name CDATA #REQUIRED
+    type CDATA #REQUIRED
+    code CDATA #REQUIRED
+>
+
+<!-- numele clasei care furnizeaza datele ce vor fi salvate in baza
+     daca nu se foloseste mecanismul implicit cu sql-uri
+-->
+<!ELEMENT data-provider-class EMPTY>
+<!ATTLIST data-provider-class
+    name CDATA #REQUIRED
+>
+
+<!-- sql-uri care se executa la inceputul metodei auditate
+     selecteaza datele vechi ale entitatii auditate
+-->
+<!ELEMENT start-audit (select+)>
+
+<!-- sql-uri care se executa la sfarsitul metodei auditate
+     selecteaza datele noi ale entitatii auditate
+-->
+<!ELEMENT end-audit (select+)>
+
+<!-- selectul prin care se aduc datele specifice entitatii
+     poate contine parametri, ale caror valori vor fi luate din Form
+     trebuie sa se precizeze numele metodelor
+     ce furnizeaza valorile parametrilor
+-->
+<!ELEMENT select (param*, xml-snippet-header?, xml-snippet, xml-snippet-footer?)>
+<!ATTLIST select
+    value CDATA #REQUIRED
+>
+
+<!-- numele metodei care va furniza valoarea
+     pt a fi setata in PreparedStatement
+     position reprezinta indexul parametrului (este primul, al doilea, etc...)
+
+              ATENTIE !!!
+     ESTE FOLOSITA REGULA DIN JAVA (PRIMUL ELEMENT ESTE PE POZITIA 0, AL DOILEA PE POZITIA 1)
+              ATENTIE !!!
+
+-->
+<!ELEMENT param EMPTY>
+<!ATTLIST param
+    getterName CDATA #REQUIRED
+    position CDATA #REQUIRED
+>
+
+<!-- bucata de text ce se insera o singura data la inceput
+     reprezinta un header pt un select care intoarce mai multe rezultate
+     ceea ce duce la scrierea mai multor portiuni de xml-snippet
+-->
+<!ELEMENT xml-snippet-header (#PCDATA)>
+
+<!-- bucata de xml ce se va completa cu datele selectate
+     si se va salva in baza de date
+-->
+<!ELEMENT xml-snippet (#PCDATA)>
+
+<!-- bucata de text ce se insera o singura data la sfarsit
+     reprezinta un footer pt un select care intoarce mai multe rezultate
+     ceea ce duce la scrierea mai multor portiuni de xml-snippet
+-->
+<!ELEMENT xml-snippet-footer (#PCDATA)>
+
+<!-- sectiunea de cautare
+     este o colectie de criterii de cautare
+     exista cel putin un criteriu
+-->
+<!ELEMENT key-attributes (key-attribute+)>
+
+<!-- un criteriu de cautare specific unei entitati
+     este definit prin nume, tip si numele metodei care va
+     furniza valoarea ce va fi salvata in baza
+     numele se afiseaza pe ecran
+     tipul este folosit la construirea sql-ului de cautare
+     ex. name=firma si  type=String => sql=select ... where firma like ''
+     ex. name=cnp si  type=numeric => sql=select ... where cnp=
+-->
+<!ELEMENT key-attribute EMPTY>
+<!ATTLIST key-attribute
+    name CDATA #REQUIRED
+    type CDATA #REQUIRED
+    method-name CDATA #REQUIRED
+>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<!--
+ # Module   : nom
+ # File     : WEB-INF/nom/struts-config.xml
+ # Creation : 07.07.2005
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+	<form-beans>
+      <form-bean name="form_StaticContentForm" type="ro.uti.apmc.staticcontent.view.command.StaticContentForm">
+	  </form-bean>
+      <form-bean name="form_EditStaticContentForm" type="ro.uti.apmc.portal.staticcontent.publishing.edhtml.command.EditStaticContentForm">
+	  </form-bean>
+	</form-beans>
+	<global-forwards type="org.apache.struts.action.ActionForward">
+	</global-forwards>
+    
+	<action-mappings>
+
+        <action path="/portal/static"
+			type="ro.uti.apmc.staticcontent.view.command.StaticContentAction"
+			name="form_StaticContentForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="x"
+			validate="false">
+			<forward name="load" contextRelative="true" path="/portaltemplate.jsp?page=web/portal/staticcontent/view/view"/>
+		</action>
+
+		<action path="/edit_static_content"
+			type="ro.uti.apmc.portal.staticcontent.publishing.edhtml.command.EditStaticContentAction"
+            name="form_EditStaticContentForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+            <set-property property="accessRoles" value="default:918"/>
+			<forward name="show" contextRelative="true" path="/template.jsp?page=web/publishing/edhtml/edhtml"/>
+		</action>
+        <action validate="false" type="ro.uti.waf.util.ViewImageMediaTypeCommand" scope="request" path="/viewmediaimage">
+			<forward contextRelative="true" path="/template.jsp?page=error" name="failure"/>
+		</action>
+		<action path="/lang"
+			type="ro.uti.waf.web.action.I18nAction"
+			scope="request">
+			<forward name="default" contextRelative="true" path="tbl_user.do"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+		</action>
+		<action type="org.apache.struts.actions.SwitchAction" path="/switch">
+			<forward contextRelative="true" path="/userservice/tbl_appl_session_operation.do" name="default"/>
+		</action>
+	</action-mappings>
+    <controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml" property="pathnames"/>
+	</plug-in>
+</struts-config>

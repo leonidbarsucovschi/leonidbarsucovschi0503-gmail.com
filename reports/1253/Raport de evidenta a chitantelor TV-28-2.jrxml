@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Raport de evidenta a chitantelor TV-28"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.6105100000000008" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="TV28_GEN_TAB.GEN_CUO_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<property name="nomenclator_code" value="CUO_COD" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<property name="multiple" value="1" />
+		<parameterDescription><![CDATA[Birou/Post vamal inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND TV28_GEN_TAB.GEN_CUO_COD = 3028 "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV28_GEN_TAB.GEN_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="5;" />
+		<parameterDescription><![CDATA[Data inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND TV28_GEN_TAB.GEN_DAT BETWEEN TO_DATE('01/03/2007','dd/mm/yyyy') AND TO_DATE('01/04/2008','dd/mm/yyyy')"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV28_GEN_TAB.PER_IDN" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="table_column" value="TV28_GEN_TAB.PER_IDN" />
+		<property name="type" value="12" />
+		<parameterDescription><![CDATA[IDNP]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND (TV28_GEN_TAB.PER_IDN LIKE '%4%') "]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+	TV28_GEN_TAB.GEN_NUM, TO_CHAR(TV28_GEN_TAB.GEN_DAT,'DD.MM.YYYY') GEN_DAT,
+	TV28_GEN_TAB.GEN_RNO, TV28_GEN_TAB.PER_NAM, TV28_GEN_TAB.PER_IDN,
+	TV28_ITEM_TAB.ITM_QTY, WITHOUT_CHR1013(TV28_ITEM_TAB.ITM_NAM) ITM_NAM, TV28_GEN_TAB.FULLNAME, TV28_GEN_TAB.USERNAME
+FROM
+	TV28_GEN_TAB, TV28_ITEM_TAB
+WHERE
+	TV28_GEN_TAB.INSTANCEID=TV28_ITEM_TAB.INSTANCEID
+	$P!{TV28_GEN_TAB.GEN_CUO_COD}
+	$P!{TV28_GEN_TAB.GEN_DAT}
+	$P!{TV28_GEN_TAB.PER_IDN}
+ORDER
+	BY TV28_GEN_TAB.GEN_DAT]]></queryString>
+
+	<field name="GEN_NUM" class="java.math.BigDecimal"/>
+	<field name="GEN_DAT" class="java.lang.String"/>
+	<field name="GEN_RNO" class="java.lang.String"/>
+	<field name="PER_NAM" class="java.lang.String"/>
+	<field name="PER_IDN" class="java.lang.String"/>
+	<field name="ITM_QTY" class="java.math.BigDecimal"/>
+	<field name="ITM_NAM" class="java.lang.String"/>
+	<field name="FULLNAME" class="java.lang.String"/>
+	<field name="USERNAME" class="java.lang.String"/>
+
+	<variable name="ROW_COUNT" class="java.lang.Integer" resetType="Report" incrementType="Report" calculation="Count">
+		<variableExpression><![CDATA[new Integer($V{ROW_COUNT}.intValue()+1)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
+	</variable>
+	<variable name="TV28_GEN_TAB.GEN_CUO_COD" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV28_GEN_TAB.GEN_CUO_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TV28_GEN_TAB.GEN_CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("'") >= 0 ?
+            $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("'")+1,$P{TV28_GEN_TAB.GEN_CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">=") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<=") > 0 ?
+              $P{TV28_GEN_TAB.GEN_CUO_COD}.substring( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">=")+2, $P{TV28_GEN_TAB.GEN_CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.lastIndexOf("<=")+2, $P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+              : ( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<") < 0 ?
+                $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">="),$P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+                : ( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">") < 0 ?
+                  $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<="),$P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+                  : ( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=") < 0 ?
+                    $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf(">"),$P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+                    : ($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<") > 0 && $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=") < 0 ?
+                      $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("<"), $P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+                      : ( $P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=") > 0 ?
+                        $P{TV28_GEN_TAB.GEN_CUO_COD}.substring($P{TV28_GEN_TAB.GEN_CUO_COD}.indexOf("=")+1, $P{TV28_GEN_TAB.GEN_CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TV28_GEN_TAB.GEN_DAT" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV28_GEN_TAB.GEN_DAT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TV28_GEN_TAB.GEN_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TV28_GEN_TAB.GEN_DAT}.indexOf("'") >= 0 ?
+            $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf("'")+1,$P{TV28_GEN_TAB.GEN_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV28_GEN_TAB.GEN_DAT}.indexOf(">=") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("<=") > 0 ?
+              $P{TV28_GEN_TAB.GEN_DAT}.substring( $P{TV28_GEN_TAB.GEN_DAT}.indexOf(">=")+2, $P{TV28_GEN_TAB.GEN_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.lastIndexOf("<=")+2, $P{TV28_GEN_TAB.GEN_DAT}.length() )
+              : ( $P{TV28_GEN_TAB.GEN_DAT}.indexOf(">") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("=") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("<") < 0 ?
+                $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf(">="),$P{TV28_GEN_TAB.GEN_DAT}.length() )
+                : ( $P{TV28_GEN_TAB.GEN_DAT}.indexOf("<") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("=") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf(">") < 0 ?
+                  $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf("<="),$P{TV28_GEN_TAB.GEN_DAT}.length() )
+                  : ( $P{TV28_GEN_TAB.GEN_DAT}.indexOf(">") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("=") < 0 ?
+                    $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf(">"),$P{TV28_GEN_TAB.GEN_DAT}.length() )
+                    : ($P{TV28_GEN_TAB.GEN_DAT}.indexOf("<") > 0 && $P{TV28_GEN_TAB.GEN_DAT}.indexOf("=") < 0 ?
+                      $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf("<"), $P{TV28_GEN_TAB.GEN_DAT}.length() )
+                      : ( $P{TV28_GEN_TAB.GEN_DAT}.indexOf("=") > 0 ?
+                        $P{TV28_GEN_TAB.GEN_DAT}.substring($P{TV28_GEN_TAB.GEN_DAT}.indexOf("=")+1, $P{TV28_GEN_TAB.GEN_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TV28_GEN_TAB.PER_IDN" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV28_GEN_TAB.PER_IDN}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV28_GEN_TAB.PER_IDN}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("TO_DATE")+9, $P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TV28_GEN_TAB.PER_IDN}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TV28_GEN_TAB.PER_IDN}.indexOf("'") >= 0 ?
+            $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf("'")+1,$P{TV28_GEN_TAB.PER_IDN}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV28_GEN_TAB.PER_IDN}.indexOf(">=") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("<=") > 0 ?
+              $P{TV28_GEN_TAB.PER_IDN}.substring( $P{TV28_GEN_TAB.PER_IDN}.indexOf(">=")+2, $P{TV28_GEN_TAB.PER_IDN}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.lastIndexOf("<=")+2, $P{TV28_GEN_TAB.PER_IDN}.length() )
+              : ( $P{TV28_GEN_TAB.PER_IDN}.indexOf(">") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("=") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("<") < 0 ?
+                $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf(">="),$P{TV28_GEN_TAB.PER_IDN}.length() )
+                : ( $P{TV28_GEN_TAB.PER_IDN}.indexOf("<") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("=") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf(">") < 0 ?
+                  $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf("<="),$P{TV28_GEN_TAB.PER_IDN}.length() )
+                  : ( $P{TV28_GEN_TAB.PER_IDN}.indexOf(">") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("=") < 0 ?
+                    $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf(">"),$P{TV28_GEN_TAB.PER_IDN}.length() )
+                    : ($P{TV28_GEN_TAB.PER_IDN}.indexOf("<") > 0 && $P{TV28_GEN_TAB.PER_IDN}.indexOf("=") < 0 ?
+                      $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf("<"), $P{TV28_GEN_TAB.PER_IDN}.length() )
+                      : ( $P{TV28_GEN_TAB.PER_IDN}.indexOf("=") > 0 ?
+                        $P{TV28_GEN_TAB.PER_IDN}.substring($P{TV28_GEN_TAB.PER_IDN}.indexOf("=")+1, $P{TV28_GEN_TAB.PER_IDN}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="43"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="283"
+						y="5"
+						width="217"
+						height="36"
+						key="staticText"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" pdfFontName="Courier" size="14" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[RAPORT DE EVIDENTA
+a chitantelor TV-28]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="781"
+						height="1"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="2.0"/>
+</graphicElement>
+				</line>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="58"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="2"
+						width="781"
+						height="1"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="57"
+						width="782"
+						height="1"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-11"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="667"
+						y="2"
+						width="115"
+						height="8"
+						key="staticText-13"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="6" isBold="true"/>
+					</textElement>
+				<text><![CDATA[raport de evidenta a chitantelor TV-28]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="77"
+						y="4"
+						width="83"
+						height="13"
+						key="staticText-15"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Courier" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[post vamal:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="165"
+						y="19"
+						width="478"
+						height="13"
+						key="textField-2"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV28_GEN_TAB.GEN_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="165"
+						y="2"
+						width="478"
+						height="16"
+						key="textField-4"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="12" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV28_GEN_TAB.GEN_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="77"
+						y="19"
+						width="83"
+						height="13"
+						key="staticText-16"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Courier" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[perioada:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="165"
+						y="32"
+						width="478"
+						height="13"
+						key="textField-2"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV28_GEN_TAB.PER_IDN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="77"
+						y="32"
+						width="83"
+						height="13"
+						key="staticText-16"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Courier" isItalic="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[indp:]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="39"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="782"
+						height="39"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="47"
+						y="0"
+						width="54"
+						height="28"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Data inregistrarii]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="101"
+						y="0"
+						width="44"
+						height="28"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Numar
+de
+referinta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="145"
+						y="13"
+						width="133"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Nume]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="47"
+						height="28"
+						forecolor="#FFFFFF"
+						key="staticText-1"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Numar
+de
+inregistrare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="28"
+						width="47"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-2"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="47"
+						y="28"
+						width="54"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-3"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="101"
+						y="28"
+						width="44"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-4"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[3]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="145"
+						y="28"
+						width="133"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-5"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[4]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="-1"
+						y="0"
+						width="1"
+						height="1"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="-1"
+						y="0"
+						width="1"
+						height="39"
+						key="line-7"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="782"
+						y="0"
+						width="1"
+						height="39"
+						key="line-9"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="278"
+						y="13"
+						width="68"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-17"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[IDNP]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="145"
+						y="0"
+						width="201"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-18"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Persoana]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="278"
+						y="28"
+						width="68"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-19"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[5]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="579"
+						y="0"
+						width="203"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-25"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Inspector]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="579"
+						y="13"
+						width="97"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-26"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Nume]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="676"
+						y="13"
+						width="106"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-27"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Cod]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="676"
+						y="28"
+						width="106"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-28"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[9]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="579"
+						y="28"
+						width="97"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-29"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[8]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="346"
+						y="0"
+						width="72"
+						height="28"
+						forecolor="#FFFFFF"
+						key="staticText-30"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Cantitatea
+valutei]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="346"
+						y="28"
+						width="72"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-31"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[6]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="418"
+						y="0"
+						width="161"
+						height="28"
+						forecolor="#FFFFFF"
+						key="staticText-32"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[Descrierea
+obiectelor
+pretioase]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="418"
+						y="28"
+						width="161"
+						height="11"
+						forecolor="#FFFFFF"
+						key="staticText-33"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="7" isBold="true" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[7]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="12"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="47"
+						y="0"
+						width="54"
+						height="12"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GEN_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="101"
+						y="0"
+						width="44"
+						height="12"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GEN_RNO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="145"
+						y="0"
+						width="133"
+						height="12"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PER_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="0"
+						width="47"
+						height="12"
+						key="textField-1"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{GEN_NUM}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="-1"
+						y="0"
+						width="1"
+						height="12"
+						key="line-8"
+						stretchType="RelativeToTallestObject"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="782"
+						y="0"
+						width="1"
+						height="12"
+						key="line-10"
+						stretchType="RelativeToTallestObject"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</line>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="278"
+						y="0"
+						width="68"
+						height="12"
+						forecolor="#000000"
+						key="textField-5"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="3" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PER_IDN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="579"
+						y="0"
+						width="97"
+						height="12"
+						forecolor="#000000"
+						key="textField-8"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{FULLNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="676"
+						y="0"
+						width="106"
+						height="12"
+						forecolor="#000000"
+						key="textField-9"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{USERNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="346"
+						y="0"
+						width="72"
+						height="12"
+						forecolor="#000000"
+						key="textField-10"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ITM_QTY}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="418"
+						y="0"
+						width="161"
+						height="12"
+						forecolor="#000000"
+						key="textField-11"
+						stretchType="RelativeToTallestObject"/>
+					<box leftPadding="2" rightPadding="3" topPadding="1" bottomPadding="1">					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ITM_NAM}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="27"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="573"
+						y="4"
+						width="170"
+						height="19"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="746"
+						y="4"
+						width="36"
+						height="19"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="true" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="782"
+						height="1"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="6"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font pdfFontName="Courier" isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="212"
+						y="6"
+						width="381"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-14"/>
+					<box leftPadding="1" rightPadding="1" topPadding="1" bottomPadding="1">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

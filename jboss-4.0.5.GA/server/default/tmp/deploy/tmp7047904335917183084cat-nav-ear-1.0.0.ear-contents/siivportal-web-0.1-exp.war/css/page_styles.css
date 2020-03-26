@@ -1,0 +1,52 @@
+/*
+stylesheet for HomePage
+****************************************************/
+body {
+	margin:0;
+	padding:0;
+	/*background-image:url(../images/ns_hpbg_3.gif);
+	background-repeat:repeat-x;*/
+	background-color:#ffffff;
+	font-family:verdana, arial, sans-serif;
+}
+
+
+.label-footer {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.logintext {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  text-align: left;
+}
+
+.input-toolbar {
+    font-family: verdana;
+    vertical-align: middle;
+    font-size: 9px;
+    color: #999999;
+    vertical-align: middle;
+    background-color: #FAFAFA;
+    border-bottom: 1px solid #f1f1f1;
+    border-right: 1px solid #f1f1f1;
+    border-top: 1px solid #828484;
+    border-left: 1px solid #828484;
+    padding: 0px 0px 0px 0px;
+    width: 60px;
+}
+
+.admin-menu {
+	vertical-align:top;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#444444;
+	font-size:11px;
+	background-color: #ffffff;
+}

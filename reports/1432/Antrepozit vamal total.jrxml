@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Antrepozit vamal total"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="3.1384283767210155" />
+	<property name="ireport.x" value="504" />
+	<property name="ireport.y" value="195" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SYS_DATE" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="0;" />
+		<property name="type" value="91" />
+		<property name="required" value="true" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Data de inceput:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["01/01/2010"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CMP_FIS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="12" />
+		<property name="operators" value="0;" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Cod fiscal:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["%%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WHS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="12" />
+		<property name="value_only" value="true" />
+		<property name="operators" value="0;" />
+		<parameterDescription><![CDATA[Cod antrepozit vamal:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["9120"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TAR_HSC_NB" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="12" />
+		<property name="operators" value="0;" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Cod marfa:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["%%"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select * from(
+
+select
+	to_date($P{SYS_DATE},'dd/mm/yyyy') ide_reg_dat, cmp_fis_cod,''
+	cmp_fis_nam,whs_cod,tar_hsc_nb,SUM(net) net,sum(cant) cant,
+	 '    ' tar_prc_ext, '    ' lnk_prv_whs ,gds_org_cty
+	from (
+			select a.ide_cuo_cod,a.ide_reg_nbr,a.ide_reg_dat,
+				( case when b.ide_typ_sad = 'IM'  then b.cmp_con_cod   else b.cmp_exp_cod end )  cmp_fis_cod,
+				( case when b.ide_typ_sad = 'IM'  then b.cmp_con_nam   else b.cmp_exp_nam end )  cmp_fis_nam,
+				a.whs_cod whs_cod, a.tar_hsc_nb,
+				( case when SUBSTR(a.tar_prc_ext,1,2) IN  ('71','73')  then a.vit_wgt_net else -a.vit_wgt_net  end )  net,
+				( case when SUBSTR(a.tar_prc_ext,1,2) IN  ('71','73')  then a.tar_sup_qty else -a.tar_sup_qty  end )  cant,
+				a.tar_prc_ext, a.lnk_prv_whs ,
+ 				( case when  a.gds_org_cty = 'QM'  then 'MD' else a.gds_org_cty  end ) gds_org_cty
+			from st.sad_item a,  st.sad_general_segment b
+			 where a.instanceid = b.instanceid
+             		and a.ide_reg_dat < to_date($P{SYS_DATE},'dd/mm/yyyy')
+				 	and ( case when b.ide_typ_sad = 'IM'  then b.cmp_con_cod   else b.cmp_exp_cod  end ) like  $P{CMP_FIS_COD}
+             		and a.tar_hsc_nb like $P{TAR_HSC_NB}
+                    and a.whs_cod like $P{WHS_COD}
+				    and a.status IN ('Assessed','Paid')
+	 				and (SUBSTR(a.tar_prc_ext,1,2) IN ('71','73') or  SUBSTR(a.tar_prc_ext,3,2) IN ('71','73'))
+
+union all
+
+        select a.ide_cuo_cod,a.ide_reg_nbr,a.ide_reg_dat,
+				( case when b.ide_typ_sad = 'IM'  then b.cmp_con_cod   else b.cmp_exp_cod end )  cmp_fis_cod,
+				( case when b.ide_typ_sad = 'IM'  then b.cmp_con_nam   else b.cmp_exp_nam end )  cmp_fis_nam,
+ 				a.lnk_prv_whs whs_cod, a.tar_hsc_nb, -a.vit_wgt_net  net, -a.tar_sup_qty cant, a.tar_prc_ext, a.whs_cod
+				lnk_prv_whs ,
+				 ( case when  gds_org_cty = 'QM'  then 'MD' else gds_org_cty  end ) gds_org_cty
+		from st.sad_item a  , st.sad_general_segment b
+		 where a.instanceid = b.instanceid
+         		and a.ide_reg_dat < to_date($P{SYS_DATE},'dd/mm/yyyy')
+ 				and ( case when b.ide_typ_sad = 'IM'  then b.cmp_con_cod   else b.cmp_exp_cod  end ) like $P{CMP_FIS_COD}
+                and a.tar_hsc_nb like $P{TAR_HSC_NB}
+			 	and a.status IN ('Assessed','Paid')
+                and a.lnk_prv_whs like $P{WHS_COD}
+ 				and SUBSTR(a.tar_prc_ext,1,2) IN ('71','73')
+
+ union all
+ 			SELECT key_cuo ide_cuo_cod, '      ' ide_reg_nbr, beg_dat ide_reg_dat,
+					cmp_cod cmp_fis_cod, '   ' cmp_fis_nam, whs_cod,hsc_cod tar_hsc_nb,
+					 wgt_beg net, qty_beg cant, '    ' tar_prc_ext, '    ' lnk_prv_whs,
+					 ( case when  cty_cod = 'QM'  then 'MD' else cty_cod  end ) gds_org_cty
+			 from st.SUS_WH_IN
+					where key_dec = 'CHG_OF_OWNER'
+                    		and beg_dat < to_date($P{SYS_DATE},'dd/mm/yyyy')
+                            and whs_cod like $P{WHS_COD}
+							and cmp_cod like $P{CMP_FIS_COD}
+                            and hsc_cod like $P{TAR_HSC_NB}
+union all
+		select ide_cuo_cod, ide_reg_nbr, ide_reg_dat, cmp_fis_cod,cmp_fis_nam,
+				whs_cod,tar_hsc_nb,-net, -cant, tar_prc_ext, lnk_prv_whs, gds_org_cty
+
+        from
+				 (SELECT instance_id, key_cuo ide_cuo_cod, '      ' ide_reg_nbr, beg_dat
+                 		ide_reg_dat,  '   ' cmp_fis_nam, whs_cod,hsc_cod tar_hsc_nb,
+						 wgt_beg net, qty_beg cant, '    ' tar_prc_ext, '    ' lnk_prv_whs,
+						( case when  cty_cod = 'QM'  then 'MD' else cty_cod  end ) gds_org_cty,
+						key_nber nber
+ 					from st.SUS_WH_IN
+			        where key_dec = 'CHG_OF_OWNER'
+        					and beg_dat < to_date($P{SYS_DATE},'dd/mm/yyyy')
+            				and whs_cod like $P{WHS_COD}
+				 )  a
+			left outer join
+				(SELECT instance_id,cmp_cod cmp_fis_cod  from st.SUS_WH_IN )  b on a.nber = b.instance_id
+			where  1=1 and
+            	b.cmp_fis_cod like $P{CMP_FIS_COD}
+            	and a.tar_hsc_nb like $P{TAR_HSC_NB}
+)
+ group by cmp_fis_cod,whs_cod,tar_hsc_nb,gds_org_cty
+having SUM(net) <> 0
+
+--- End SOLD
+
+)
+order by whs_cod,cmp_fis_cod,tar_hsc_nb,gds_org_cty,ide_reg_dat]]></queryString>
+
+	<field name="IDE_REG_DAT" class="java.sql.Timestamp"/>
+	<field name="CMP_FIS_COD" class="java.lang.String"/>
+	<field name="CMP_FIS_NAM" class="java.lang.String"/>
+	<field name="WHS_COD" class="java.lang.String"/>
+	<field name="TAR_HSC_NB" class="java.lang.String"/>
+	<field name="NET" class="java.math.BigDecimal"/>
+	<field name="CANT" class="java.math.BigDecimal"/>
+	<field name="TAR_PRC_EXT" class="java.lang.String"/>
+	<field name="LNK_PRV_WHS" class="java.lang.String"/>
+	<field name="GDS_ORG_CTY" class="java.lang.String"/>
+
+	<variable name="SYS_DATE" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SYS_DATE}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{SYS_DATE}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{SYS_DATE}.substring($P{SYS_DATE}.toUpperCase().indexOf("TO_DATE")+9, $P{SYS_DATE}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{SYS_DATE}.substring($P{SYS_DATE}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SYS_DATE}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{SYS_DATE}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SYS_DATE}.substring($P{SYS_DATE}.toUpperCase().indexOf("TO_DATE")+9, $P{SYS_DATE}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SYS_DATE}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{SYS_DATE}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{SYS_DATE}.indexOf("'") >= 0 ?
+            $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf("'")+1,$P{SYS_DATE}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SYS_DATE}.indexOf(">=") > 0 && $P{SYS_DATE}.indexOf("<=") > 0 ?
+              $P{SYS_DATE}.substring( $P{SYS_DATE}.indexOf(">=")+2, $P{SYS_DATE}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SYS_DATE}.substring($P{SYS_DATE}.lastIndexOf("<=")+2, $P{SYS_DATE}.length() )
+              : ( $P{SYS_DATE}.indexOf(">") > 0 && $P{SYS_DATE}.indexOf("=") > 0 && $P{SYS_DATE}.indexOf("<") < 0 ?
+                $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf(">="),$P{SYS_DATE}.length() )
+                : ( $P{SYS_DATE}.indexOf("<") > 0 && $P{SYS_DATE}.indexOf("=") > 0 && $P{SYS_DATE}.indexOf(">") < 0 ?
+                  $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf("<="),$P{SYS_DATE}.length() )
+                  : ( $P{SYS_DATE}.indexOf(">") > 0 && $P{SYS_DATE}.indexOf("=") < 0 ?
+                    $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf(">"),$P{SYS_DATE}.length() )
+                    : ($P{SYS_DATE}.indexOf("<") > 0 && $P{SYS_DATE}.indexOf("=") < 0 ?
+                      $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf("<"), $P{SYS_DATE}.length() )
+                      : ( $P{SYS_DATE}.indexOf("=") > 0 ?
+                        $P{SYS_DATE}.substring($P{SYS_DATE}.indexOf("=")+1, $P{SYS_DATE}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="CMP_FIS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{CMP_FIS_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{CMP_FIS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{CMP_FIS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{CMP_FIS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{CMP_FIS_COD}.indexOf("'") >= 0 ?
+            $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf("'")+1,$P{CMP_FIS_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{CMP_FIS_COD}.indexOf(">=") > 0 && $P{CMP_FIS_COD}.indexOf("<=") > 0 ?
+              $P{CMP_FIS_COD}.substring( $P{CMP_FIS_COD}.indexOf(">=")+2, $P{CMP_FIS_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.lastIndexOf("<=")+2, $P{CMP_FIS_COD}.length() )
+              : ( $P{CMP_FIS_COD}.indexOf(">") > 0 && $P{CMP_FIS_COD}.indexOf("=") > 0 && $P{CMP_FIS_COD}.indexOf("<") < 0 ?
+                $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf(">="),$P{CMP_FIS_COD}.length() )
+                : ( $P{CMP_FIS_COD}.indexOf("<") > 0 && $P{CMP_FIS_COD}.indexOf("=") > 0 && $P{CMP_FIS_COD}.indexOf(">") < 0 ?
+                  $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf("<="),$P{CMP_FIS_COD}.length() )
+                  : ( $P{CMP_FIS_COD}.indexOf(">") > 0 && $P{CMP_FIS_COD}.indexOf("=") < 0 ?
+                    $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf(">"),$P{CMP_FIS_COD}.length() )
+                    : ($P{CMP_FIS_COD}.indexOf("<") > 0 && $P{CMP_FIS_COD}.indexOf("=") < 0 ?
+                      $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf("<"), $P{CMP_FIS_COD}.length() )
+                      : ( $P{CMP_FIS_COD}.indexOf("=") > 0 ?
+                        $P{CMP_FIS_COD}.substring($P{CMP_FIS_COD}.indexOf("=")+1, $P{CMP_FIS_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="WHS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{WHS_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{WHS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{WHS_COD}.substring($P{WHS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{WHS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{WHS_COD}.substring($P{WHS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{WHS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{WHS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{WHS_COD}.substring($P{WHS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{WHS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{WHS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{WHS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{WHS_COD}.indexOf("'") >= 0 ?
+            $P{WHS_COD}.substring($P{WHS_COD}.indexOf("'")+1,$P{WHS_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{WHS_COD}.indexOf(">=") > 0 && $P{WHS_COD}.indexOf("<=") > 0 ?
+              $P{WHS_COD}.substring( $P{WHS_COD}.indexOf(">=")+2, $P{WHS_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{WHS_COD}.substring($P{WHS_COD}.lastIndexOf("<=")+2, $P{WHS_COD}.length() )
+              : ( $P{WHS_COD}.indexOf(">") > 0 && $P{WHS_COD}.indexOf("=") > 0 && $P{WHS_COD}.indexOf("<") < 0 ?
+                $P{WHS_COD}.substring($P{WHS_COD}.indexOf(">="),$P{WHS_COD}.length() )
+                : ( $P{WHS_COD}.indexOf("<") > 0 && $P{WHS_COD}.indexOf("=") > 0 && $P{WHS_COD}.indexOf(">") < 0 ?
+                  $P{WHS_COD}.substring($P{WHS_COD}.indexOf("<="),$P{WHS_COD}.length() )
+                  : ( $P{WHS_COD}.indexOf(">") > 0 && $P{WHS_COD}.indexOf("=") < 0 ?
+                    $P{WHS_COD}.substring($P{WHS_COD}.indexOf(">"),$P{WHS_COD}.length() )
+                    : ($P{WHS_COD}.indexOf("<") > 0 && $P{WHS_COD}.indexOf("=") < 0 ?
+                      $P{WHS_COD}.substring($P{WHS_COD}.indexOf("<"), $P{WHS_COD}.length() )
+                      : ( $P{WHS_COD}.indexOf("=") > 0 ?
+                        $P{WHS_COD}.substring($P{WHS_COD}.indexOf("=")+1, $P{WHS_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TAR_HSC_NB" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TAR_HSC_NB}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TAR_HSC_NB}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+9, $P{TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TAR_HSC_NB}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+9, $P{TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TAR_HSC_NB}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TAR_HSC_NB}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TAR_HSC_NB}.indexOf("'") >= 0 ?
+            $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf("'")+1,$P{TAR_HSC_NB}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TAR_HSC_NB}.indexOf(">=") > 0 && $P{TAR_HSC_NB}.indexOf("<=") > 0 ?
+              $P{TAR_HSC_NB}.substring( $P{TAR_HSC_NB}.indexOf(">=")+2, $P{TAR_HSC_NB}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.lastIndexOf("<=")+2, $P{TAR_HSC_NB}.length() )
+              : ( $P{TAR_HSC_NB}.indexOf(">") > 0 && $P{TAR_HSC_NB}.indexOf("=") > 0 && $P{TAR_HSC_NB}.indexOf("<") < 0 ?
+                $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf(">="),$P{TAR_HSC_NB}.length() )
+                : ( $P{TAR_HSC_NB}.indexOf("<") > 0 && $P{TAR_HSC_NB}.indexOf("=") > 0 && $P{TAR_HSC_NB}.indexOf(">") < 0 ?
+                  $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf("<="),$P{TAR_HSC_NB}.length() )
+                  : ( $P{TAR_HSC_NB}.indexOf(">") > 0 && $P{TAR_HSC_NB}.indexOf("=") < 0 ?
+                    $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf(">"),$P{TAR_HSC_NB}.length() )
+                    : ($P{TAR_HSC_NB}.indexOf("<") > 0 && $P{TAR_HSC_NB}.indexOf("=") < 0 ?
+                      $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf("<"), $P{TAR_HSC_NB}.length() )
+                      : ( $P{TAR_HSC_NB}.indexOf("=") > 0 ?
+                        $P{TAR_HSC_NB}.substring($P{TAR_HSC_NB}.indexOf("=")+1, $P{TAR_HSC_NB}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+
+		<group  name="Antrepozit vamal" >
+			<groupExpression><![CDATA[$F{WHS_COD}]]></groupExpression>
+			<groupHeader>
+			<band height="13"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="100"
+						height="12"
+						key="staticText-8"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Antrepozitul vamal]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="100"
+						y="0"
+						width="143"
+						height="12"
+						key="textField-5"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{WHS_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="Acent economic" >
+			<groupExpression><![CDATA[$F{CMP_FIS_COD}]]></groupExpression>
+			<groupHeader>
+			<band height="37"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="135"
+						y="8"
+						width="286"
+						height="11"
+						key="textField-1"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CMP_FIS_COD} + "    " + ($F{CMP_FIS_NAM}==null ? "-":$F{CMP_FIS_NAM})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="51"
+						y="8"
+						width="85"
+						height="11"
+						key="staticText-2"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Cod agent economic]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="466"
+						y="21"
+						width="69"
+						height="16"
+						key="staticText-5"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Cantit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="412"
+						y="21"
+						width="54"
+						height="16"
+						key="staticText-6"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Netto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="375"
+						y="21"
+						width="37"
+						height="16"
+						key="staticText-7"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Regim]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="276"
+						y="21"
+						width="70"
+						height="16"
+						key="staticText-7"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Pozitia tarifara]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="346"
+						y="21"
+						width="29"
+						height="16"
+						key="staticText-7"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Tara]]></text>
+				</staticText>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="129"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="535"
+						height="24"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="18"/>
+					</textElement>
+				<text><![CDATA[Antrepozit vamal total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="33"
+						width="225"
+						height="14"
+						key="staticText-13"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Times New Roman" pdfFontName="Times-BoldItalic" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Data:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="47"
+						width="225"
+						height="14"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Times New Roman" pdfFontName="Times-BoldItalic" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Cod fiscal:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd.MM.yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="243"
+						y="33"
+						width="166"
+						height="14"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{SYS_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="243"
+						y="47"
+						width="166"
+						height="14"
+						key="textField-11"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{CMP_FIS_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="61"
+						width="225"
+						height="14"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Times New Roman" pdfFontName="Times-BoldItalic" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Cod antrepozit vamal:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="75"
+						width="225"
+						height="14"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font fontName="Times New Roman" pdfFontName="Times-BoldItalic" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Cod marfa:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="243"
+						y="75"
+						width="166"
+						height="14"
+						key="textField-11"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{TAR_HSC_NB}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="243"
+						y="61"
+						width="166"
+						height="14"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{WHS_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="36"
+						y="-56"
+						width="0"
+						height="0"
+						key="staticText-12"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Static Text]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="466"
+						y="0"
+						width="69"
+						height="10"
+						key="textField-2"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{CANT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="412"
+						y="0"
+						width="54"
+						height="10"
+						key="textField-3"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{NET}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="375"
+						y="0"
+						width="37"
+						height="10"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TAR_PRC_EXT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="346"
+						y="0"
+						width="29"
+						height="10"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GDS_ORG_CTY}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="276"
+						y="0"
+						width="70"
+						height="10"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TAR_HSC_NB}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="24"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="194"
+						y="10"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="310"
+						y="0"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-15"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="498"
+						y="0"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="-1"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

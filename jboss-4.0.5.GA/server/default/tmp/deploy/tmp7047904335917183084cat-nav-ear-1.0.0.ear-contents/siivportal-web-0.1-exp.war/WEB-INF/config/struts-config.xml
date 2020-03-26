@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+        "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<!--
+ # Module   : default config file
+ # File     : WEB-INF/struts-config.xml
+ # Creation : 07.07.2005
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+	<form-beans>
+		<form-bean name="form_LoginForm" type="ro.uti.apmc.sys.command.LoginForm"/>
+		<form-bean name="form_ImageForm" type="ro.uti.apmc.portal.components.command.ImageForm"/>
+		<form-bean name="form_MenuForm"  type="ro.uti.apmc.sys.command.AdmMenuForm"/>
+		<form-bean name="form_SearchForm"
+			type="ro.uti.apmc.portal.search.action.SearchForm"/>
+		<!--form-bean name="form_AdmMenuEntryForm" type="ro.uti.apmc.sys.command.AdmMenuEntryForm" /-->
+	</form-beans>
+	<global-exceptions>
+		<exception
+			key="global.error.message"
+			path="/exception.jsp"
+			type="java.lang.Exception"/>
+	</global-exceptions>
+	<global-forwards type="org.apache.struts.action.ActionForward">
+		<forward path="/userservice/tbl_appl_user_session.do"
+			name="/sw" contextRelative="true"/>
+	</global-forwards>
+	<action-mappings>
+	<action path="/login" name="form_LoginForm"
+			type="ro.uti.apmc.sys.command.LoginAction" scope="request"
+			validate="false" input="/login.jsp" parameter="method">
+			<forward name="default" path="/portaltemplate.jsp?page=login"
+				contextRelative="true"/>
+			<forward name="admin" path="/portaltemplate.jsp?page=welcome"
+				contextRelative="true"/>
+			<forward name="site" path="/index.jsp" contextRelative="true"/>
+			<forward name="accessDenied" path="/template.jsp?page=denied"
+				contextRelative="true"/>
+			<forward name="index" path="/index.jsp"
+				contextRelative="true"/>
+			<forward name="showSchimbareParola" contextRelative="true"  path="/portaltemplate.jsp?page=change_pwd"/>
+		</action>
+		<action path="/menu" name="form_MenuForm"
+			type="ro.uti.apmc.sys.command.AdmMenuAction" scope="request"
+			validate="false" input="/menu.jsp" parameter="method">
+			<forward name="default" path="/menu_index.jsp"
+				contextRelative="true"/>
+			<forward name="toolbar" path="/toolbar.jsp" contextRelative="true"/>
+		</action>
+		<!--action path="/admmenuentry" name="form_AdmMenuEntryForm" type="ro.uti.apmc.sys.command.AdmMenuEntryAction" scope="request" validate="false" input="/web/sys/admmenuentry/list_admmenuentry.jsp" parameter="method">
+			  <forward name="showList" path="/template.jsp?page=web/sys/admmenuentry/list_admmenuentry" contextRelative="true" />
+			  <forward name="showAdd" path="/template.jsp?page=web/sys/admmenuentry/add_admmenuentry" contextRelative="true" />
+		  </action-->
+		<action validate="false"
+			type="ro.uti.apmc.portal.components.command.ViewImageMediaTypeAction" scope="request"
+			name="form_ImageForm"
+			path="/image">
+		</action>
+		<action path="/i"
+			type="ro.uti.waf.web.action.I18nAction"
+			scope="request">
+			<forward name="default" contextRelative="true" path="/index.jsp"/>
+		</action>
+		<action path="/s"
+			type="ro.uti.apmc.portal.search.action.SearchAction"
+			scope="request" parameter="method" name="form_SearchForm">
+			<forward name="show" contextRelative="true" path="/portaltemplate.jsp?page=search"/>
+			<forward name="showAdmin" contextRelative="true" path="/template.jsp?page=search_admin"/>
+
+		</action>
+
+		<!--<action path="/back"-->
+		<!--type="ro.uti.waf.components.history.BackAction"-->
+		<!--scope="request">			-->
+		<!--</action>-->
+		<action type="org.apache.struts.actions.SwitchAction" path="/switch">
+			<forward path="/userservice/tbl_appl_session_operation.do"
+				name="default"/>
+		</action>
+		<action path="/ex" type="ro.uti.apmc.exception.ExceptionAction"
+			validate="false" scope="request">
+			<forward name="default" path="/exception.jsp" contextRelative="true"/>
+		</action>
+	</action-mappings>
+
+	<controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+
+	<message-resources parameter="uti.resources.web.sys.adm" null="false"
+		key="adm"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<message-resources parameter="uti.resources.General" null="false"
+		key="app"/>
+	<message-resources parameter="uti.resources.Portal" null="false"
+		key="portal"/>
+	<message-resources parameter="uti.resources.web.reports.report" null="false"
+		key="report"/>
+	<message-resources parameter="uti.resources.web.contrapositions.fileoperation" null="false"
+		key="fileoperation"/>
+	<message-resources parameter="uti.resources.web.contrapositions.fileexport" null="false"
+		key="fileexport"/>
+	<message-resources parameter="uti.resources.web.contrapositions.company" null="false"
+		key="company"/>
+	<message-resources parameter="uti.resources.web.reports.reportmenu" null="false"
+		key="reportmenu"/>
+	<message-resources parameter="uti.resources.web.nom.nomlimba" null="false"
+		key="nomlimba"/>
+	<message-resources parameter="uti.resources.web.sys.admmenuentry"
+		null="false" key="admmenuentry"/>
+	<message-resources parameter="uti.resources.web.sys.admuserinreg"
+		null="false" key="admuserinreg"/>
+	<message-resources parameter="uti.resources.web.sys.admuserext"
+		null="false" key="admuserext"/>
+	<message-resources parameter="uti.resources.web.sys.admmenuentryrole"
+		null="false" key="admmenuentryrole"/>
+	<message-resources parameter="uti.resources.web.sys.admoperationtype"
+		null="false" key="admoperationtype"/>
+	<message-resources parameter="uti.resources.web.sys.admrolehierarchy"
+		null="false" key="admrolehierarchy"/>
+	<message-resources parameter="uti.resources.web.sys.admsessionoperation"
+		null="false" key="admsessionoperation"/>
+	<message-resources parameter="uti.resources.web.sys.admuser" null="false"
+		key="admuser"/>
+	<message-resources parameter="uti.resources.web.sys.admusersession"
+		null="false" key="admusersession"/>
+	<message-resources parameter="uti.resources.web.sys.admparametriiconfig"
+		null="false" key="admparametriiconfig"/>
+	<message-resources parameter="uti.resources.web.sys.admrole" null="false"
+		key="admrole"/>
+	<message-resources parameter="uti.resources.web.portal.mesajsite"
+		null="false" key="mesajsite"/>
+	<message-resources parameter="uti.resources.web.portal.upload" null="false"
+		key="upload"/>
+	<message-resources parameter="uti.resources.web.portal.stire" null="false" key="stire"/>
+	<message-resources parameter="uti.resources.web.portal.stiredct" null="false" key="stiredct"/>
+	<message-resources parameter="uti.resources.web.sys.login" null="false"
+		key="login"/>
+	<message-resources parameter="uti.resources.web.org.persoana"
+		null="false" key="persoana"/>
+	<message-resources parameter="uti.resources.web.org.structorg"
+		null="false" key="structorg"/>
+
+	<message-resources parameter="uti.resources.web.publishing.edhtml"
+		null="false" key="edhtml"/>
+	<message-resources parameter="uti.resources.web.portal.tree.tree" null="false"
+		key="tree"/>
+	<message-resources parameter="uti.resources.web.portal.servicii.servicii"
+		null="false" key="servicii"/>
+	<message-resources parameter="uti.resources.web.portal.terminal.terminal"
+		null="false" key="terminal"/>
+	<message-resources parameter="uti.resources.web.portal.voiajnava" null="false" key="voiajnava"/>
+	<message-resources parameter="uti.resources.web.portal.search.search" null="false" key="search"/>
+
+	<message-resources parameter="uti.resources.web.portal.grupamarfaxterminal" null="false" key="grupamarfaxterminal"/>
+
+
+	<message-resources parameter="uti.resources.web.sys.admmessagetemplate" null="false" key="admmessagetemplate"/>
+	<!-- Composite Entities -->
+	<message-resources parameter="ro.uti.jpf.base.composite.composite" null="false" key="composite"/>
+	<message-resources parameter="ro.uti.jpf.taglib.records.records" null="false" key="records"/>
+	<!-- end Composite Entities -->
+
+	<message-resources parameter="uti.resources.web.portal.linieregulata.linieregulata" null="false" key="lnregulata"/>
+	<message-resources parameter="uti.resources.web.sys.jobimport" null="false" key="jobimport"/>
+	<message-resources parameter="uti.resources.web.audit.audit" null="false" key="audit"/>
+
+	<message-resources parameter="uti.resources.General" null="false" key="app"/>
+	<message-resources parameter="uti.resources.web.portal.buletininformativ" null="false" key="buletininformativ"/>
+    <plug-in className="ro.uti.apmc.sys.util.AppConfigStrutsPlugin">
+
+		<set-property property="auditConfigFilePath"
+			value="/WEB-INF/config/audit/audit-config.xml"/>
+	</plug-in>
+
+	<plug-in className="ro.uti.waf.components.caching.CacheStrutsPlugin">
+		<set-property value="/WEB-INF/config/cache/oscache.properties"
+			property="cachingConfigurationPath"/>
+		<set-property value="ro.uti.waf.components.caching.OSCacheProvider"
+			property="cacheProvider"/>
+	</plug-in>
+
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml"
+			property="pathnames"/>
+	</plug-in>
+
+	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation"
+			value="/WEB-INF/config/spring/webContext-service.xml"/>
+	</plug-in>
+
+</struts-config>

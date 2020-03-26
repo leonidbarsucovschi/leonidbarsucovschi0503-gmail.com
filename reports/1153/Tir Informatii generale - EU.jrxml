@@ -1,0 +1,2375 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="BVBriceniPasageriPerioada"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.5" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="96" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="TIR_VOUCHER_TAB.ITM_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="5;" />
+		<property name="type" value="91" />
+		<property name="required" value="true" />
+		<parameterDescription><![CDATA[Data inregistrare TIR:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and TIR_VOUCHER_TAB.ITM_REG_DAT between to_date('10.07.2010','DD.MM.YYYY hh24:mi:ss') and to_date('11.07.2010','DD.MM.YYYY hh24:mi:ss') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.ITM_REG_CUO_COD" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<property name="visible" value="true" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<property name="nomenclator_code" value="CUO_COD" />
+		<parameterDescription><![CDATA[Birou/Post vamal inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.NBR" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="operators" value="8;" />
+		<parameterDescription><![CDATA[Numar TIR:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.ASS_CTY_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara emis de:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.HLD_NAM" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="operators" value="8;" />
+		<parameterDescription><![CDATA[Nume titular:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.ITM_ARR_CUO_COD" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<property name="visible" value="true" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<property name="nomenclator_code" value="CUO_COD" />
+		<parameterDescription><![CDATA[Birou/Post vamal destinatie:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.ITM_ARR_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="5;" />
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<parameterDescription><![CDATA[Data validare TIR:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and TIR_VOUCHER_TAB.ITM_REG_DAT between to_date('10.07.2010','DD.MM.YYYY hh24:mi:ss') and to_date('11.07.2010','DD.MM.YYYY hh24:mi:ss') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DEP_CTY_COD1" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara plecare 1:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DEP_CTY_COD2" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara plecare 2:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DEP_CTY_COD3" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara plecare 3:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DST_CTY_COD1" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara destinatie 1:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DST_CTY_COD2" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara destinatie 2:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.DST_CTY_COD3" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara destinatie 3:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.TRS_REG_IDT" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="8;" />
+		<property name="type" value="12" />
+		<parameterDescription><![CDATA[Numar de inmatriculare transport:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and TIR_VOUCHER_TAB.TRS_REG_IDT between to_date('10.07.2010','DD.MM.YYYY hh24:mi:ss') and to_date('11.07.2010','DD.MM.YYYY hh24:mi:ss') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_TAB.TRS_TRL_IDT" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="operators" value="8;" />
+		<parameterDescription><![CDATA[Numar de inmatriculare trailer:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="operators" value="8;" />
+		<parameterDescription><![CDATA[Descriere marfa:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT TIR_VOUCHER_TAB.NBR "Carnet TIR number", 
+TIR_VOUCHER_TAB.ITM_REG_CUO_COD "Customs Offices of departure", 
+WITHOUT_CHR1013(TIR_VOUCHER_TAB.HLD_NAM) "Holder of the carnet", 
+TIR_VOUCHER_TAB.DEP_CTY_COD1 "Country of departure",
+TIR_VOUCHER_TAB.DST_CTY_COD1 "Country of destination",
+TIR_VOUCHER_TAB.TRS_REG_IDT "No.of road vehicle", 
+UNATDTAB.ATD_DSC dsc1, 
+UNATDTAB1.ATD_DSC dsc2,
+UNATDTAB2.ATD_DSC dsc3,
+UNATDTAB3.ATD_DSC dsc4,
+TIR_VOUCHER_GDS_TAB.ITM_GDS_PKG_NBR,
+TIR_VOUCHER_GDS_TAB.ITM_GDS_PKG_COD,
+WITHOUT_CHR1013(TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC),
+TIR_VOUCHER_GDS_TAB.ITM_GDS_WGT,
+TIR_VOUCHER_TAB.ITM_TOT_PKG,
+TIR_VOUCHER_TAB.ITM_REG_TIM "Time limit of tranzit",
+TIR_VOUCHER_TAB.ITM_REG_DAT "Registered date",
+'t/e nr.valete VAU' VOU,
+TIR_VOUCHER_TAB.ITM_ARR_RES_TXT "Reservation",
+TIR_VOUCHER_GDS_TAB.FULLNAME
+FROM TIR_VOUCHER_TAB
+JOIN TIR_VOUCHER_GDS_TAB on TIR_VOUCHER_TAB.INSTANCE_ID = TIR_VOUCHER_GDS_TAB.INSTANCE_ID
+left JOIN NOMENCLATOARE.UNATDTAB  UNATDTAB  ON TIR_VOUCHER_TAB.ITM_ATD_COD1 = UNATDTAB.atd_cod
+left JOIN NOMENCLATOARE.UNATDTAB  UNATDTAB1  ON TIR_VOUCHER_TAB.ITM_ATD_COD2 = UNATDTAB1.atd_cod
+left JOIN NOMENCLATOARE.UNATDTAB  UNATDTAB2  ON TIR_VOUCHER_TAB.ITM_ATD_COD3 = UNATDTAB2.atd_cod
+left JOIN NOMENCLATOARE.UNATDTAB  UNATDTAB3  ON TIR_VOUCHER_TAB.ITM_ATD_COD4 = UNATDTAB3.atd_cod
+WHERE 
+TIR_VOUCHER_TAB.RNK = TIR_VOUCHER_GDS_TAB.RNK 
+AND TIR_VOUCHER_TAB.STATUS like 'Closed%'
+and TIR_VOUCHER_TAB.DST_CTY_COD1='UA'
+$P!{TIR_VOUCHER_TAB.ITM_REG_DAT} 
+$P!{TIR_VOUCHER_TAB.NBR}
+$P!{TIR_VOUCHER_TAB.ASS_CTY_COD} 
+$P!{TIR_VOUCHER_TAB.HLD_NAM} 
+$P!{TIR_VOUCHER_TAB.ITM_REG_CUO_COD} 
+$P!{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD} 
+$P!{TIR_VOUCHER_TAB.ITM_ARR_DAT} 
+$P!{TIR_VOUCHER_TAB.DEP_CTY_COD1} 
+$P!{TIR_VOUCHER_TAB.DEP_CTY_COD2} 
+$P!{TIR_VOUCHER_TAB.DEP_CTY_COD3} 
+$P!{TIR_VOUCHER_TAB.DST_CTY_COD1} 
+$P!{TIR_VOUCHER_TAB.DST_CTY_COD2} 
+$P!{TIR_VOUCHER_TAB.DST_CTY_COD3} 
+$P!{TIR_VOUCHER_TAB.TRS_REG_IDT} 
+$P!{TIR_VOUCHER_TAB.TRS_TRL_IDT} 
+$P!{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}
+order by TIR_VOUCHER_TAB.NBR]]></queryString>
+
+	<field name="Carnet TIR number" class="java.lang.String"/>
+	<field name="Customs Offices of departure" class="java.lang.String"/>
+	<field name="Holder of the carnet" class="java.lang.String"/>
+	<field name="Country of departure" class="java.lang.String"/>
+	<field name="Country of destination" class="java.lang.String"/>
+	<field name="No.of road vehicle" class="java.lang.String"/>
+	<field name="DSC1" class="java.lang.String"/>
+	<field name="DSC2" class="java.lang.String"/>
+	<field name="DSC3" class="java.lang.String"/>
+	<field name="DSC4" class="java.lang.String"/>
+	<field name="ITM_GDS_PKG_NBR" class="java.math.BigDecimal"/>
+	<field name="ITM_GDS_PKG_COD" class="java.lang.String"/>
+	<field name="WITHOUT_CHR1013(TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC)" class="java.lang.String"/>
+	<field name="ITM_GDS_WGT" class="java.math.BigDecimal"/>
+	<field name="ITM_TOT_PKG" class="java.math.BigDecimal"/>
+	<field name="Time limit of tranzit" class="java.sql.Timestamp"/>
+	<field name="Registered date" class="java.sql.Timestamp"/>
+	<field name="VOU" class="java.lang.String"/>
+	<field name="Reservation" class="java.lang.String"/>
+	<field name="FULLNAME" class="java.lang.String"/>
+
+	<variable name="TIR_VOUCHER_TAB.ITM_REG_CUO_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+              : ( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">="),$P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+                : ( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<="),$P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf(">"),$P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+                    : ($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("<"), $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.ITM_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.ITM_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+              : ( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">="),$P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+                : ( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<="),$P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf(">"),$P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+                    : ($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("<"), $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_REG_DAT}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.ITM_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.NBR" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.NBR}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.NBR}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.NBR}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.NBR}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.NBR}.substring( $P{TIR_VOUCHER_TAB.NBR}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.NBR}.length() )
+              : ( $P{TIR_VOUCHER_TAB.NBR}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf(">="),$P{TIR_VOUCHER_TAB.NBR}.length() )
+                : ( $P{TIR_VOUCHER_TAB.NBR}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf("<="),$P{TIR_VOUCHER_TAB.NBR}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.NBR}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf(">"),$P{TIR_VOUCHER_TAB.NBR}.length() )
+                    : ($P{TIR_VOUCHER_TAB.NBR}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.NBR}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf("<"), $P{TIR_VOUCHER_TAB.NBR}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.NBR}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.NBR}.substring($P{TIR_VOUCHER_TAB.NBR}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.ASS_CTY_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.ASS_CTY_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+              : ( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">="),$P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+                : ( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<="),$P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf(">"),$P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+                    : ($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("<"), $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.substring($P{TIR_VOUCHER_TAB.ASS_CTY_COD}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.ASS_CTY_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.HLD_NAM" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.HLD_NAM}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.HLD_NAM}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.HLD_NAM}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.HLD_NAM}.substring( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.HLD_NAM}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+              : ( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">="),$P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+                : ( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<="),$P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf(">"),$P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+                    : ($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("<"), $P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.HLD_NAM}.substring($P{TIR_VOUCHER_TAB.HLD_NAM}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.HLD_NAM}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.ITM_ARR_CUO_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+              : ( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">="),$P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+                : ( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<="),$P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf(">"),$P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+                    : ($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("<"), $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.ITM_ARR_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+              : ( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">="),$P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+                : ( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<="),$P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf(">"),$P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+                    : ($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("<"), $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.substring($P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.ITM_ARR_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DEP_CTY_COD1" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf(">"),$P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("<"), $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DEP_CTY_COD1}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DEP_CTY_COD2" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf(">"),$P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("<"), $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DEP_CTY_COD2}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DEP_CTY_COD3" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<="),$P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf(">"),$P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("<"), $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DEP_CTY_COD3}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DST_CTY_COD1" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DST_CTY_COD1}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">="),$P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<="),$P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf(">"),$P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("<"), $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD1}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DST_CTY_COD1}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DST_CTY_COD2" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DST_CTY_COD2}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">="),$P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<="),$P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf(">"),$P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("<"), $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD2}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DST_CTY_COD2}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.DST_CTY_COD3" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.DST_CTY_COD3}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+              : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">="),$P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+                : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<="),$P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf(">"),$P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+                    : ($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("<"), $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.substring($P{TIR_VOUCHER_TAB.DST_CTY_COD3}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.DST_CTY_COD3}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.TRS_REG_IDT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.TRS_REG_IDT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+              : ( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">="),$P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+                : ( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<="),$P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf(">"),$P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+                    : ($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("<"), $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_REG_IDT}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.TRS_REG_IDT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_TAB.TRS_TRL_IDT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("'")+1,$P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">=") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">=")+2, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+              : ( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">="),$P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+                : ( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<="),$P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+                  : ( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf(">"),$P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+                    : ($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<") > 0 && $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("<"), $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+                      : ( $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.substring($P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.indexOf("=")+1, $P{TIR_VOUCHER_TAB.TRS_TRL_IDT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("TO_DATE")+9, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("'") >= 0 ?
+            $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("'")+1,$P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">=") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<=") > 0 ?
+              $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">=")+2, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.lastIndexOf("<=")+2, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+              : ( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<") < 0 ?
+                $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">="),$P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+                : ( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">") < 0 ?
+                  $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<="),$P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+                  : ( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=") < 0 ?
+                    $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf(">"),$P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+                    : ($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<") > 0 && $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=") < 0 ?
+                      $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("<"), $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+                      : ( $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=") > 0 ?
+                        $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.substring($P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.indexOf("=")+1, $P{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="400"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="133"
+						y="13"
+						width="500"
+						height="30"
+						forecolor="#666666"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Serviciul Vamal al Ministerului Finantelor al Republicii Moldova]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="103"
+						width="149"
+						height="15"
+						forecolor="#666666"
+						key="staticText-13"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Birou/Post vamal inregistrare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="103"
+						width="350"
+						height="15"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.ITM_REG_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="120"
+						width="350"
+						height="15"
+						key="textField-21"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.ITM_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="120"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-19"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Data inregistrare TIR:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="188"
+						y="50"
+						width="380"
+						height="22"
+						forecolor="#666666"
+						key="staticText-31"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[TIR Informatii generale]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="156"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-49"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara emis de:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="156"
+						width="350"
+						height="15"
+						key="textField-38"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.ASS_CTY_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="138"
+						width="350"
+						height="15"
+						key="textField-39"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.NBR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="138"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-50"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Numar TIR:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="174"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-51"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Nume titular:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="174"
+						width="350"
+						height="15"
+						key="textField-40"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.HLD_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="192"
+						width="350"
+						height="15"
+						key="textField-41"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.ITM_ARR_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="192"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-52"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Birou/Post vamal destinatie:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="210"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-53"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Data validare TIR:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="210"
+						width="350"
+						height="15"
+						key="textField-42"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.ITM_ARR_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="228"
+						width="350"
+						height="15"
+						key="textField-43"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DEP_CTY_COD1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="228"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-54"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara plecare 1:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="246"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-55"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara plecare 2:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="246"
+						width="350"
+						height="15"
+						key="textField-44"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DEP_CTY_COD2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="263"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-56"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara plecare 3:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="281"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-57"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara destinatie 1:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="299"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-58"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara destinatie 2:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="317"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-59"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tara destinatie 3:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="335"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-60"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Numar de inmatriculare transport:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="353"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-61"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Numar de inmatriculare trailer:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="135"
+						y="371"
+						width="150"
+						height="15"
+						forecolor="#666666"
+						key="staticText-62"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Descriere marfa:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="263"
+						width="350"
+						height="15"
+						key="textField-45"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DEP_CTY_COD3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="281"
+						width="350"
+						height="15"
+						key="textField-46"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DST_CTY_COD1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="299"
+						width="350"
+						height="15"
+						key="textField-47"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DST_CTY_COD2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="317"
+						width="350"
+						height="15"
+						key="textField-48"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.DST_CTY_COD3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="335"
+						width="350"
+						height="15"
+						key="textField-49"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.TRS_REG_IDT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="353"
+						width="350"
+						height="15"
+						key="textField-50"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_TAB.TRS_TRL_IDT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="371"
+						width="350"
+						height="15"
+						key="textField-51"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="135"
+						y="88"
+						width="149"
+						height="13"
+						key="staticText-74"/>
+					<box rightPadding="2">					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="290"
+						y="88"
+						width="350"
+						height="13"
+						forecolor="#000000"
+						key="textField-63"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="36"
+						y="-363"
+						width="0"
+						height="0"
+						key="staticText-12"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Static Text]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="65"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="2"
+						y="16"
+						width="48"
+						height="49"
+						forecolor="#000000"
+						key="staticText-40"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Nr TIR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="50"
+						y="16"
+						width="30"
+						height="49"
+						forecolor="#000000"
+						key="staticText-41"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Birou/Post vamal inregistrare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="80"
+						y="16"
+						width="67"
+						height="49"
+						forecolor="#000000"
+						key="staticText-42"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Nume titular]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="147"
+						y="16"
+						width="25"
+						height="49"
+						forecolor="#000000"
+						key="staticText-43"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Tara plecare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="197"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-44"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Numar de inmatriculare transport]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="236"
+						y="35"
+						width="39"
+						height="30"
+						forecolor="#000000"
+						key="staticText-45"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Doc 1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="275"
+						y="35"
+						width="39"
+						height="30"
+						forecolor="#000000"
+						key="staticText-46"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Doc 2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="314"
+						y="35"
+						width="39"
+						height="30"
+						forecolor="#000000"
+						key="staticText-47"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Doc 3]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="353"
+						y="35"
+						width="39"
+						height="30"
+						forecolor="#000000"
+						key="staticText-48"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Doc 4]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="470"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-63"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Descriere marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="431"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-64"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Tip articole]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="392"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-65"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Nr. de pachete]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="172"
+						y="16"
+						width="25"
+						height="49"
+						forecolor="#000000"
+						key="staticText-66"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Tara destinatie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="731"
+						y="16"
+						width="50"
+						height="49"
+						forecolor="#000000"
+						key="staticText-67"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Inspector Vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="692"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-68"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Rezervare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="647"
+						y="16"
+						width="45"
+						height="49"
+						forecolor="#000000"
+						key="staticText-69"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Nr. valete]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="608"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-70"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Data inregistrarii la BV (PV)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="569"
+						y="16"
+						width="39"
+						height="49"
+						forecolor="#000000"
+						key="staticText-71"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Timpul limita de tranzit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="539"
+						y="16"
+						width="30"
+						height="49"
+						forecolor="#000000"
+						key="staticText-72"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Total nr. pachete]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="509"
+						y="16"
+						width="30"
+						height="49"
+						forecolor="#000000"
+						key="staticText-73"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Greutatea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="236"
+						y="16"
+						width="156"
+						height="19"
+						forecolor="#000000"
+						key="staticText-75"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[Documente atasate]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="21"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="50"
+						y="0"
+						width="30"
+						height="21"
+						forecolor="#333333"
+						key="textField-7"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Customs Offices of departure}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="80"
+						y="0"
+						width="67"
+						height="21"
+						forecolor="#333333"
+						key="textField-5"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Holder of the carnet}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="147"
+						y="0"
+						width="25"
+						height="21"
+						forecolor="#333333"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Country of departure}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="236"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-3"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DSC1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="275"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-2"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DSC2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd.MM.yyyy HH:mm:ss" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="0"
+						width="48"
+						height="21"
+						forecolor="#333333"
+						key="textField-34"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Carnet TIR number}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="197"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-35"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{No.of road vehicle}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="314"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-36"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DSC3}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="353"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-37"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DSC4}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="431"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-52"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ITM_GDS_PKG_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="392"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-53"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ITM_GDS_PKG_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="470"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-54"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{WITHOUT_CHR1013(TIR_VOUCHER_GDS_TAB.ITM_GDS_DSC)}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="509"
+						y="0"
+						width="30"
+						height="21"
+						forecolor="#333333"
+						key="textField-55"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ITM_GDS_WGT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="539"
+						y="0"
+						width="30"
+						height="21"
+						forecolor="#333333"
+						key="textField-56"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ITM_TOT_PKG}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd.MM.yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="569"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-57"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{Time limit of tranzit}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd.MM.yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="608"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-58"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{Registered date}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="647"
+						y="0"
+						width="45"
+						height="21"
+						forecolor="#333333"
+						key="textField-59"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VOU}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="692"
+						y="0"
+						width="39"
+						height="21"
+						forecolor="#333333"
+						key="textField-60"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Reservation}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="731"
+						y="0"
+						width="50"
+						height="21"
+						forecolor="#333333"
+						key="textField-61"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{FULLNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="172"
+						y="0"
+						width="25"
+						height="21"
+						forecolor="#333333"
+						key="textField-62"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Country of destination}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="227"
+						y="17"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="516"
+						y="17"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-15"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="706"
+						y="17"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="5"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-18"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="227"
+						y="18"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="517"
+						y="18"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-19"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="706"
+						y="18"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-20"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

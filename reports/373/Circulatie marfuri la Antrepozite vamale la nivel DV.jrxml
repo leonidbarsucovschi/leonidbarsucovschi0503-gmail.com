@@ -1,0 +1,1521 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Circulatie marfuri la Antrepozite vamale la nivel DV"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="814"
+		 columnSpacing="0"
+		 leftMargin="14"
+		 rightMargin="14"
+		 topMargin="14"
+		 bottomMargin="14"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="PORTALSIIV_TYPES.TIP_DATE_1" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="operators" value="3;" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Inceput perioada Data inregistrare DV :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["01/01/2006"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PORTALSIIV_TYPES.TIP_DATE_2" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="operators" value="4;" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Sfirsit perioada Data inregistrare DV :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA["30/01/2006"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.WHS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNWHSTAB" />
+		<property name="nomenclator_id" value="WHS_COD" />
+		<property name="nomenclator_code" value="WHS_COD" />
+		<property name="nomenclator_descr" value="WHS_NAM" />
+		<parameterDescription><![CDATA[Antrepozit vamal:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.CMP_FIS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[IDNO responsabil financiar:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.CMP_FIS_NAM" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Nume responsabil financiar:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select * from (
+select 
+SAD_ITEM.WHS_COD cod_antrepozit,
+UNWHSTAB.WHS_NAM nume_antrepozit,
+without_chr1013(UNWHSTAB.WHS_ADR||' '||UNWHSTAB.WHS_AD2||' '||UNWHSTAB.WHS_AD3||' '||UNWHSTAB.WHS_AD4||' '||UNWHSTAB.WHS_TEL) adresa_antrepozit,
+SAD_ITEM.CMP_FIS_COD resp_fin_cod,
+without_chr1013(SAD_ITEM.CMP_FIS_NAM) resp_fin_nam, 
+SAD_ITEM.ide_cuo_cod cuo_dec, 
+SAD_ITEM.ide_reg_nbr nr_dec, 
+to_char(SAD_ITEM.ide_reg_dat,'dd/mm/yyyy') data_dec,
+
+sum( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy')
+and substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_WGT_GRS, 0) else 0 end ) greutate_brutto_in,
+
+sum( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy')
+and substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_STV, 0) else 0 end ) valoare_in_vama_in,
+
+avg( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy') 
+and substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.FIN_GTY_AMT, 0) else 0 end ) garantie_in,
+
+sum( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy')
+and substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_WGT_GRS, 0) else 0 end ) greutate_brutto_out,
+
+sum( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy')
+and substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_STV, 0) else 0 end ) valoare_in_vama_out,
+
+avg( case when SAD_ITEM.IDE_REG_DAT >= to_date($P{PORTALSIIV_TYPES.TIP_DATE_1},'dd/mm/yyyy') and SAD_ITEM.IDE_REG_DAT <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy') 
+and substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.FIN_GTY_AMT, 0) else 0 end ) garantie_out,
+
+sum( case when substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_WGT_GRS, 0) else 0 end
+- case when substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_WGT_GRS, 0) else 0 end ) greutate_brutto_end,
+
+sum( case when substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_STV, 0) else 0 end
+- case when substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.VIT_STV, 0) else 0 end ) valoare_in_vama_end,
+
+avg( case when substr(SAD_ITEM.TAR_PRC_EXT,1,2) in ('71','72','73') then NVL(SAD_ITEM.FIN_GTY_AMT, 0) else 0 end
+- case when substr(SAD_ITEM.TAR_PRC_EXT,3,2) in ('71','72','73') then NVL(SAD_ITEM.FIN_GTY_AMT, 0) else 0 end ) garantie_end
+
+from st.SAD_ITEM SAD_ITEM left outer join nomenclatoare.UNWHSTAB UNWHSTAB on (SAD_ITEM.WHS_COD = UNWHSTAB.WHS_COD)
+where sad_item.ide_reg_dat >= to_date('01/01/2005','dd/mm/yyyy')
+and sad_item.ide_reg_dat <= to_date($P{PORTALSIIV_TYPES.TIP_DATE_2},'dd/mm/yyyy')
+and ( substr(TAR_PRC_EXT,1,2) in ('71','72','73') 
+or substr(TAR_PRC_EXT,3,2) in ('71','72','73') )
+$P!{SAD_ITEM.WHS_COD}
+$P!{SAD_ITEM.CMP_FIS_COD}
+$P!{SAD_ITEM.CMP_FIS_NAM}
+
+group by 
+SAD_ITEM.WHS_COD,
+UNWHSTAB.WHS_NAM,
+without_chr1013(UNWHSTAB.WHS_ADR||' '||UNWHSTAB.WHS_AD2||' '||UNWHSTAB.WHS_AD3||' '||UNWHSTAB.WHS_AD4||' '||UNWHSTAB.WHS_TEL),
+SAD_ITEM.CMP_FIS_COD,
+without_chr1013(SAD_ITEM.CMP_FIS_NAM),
+SAD_ITEM.ide_cuo_cod, 
+SAD_ITEM.ide_reg_nbr, 
+to_char(SAD_ITEM.ide_reg_dat,'dd/mm/yyyy')
+
+order by 
+cod_antrepozit,
+nume_antrepozit,
+adresa_antrepozit,
+resp_fin_cod,
+resp_fin_nam,
+cuo_dec, 
+nr_dec, 
+data_dec
+
+)
+where greutate_brutto_in != 0
+or valoare_in_vama_in != 0
+or garantie_in != 0
+or greutate_brutto_out != 0
+or valoare_in_vama_out != 0
+or garantie_out != 0
+
+
+
+]]></queryString>
+
+	<field name="COD_ANTREPOZIT" class="java.lang.String"/>
+	<field name="NUME_ANTREPOZIT" class="java.lang.String"/>
+	<field name="ADRESA_ANTREPOZIT" class="java.lang.String"/>
+	<field name="RESP_FIN_COD" class="java.lang.String"/>
+	<field name="RESP_FIN_NAM" class="java.lang.String"/>
+	<field name="CUO_DEC" class="java.lang.String"/>
+	<field name="NR_DEC" class="java.lang.String"/>
+	<field name="DATA_DEC" class="java.lang.String"/>
+	<field name="GREUTATE_BRUTTO_IN" class="java.math.BigDecimal"/>
+	<field name="VALOARE_IN_VAMA_IN" class="java.math.BigDecimal"/>
+	<field name="GARANTIE_IN" class="java.math.BigDecimal"/>
+	<field name="GREUTATE_BRUTTO_OUT" class="java.math.BigDecimal"/>
+	<field name="VALOARE_IN_VAMA_OUT" class="java.math.BigDecimal"/>
+	<field name="GARANTIE_OUT" class="java.math.BigDecimal"/>
+	<field name="GREUTATE_BRUTTO_END" class="java.math.BigDecimal"/>
+	<field name="VALOARE_IN_VAMA_END" class="java.math.BigDecimal"/>
+	<field name="GARANTIE_END" class="java.math.BigDecimal"/>
+
+	<variable name="SAD_ITEM.WHS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.WHS_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.WHS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_ITEM.WHS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_ITEM.WHS_COD}.indexOf("'") >= 0 ?
+            $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf("'")+1,$P{SAD_ITEM.WHS_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_ITEM.WHS_COD}.indexOf(">=") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("<=") > 0 ?
+              $P{SAD_ITEM.WHS_COD}.substring( $P{SAD_ITEM.WHS_COD}.indexOf(">=")+2, $P{SAD_ITEM.WHS_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.lastIndexOf("<=")+2, $P{SAD_ITEM.WHS_COD}.length() )
+              : ( $P{SAD_ITEM.WHS_COD}.indexOf(">") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("=") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("<") < 0 ?
+                $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf(">="),$P{SAD_ITEM.WHS_COD}.length() )
+                : ( $P{SAD_ITEM.WHS_COD}.indexOf("<") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("=") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf(">") < 0 ?
+                  $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf("<="),$P{SAD_ITEM.WHS_COD}.length() ) 
+                  : ( $P{SAD_ITEM.WHS_COD}.indexOf(">") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("=") < 0 ?
+                    $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf(">"),$P{SAD_ITEM.WHS_COD}.length() )
+                    : ($P{SAD_ITEM.WHS_COD}.indexOf("<") > 0 && $P{SAD_ITEM.WHS_COD}.indexOf("=") < 0 ?
+                      $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf("<"), $P{SAD_ITEM.WHS_COD}.length() )
+                      : ( $P{SAD_ITEM.WHS_COD}.indexOf("=") > 0 ?
+                        $P{SAD_ITEM.WHS_COD}.substring($P{SAD_ITEM.WHS_COD}.indexOf("=")+1, $P{SAD_ITEM.WHS_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="SAD_ITEM.CMP_FIS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.CMP_FIS_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_ITEM.CMP_FIS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_ITEM.CMP_FIS_COD}.indexOf("'") >= 0 ?
+            $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf("'")+1,$P{SAD_ITEM.CMP_FIS_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_ITEM.CMP_FIS_COD}.indexOf(">=") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("<=") > 0 ?
+              $P{SAD_ITEM.CMP_FIS_COD}.substring( $P{SAD_ITEM.CMP_FIS_COD}.indexOf(">=")+2, $P{SAD_ITEM.CMP_FIS_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.lastIndexOf("<=")+2, $P{SAD_ITEM.CMP_FIS_COD}.length() )
+              : ( $P{SAD_ITEM.CMP_FIS_COD}.indexOf(">") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("=") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("<") < 0 ?
+                $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf(">="),$P{SAD_ITEM.CMP_FIS_COD}.length() )
+                : ( $P{SAD_ITEM.CMP_FIS_COD}.indexOf("<") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("=") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf(">") < 0 ?
+                  $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf("<="),$P{SAD_ITEM.CMP_FIS_COD}.length() ) 
+                  : ( $P{SAD_ITEM.CMP_FIS_COD}.indexOf(">") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("=") < 0 ?
+                    $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf(">"),$P{SAD_ITEM.CMP_FIS_COD}.length() )
+                    : ($P{SAD_ITEM.CMP_FIS_COD}.indexOf("<") > 0 && $P{SAD_ITEM.CMP_FIS_COD}.indexOf("=") < 0 ?
+                      $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf("<"), $P{SAD_ITEM.CMP_FIS_COD}.length() )
+                      : ( $P{SAD_ITEM.CMP_FIS_COD}.indexOf("=") > 0 ?
+                        $P{SAD_ITEM.CMP_FIS_COD}.substring($P{SAD_ITEM.CMP_FIS_COD}.indexOf("=")+1, $P{SAD_ITEM.CMP_FIS_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="SAD_ITEM.CMP_FIS_NAM" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.CMP_FIS_NAM}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_ITEM.CMP_FIS_NAM}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("'") >= 0 ?
+            $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("'")+1,$P{SAD_ITEM.CMP_FIS_NAM}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">=") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<=") > 0 ?
+              $P{SAD_ITEM.CMP_FIS_NAM}.substring( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">=")+2, $P{SAD_ITEM.CMP_FIS_NAM}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.lastIndexOf("<=")+2, $P{SAD_ITEM.CMP_FIS_NAM}.length() )
+              : ( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<") < 0 ?
+                $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">="),$P{SAD_ITEM.CMP_FIS_NAM}.length() )
+                : ( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">") < 0 ?
+                  $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<="),$P{SAD_ITEM.CMP_FIS_NAM}.length() ) 
+                  : ( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=") < 0 ?
+                    $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf(">"),$P{SAD_ITEM.CMP_FIS_NAM}.length() )
+                    : ($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<") > 0 && $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=") < 0 ?
+                      $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("<"), $P{SAD_ITEM.CMP_FIS_NAM}.length() )
+                      : ( $P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=") > 0 ?
+                        $P{SAD_ITEM.CMP_FIS_NAM}.substring($P{SAD_ITEM.CMP_FIS_NAM}.indexOf("=")+1, $P{SAD_ITEM.CMP_FIS_NAM}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="total_brutto_in_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_IN}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_in_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_IN}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_brutto_out_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_OUT}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_out_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_OUT}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_brutto_in" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_IN}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_in" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_IN}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_brutto_out" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_OUT}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_out" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_OUT}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_brutto_end_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_END}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_end_antrepozit_responsabil_financiar" class="java.math.BigDecimal" resetType="Group" resetGroup="Antrepozit_Responsabil_financiar" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_END}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_brutto_end" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{GREUTATE_BRUTTO_END}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="total_valoare_in_vama_end" class="java.math.BigDecimal" resetType="Group" resetGroup="total_general" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_IN_VAMA_END}.divide( new BigDecimal(1), 2, BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+
+		<group  name="total_general" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="734"
+						y="2"
+						width="80"
+						height="14"
+						forecolor="#000000"
+						key="textField-168"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="654"
+						y="2"
+						width="80"
+						height="14"
+						forecolor="#000000"
+						key="textField-169"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_end}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="574"
+						y="2"
+						width="80"
+						height="14"
+						forecolor="#000000"
+						key="textField-170"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_end}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="502"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-148"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="430"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-146"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_out}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="358"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-144"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_out}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="286"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-139"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="214"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-137"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_in}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="2"
+						width="72"
+						height="14"
+						forecolor="#000000"
+						key="textField-132"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="total_general"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_in}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="2"
+						width="142"
+						height="14"
+						forecolor="#000000"
+						key="staticText-73"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total general:]]></text>
+				</staticText>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="Antrepozit_Responsabil_financiar" isReprintHeaderOnEachPage="true" minHeightToStartNewPage="74" >
+			<groupExpression><![CDATA[$F{COD_ANTREPOZIT}.concat($F{RESP_FIN_COD}).concat($F{RESP_FIN_NAM})]]></groupExpression>
+			<groupHeader>
+			<band height="50"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="10"
+						width="814"
+						height="10"
+						forecolor="#000000"
+						key="textField-119"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="Helvetica-BoldOblique" size="7" isBold="true" isItalic="true" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{RESP_FIN_COD} + " - " + $F{RESP_FIN_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="0"
+						width="814"
+						height="10"
+						forecolor="#000000"
+						key="textField-118"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COD_ANTREPOZIT} + " - " + $F{NUME_ANTREPOZIT} + " - (Adresa: " + $F{ADRESA_ANTREPOZIT} + ")"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="734"
+						y="40"
+						width="80"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-93"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Garantie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="654"
+						y="40"
+						width="80"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-92"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Valoare in vama]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="574"
+						y="40"
+						width="80"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-91"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Greutate Brutto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="502"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-84"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Garantie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="430"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-83"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Valoare in vama]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="358"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-82"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Greutate Brutto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="286"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-80"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Garantie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="214"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-79"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Valoare in vama]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="142"
+						y="40"
+						width="72"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-78"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Greutate Brutto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="574"
+						y="30"
+						width="240"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-90"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[regimurile: 71,72,73XX - XX71,72,73]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="358"
+						y="30"
+						width="216"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-81"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[regimurile: XX71 sau XX72 sau XX73]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="142"
+						y="30"
+						width="216"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-77"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[regimurile: 71XX sau 72XX sau 73XX]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="574"
+						y="20"
+						width="240"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="textField-161"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{PORTALSIIV_TYPES.TIP_DATE_2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="142"
+						y="20"
+						width="432"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="textField-160"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{PORTALSIIV_TYPES.TIP_DATE_1} + " - " + $P{PORTALSIIV_TYPES.TIP_DATE_2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="88"
+						y="20"
+						width="54"
+						height="30"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-95"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Data inregistrare
+declaratie 
+vamala]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="34"
+						y="20"
+						width="54"
+						height="30"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-19"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="Thin" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Numar inregistrare
+declaratie 
+vamala]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="20"
+						width="34"
+						height="30"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-76"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Birou / Post vamal
+inregistrare]]></text>
+				</staticText>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="15"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="734"
+						y="0"
+						width="80"
+						height="11"
+						forecolor="#000000"
+						key="textField-167"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="654"
+						y="0"
+						width="80"
+						height="11"
+						forecolor="#000000"
+						key="textField-166"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_end_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="574"
+						y="0"
+						width="80"
+						height="11"
+						forecolor="#000000"
+						key="textField-165"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_end_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="502"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-147"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="430"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-145"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_out_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="358"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-143"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_out_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="286"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-138"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="214"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-136"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_valoare_in_vama_in_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="0"
+						width="72"
+						height="11"
+						forecolor="#000000"
+						key="textField-131"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{total_brutto_in_antrepozit_responsabil_financiar}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="142"
+						height="11"
+						forecolor="#000000"
+						key="staticText-74"
+						positionType="Float"
+						printWhenGroupChanges="Antrepozit_Responsabil_financiar"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[total :]]></text>
+				</staticText>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="115"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="814"
+						height="26"
+						key="staticText-54"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Circulatie marfuri la Antrepozite vamale la nivel DV]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="80"
+						width="625"
+						height="13"
+						key="textField-55"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_ITEM.CMP_FIS_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="80"
+						width="182"
+						height="13"
+						key="staticText-55"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[IDNO responsabil financiar:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="28"
+						width="625"
+						height="13"
+						forecolor="#000000"
+						key="textField-56"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="28"
+						width="182"
+						height="13"
+						key="staticText-58"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="110"
+						width="815"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="41"
+						width="625"
+						height="13"
+						key="textField-59"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{PORTALSIIV_TYPES.TIP_DATE_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="41"
+						width="182"
+						height="13"
+						key="staticText-59"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Inceput perioada Data inregistrare DV :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="67"
+						width="625"
+						height="13"
+						key="textField-60"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_ITEM.WHS_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="67"
+						width="182"
+						height="13"
+						key="staticText-60"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Antrepozit vamal:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="93"
+						width="182"
+						height="13"
+						key="staticText-70"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Nume responsabil financiar:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="93"
+						width="625"
+						height="13"
+						key="textField-81"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_ITEM.CMP_FIS_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="189"
+						y="54"
+						width="625"
+						height="13"
+						key="textField-149"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{PORTALSIIV_TYPES.TIP_DATE_2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="54"
+						width="182"
+						height="13"
+						key="staticText-85"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Sfirsit perioada Data inregistrare DV :]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="734"
+						y="0"
+						width="80"
+						height="10"
+						forecolor="#000000"
+						key="textField-162"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GARANTIE_END}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="654"
+						y="0"
+						width="80"
+						height="10"
+						forecolor="#000000"
+						key="textField-163"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VALOARE_IN_VAMA_END}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="574"
+						y="0"
+						width="80"
+						height="10"
+						forecolor="#000000"
+						key="textField-164"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GREUTATE_BRUTTO_END}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="502"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-142"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GARANTIE_OUT}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="430"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-141"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VALOARE_IN_VAMA_OUT}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="358"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-140"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GREUTATE_BRUTTO_OUT}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="286"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-130"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GARANTIE_IN}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="214"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-129"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VALOARE_IN_VAMA_IN}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="0"
+						width="72"
+						height="10"
+						forecolor="#000000"
+						key="textField-128"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GREUTATE_BRUTTO_IN}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="34"
+						y="0"
+						width="54"
+						height="10"
+						forecolor="#000000"
+						key="textField-105"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NR_DEC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="34"
+						height="10"
+						forecolor="#000000"
+						key="textField-108"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="5" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CUO_DEC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="88"
+						y="0"
+						width="54"
+						height="10"
+						forecolor="#000000"
+						key="textField-172"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DATA_DEC}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="14"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="636"
+						y="4"
+						width="139"
+						height="10"
+						forecolor="#000000"
+						key="textField-61"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica" size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="778"
+						y="4"
+						width="36"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-62"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Helvetica" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="4"
+						width="301"
+						height="10"
+						forecolor="#FF0033"
+						key="staticText-61"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

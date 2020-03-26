@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="R1vehicule"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="gs.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="5;" />
+		<property name="type" value="91" />
+		<property name="required" value="true" />
+		<parameterDescription><![CDATA[DATA-Timpul Intrare in PostVAMAL]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and IDE_REG_DAT between to_date('01.01.2009','DD.MM.YYYY') and to_date('25.10.2009','DD.MM.YYYY') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="gs.REGIM" isForPrompting="false" class="java.lang.String">
+		<property name="nomenclator_table" value="REGIM" />
+		<property name="nomenclator_descr" value="DESCRIERE" />
+		<property name="required" value="false" />
+		<property name="nomenclator_id" value="COD" />
+		<parameterDescription><![CDATA[Regim de Vamuire / Tranzit]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="n.CUO_COD" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<property name="visible" value="true" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<parameterDescription><![CDATA[Post Vamal]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and gs.IDE_CUO_COD in ( '1501', '4503') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="gs.SYS_OPR_TYPE" isForPrompting="false" class="java.lang.String">
+		<property name="nomenclator_table" value="VHC_TYPE" />
+		<property name="nomenclator_descr" value="DESCRIERE" />
+		<property name="required" value="false" />
+		<property name="nomenclator_id" value="ID" />
+		<property name="multiple" value="6" />
+		<property name="nomenclator_code" value="DESCRIERE" />
+		<parameterDescription><![CDATA[Nomnclator: Tip Vehicule]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="gs.DIRECT" isForPrompting="false" class="java.lang.String">
+		<property name="nomenclator_table" value="ANTA_DIRECTIE" />
+		<property name="nomenclator_id" value="DESCRIERE" />
+		<property name="required" value="false" />
+		<property name="nomenclator_descr" value="DESCRIERE" />
+		<property name="visible" value="true" />
+		<property name="multiple" value="1" />
+		<property name="nomenclator_code" value="COD" />
+		<parameterDescription><![CDATA[Directia: Intrare/ Iesire]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" "]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select case when grouping(ide_cuo_cod)||grouping(post)=01 then 'Sub-total '
+            when grouping(ide_cuo_cod)||grouping(post)=11 then 'Total general '
+            else '  ' || post end post,
+IDE_CUO_COD,SYS_OPR_TYPE,
+round((sum(nvl(cont_fiz,0))*100)/sum(vehicule),2) contr_fiz,
+round((sum(nvl(ireg,0))*100)/sum(vehicule),2) ireg ,
+sum(vehicule) vehicule, round(min(minute),2) min1, round(max(minute),2) max1, round(avg(minute),2) avg1
+from (
+select gs.IDE_CUO_COD, n.CUO_NAM as POST, SYS_OPR_TYPE,
+count(SYS_OPR_TYPE) as VEHICULE,
+case when ("EXIT" - IDE_REG_DAT)<0
+          then (("EXIT"+1/24) - IDE_REG_DAT)*24*60
+          else ("EXIT" - IDE_REG_DAT)*24*60
+          end MINUTE,
+sum(cont_fiz) cont_fiz, sum(IREG) ireg
+from gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs
+JOIN NOMENCLATOARE.UNCUOTAB n ON gs.IDE_CUO_COD = n.CUO_COD
+where
+1 = 1
+$P!{n.CUO_COD}
+$P!{gs.SYS_OPR_TYPE}
+$P!{gs.IDE_REG_DAT}
+$P!{gs.DIRECT}
+$P!{gs.REGIM}
+and "EXIT" is not null
+and ("EXIT" - IDE_REG_DAT)*24*60 < (case when gs.REGIM=0 then 300
+                                         when gs.regim=1 then 1000 else 1000 end)
+group by  SYS_OPR_TYPE, IDE_CUO_COD, n.CUO_NAM, "EXIT", IDE_REG_DAT
+order by minute
+)
+group by grouping sets ((IDE_CUO_COD, post,SYS_OPR_TYPE),(IDE_CUO_COD),())]]></queryString>
+
+	<field name="POST" class="java.lang.String"/>
+	<field name="IDE_CUO_COD" class="java.lang.String"/>
+	<field name="SYS_OPR_TYPE" class="java.lang.String"/>
+	<field name="CONTR_FIZ" class="java.math.BigDecimal"/>
+	<field name="IREG" class="java.math.BigDecimal"/>
+	<field name="VEHICULE" class="java.math.BigDecimal"/>
+	<field name="MIN1" class="java.math.BigDecimal"/>
+	<field name="MAX1" class="java.math.BigDecimal"/>
+	<field name="AVG1" class="java.math.BigDecimal"/>
+
+	<variable name="gs.REGIM" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{gs.REGIM}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{gs.REGIM}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{gs.REGIM}.substring($P{gs.REGIM}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.REGIM}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{gs.REGIM}.substring($P{gs.REGIM}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{gs.REGIM}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{gs.REGIM}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{gs.REGIM}.substring($P{gs.REGIM}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.REGIM}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{gs.REGIM}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{gs.REGIM}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{gs.REGIM}.indexOf("'") >= 0 ?
+            $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf("'")+1,$P{gs.REGIM}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{gs.REGIM}.indexOf(">=") > 0 && $P{gs.REGIM}.indexOf("<=") > 0 ?
+              $P{gs.REGIM}.substring( $P{gs.REGIM}.indexOf(">=")+2, $P{gs.REGIM}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{gs.REGIM}.substring($P{gs.REGIM}.lastIndexOf("<=")+2, $P{gs.REGIM}.length() )
+              : ( $P{gs.REGIM}.indexOf(">") > 0 && $P{gs.REGIM}.indexOf("=") > 0 && $P{gs.REGIM}.indexOf("<") < 0 ?
+                $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf(">="),$P{gs.REGIM}.length() )
+                : ( $P{gs.REGIM}.indexOf("<") > 0 && $P{gs.REGIM}.indexOf("=") > 0 && $P{gs.REGIM}.indexOf(">") < 0 ?
+                  $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf("<="),$P{gs.REGIM}.length() ) 
+                  : ( $P{gs.REGIM}.indexOf(">") > 0 && $P{gs.REGIM}.indexOf("=") < 0 ?
+                    $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf(">"),$P{gs.REGIM}.length() )
+                    : ($P{gs.REGIM}.indexOf("<") > 0 && $P{gs.REGIM}.indexOf("=") < 0 ?
+                      $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf("<"), $P{gs.REGIM}.length() )
+                      : ( $P{gs.REGIM}.indexOf("=") > 0 ?
+                        $P{gs.REGIM}.substring($P{gs.REGIM}.indexOf("=")+1, $P{gs.REGIM}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="gs.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{gs.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{gs.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{gs.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{gs.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf("'")+1,$P{gs.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{gs.IDE_REG_DAT}.indexOf(">=") > 0 && $P{gs.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{gs.IDE_REG_DAT}.substring( $P{gs.IDE_REG_DAT}.indexOf(">=")+2, $P{gs.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{gs.IDE_REG_DAT}.length() )
+              : ( $P{gs.IDE_REG_DAT}.indexOf(">") > 0 && $P{gs.IDE_REG_DAT}.indexOf("=") > 0 && $P{gs.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf(">="),$P{gs.IDE_REG_DAT}.length() )
+                : ( $P{gs.IDE_REG_DAT}.indexOf("<") > 0 && $P{gs.IDE_REG_DAT}.indexOf("=") > 0 && $P{gs.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf("<="),$P{gs.IDE_REG_DAT}.length() ) 
+                  : ( $P{gs.IDE_REG_DAT}.indexOf(">") > 0 && $P{gs.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf(">"),$P{gs.IDE_REG_DAT}.length() )
+                    : ($P{gs.IDE_REG_DAT}.indexOf("<") > 0 && $P{gs.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf("<"), $P{gs.IDE_REG_DAT}.length() )
+                      : ( $P{gs.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{gs.IDE_REG_DAT}.substring($P{gs.IDE_REG_DAT}.indexOf("=")+1, $P{gs.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="n.CUO_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{n.CUO_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{n.CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{n.CUO_COD}.substring($P{n.CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{n.CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{n.CUO_COD}.substring($P{n.CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{n.CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{n.CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{n.CUO_COD}.substring($P{n.CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{n.CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{n.CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{n.CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{n.CUO_COD}.indexOf("'") >= 0 ?
+            $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf("'")+1,$P{n.CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{n.CUO_COD}.indexOf(">=") > 0 && $P{n.CUO_COD}.indexOf("<=") > 0 ?
+              $P{n.CUO_COD}.substring( $P{n.CUO_COD}.indexOf(">=")+2, $P{n.CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{n.CUO_COD}.substring($P{n.CUO_COD}.lastIndexOf("<=")+2, $P{n.CUO_COD}.length() )
+              : ( $P{n.CUO_COD}.indexOf(">") > 0 && $P{n.CUO_COD}.indexOf("=") > 0 && $P{n.CUO_COD}.indexOf("<") < 0 ?
+                $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf(">="),$P{n.CUO_COD}.length() )
+                : ( $P{n.CUO_COD}.indexOf("<") > 0 && $P{n.CUO_COD}.indexOf("=") > 0 && $P{n.CUO_COD}.indexOf(">") < 0 ?
+                  $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf("<="),$P{n.CUO_COD}.length() ) 
+                  : ( $P{n.CUO_COD}.indexOf(">") > 0 && $P{n.CUO_COD}.indexOf("=") < 0 ?
+                    $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf(">"),$P{n.CUO_COD}.length() )
+                    : ($P{n.CUO_COD}.indexOf("<") > 0 && $P{n.CUO_COD}.indexOf("=") < 0 ?
+                      $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf("<"), $P{n.CUO_COD}.length() )
+                      : ( $P{n.CUO_COD}.indexOf("=") > 0 ?
+                        $P{n.CUO_COD}.substring($P{n.CUO_COD}.indexOf("=")+1, $P{n.CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="gs.SYS_OPR_TYPE" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{gs.SYS_OPR_TYPE}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{gs.SYS_OPR_TYPE}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{gs.SYS_OPR_TYPE}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{gs.SYS_OPR_TYPE}.indexOf("'") >= 0 ?
+            $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf("'")+1,$P{gs.SYS_OPR_TYPE}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{gs.SYS_OPR_TYPE}.indexOf(">=") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("<=") > 0 ?
+              $P{gs.SYS_OPR_TYPE}.substring( $P{gs.SYS_OPR_TYPE}.indexOf(">=")+2, $P{gs.SYS_OPR_TYPE}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.lastIndexOf("<=")+2, $P{gs.SYS_OPR_TYPE}.length() )
+              : ( $P{gs.SYS_OPR_TYPE}.indexOf(">") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("=") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("<") < 0 ?
+                $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf(">="),$P{gs.SYS_OPR_TYPE}.length() )
+                : ( $P{gs.SYS_OPR_TYPE}.indexOf("<") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("=") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf(">") < 0 ?
+                  $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf("<="),$P{gs.SYS_OPR_TYPE}.length() ) 
+                  : ( $P{gs.SYS_OPR_TYPE}.indexOf(">") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("=") < 0 ?
+                    $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf(">"),$P{gs.SYS_OPR_TYPE}.length() )
+                    : ($P{gs.SYS_OPR_TYPE}.indexOf("<") > 0 && $P{gs.SYS_OPR_TYPE}.indexOf("=") < 0 ?
+                      $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf("<"), $P{gs.SYS_OPR_TYPE}.length() )
+                      : ( $P{gs.SYS_OPR_TYPE}.indexOf("=") > 0 ?
+                        $P{gs.SYS_OPR_TYPE}.substring($P{gs.SYS_OPR_TYPE}.indexOf("=")+1, $P{gs.SYS_OPR_TYPE}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="gs.DIRECT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{gs.DIRECT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{gs.DIRECT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{gs.DIRECT}.substring($P{gs.DIRECT}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.DIRECT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{gs.DIRECT}.substring($P{gs.DIRECT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{gs.DIRECT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{gs.DIRECT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{gs.DIRECT}.substring($P{gs.DIRECT}.toUpperCase().indexOf("TO_DATE")+9, $P{gs.DIRECT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{gs.DIRECT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{gs.DIRECT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{gs.DIRECT}.indexOf("'") >= 0 ?
+            $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf("'")+1,$P{gs.DIRECT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{gs.DIRECT}.indexOf(">=") > 0 && $P{gs.DIRECT}.indexOf("<=") > 0 ?
+              $P{gs.DIRECT}.substring( $P{gs.DIRECT}.indexOf(">=")+2, $P{gs.DIRECT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{gs.DIRECT}.substring($P{gs.DIRECT}.lastIndexOf("<=")+2, $P{gs.DIRECT}.length() )
+              : ( $P{gs.DIRECT}.indexOf(">") > 0 && $P{gs.DIRECT}.indexOf("=") > 0 && $P{gs.DIRECT}.indexOf("<") < 0 ?
+                $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf(">="),$P{gs.DIRECT}.length() )
+                : ( $P{gs.DIRECT}.indexOf("<") > 0 && $P{gs.DIRECT}.indexOf("=") > 0 && $P{gs.DIRECT}.indexOf(">") < 0 ?
+                  $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf("<="),$P{gs.DIRECT}.length() ) 
+                  : ( $P{gs.DIRECT}.indexOf(">") > 0 && $P{gs.DIRECT}.indexOf("=") < 0 ?
+                    $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf(">"),$P{gs.DIRECT}.length() )
+                    : ($P{gs.DIRECT}.indexOf("<") > 0 && $P{gs.DIRECT}.indexOf("=") < 0 ?
+                      $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf("<"), $P{gs.DIRECT}.length() )
+                      : ( $P{gs.DIRECT}.indexOf("=") > 0 ?
+                        $P{gs.DIRECT}.substring($P{gs.DIRECT}.indexOf("=")+1, $P{gs.DIRECT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="180"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="93"
+						y="10"
+						width="350"
+						height="18"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Timpul perfectarii bonului unic]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="13"
+						y="76"
+						width="68"
+						height="15"
+						key="staticText-13"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Perioada:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="13"
+						y="57"
+						width="68"
+						height="15"
+						key="staticText-14"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Regim:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="76"
+						width="160"
+						height="15"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{gs.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="57"
+						width="120"
+						height="15"
+						key="textField-11"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{gs.REGIM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="96"
+						width="188"
+						height="15"
+						key="textField-21"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{n.CUO_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="13"
+						y="117"
+						width="68"
+						height="15"
+						key="staticText-18"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tip transport:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="117"
+						width="417"
+						height="15"
+						key="textField-22"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{gs.SYS_OPR_TYPE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="13"
+						y="96"
+						width="68"
+						height="15"
+						key="staticText-19"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Post Vamal]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="136"
+						width="188"
+						height="15"
+						key="textField-33"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{gs.DIRECT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="13"
+						y="136"
+						width="68"
+						height="15"
+						key="staticText-30"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Directia:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="93"
+						y="35"
+						width="350"
+						height="18"
+						key="staticText-31"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true"/>
+					</textElement>
+				<text><![CDATA[( Timp < 300, 1000 )]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="36"
+						y="-143"
+						width="0"
+						height="0"
+						key="staticText-12"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Static Text]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="65"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="149"
+						y="0"
+						width="55"
+						height="65"
+						key="staticText-1"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Tip transport]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="49"
+						y="0"
+						width="100"
+						height="65"
+						key="staticText-3"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Post Vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="414"
+						y="0"
+						width="60"
+						height="65"
+						key="staticText-4"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Timp max]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="354"
+						y="0"
+						width="60"
+						height="65"
+						key="staticText-5"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Timp min]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="309"
+						y="0"
+						width="45"
+						height="65"
+						key="staticText-6"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Iregularitati %]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="264"
+						y="0"
+						width="45"
+						height="65"
+						key="staticText-7"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Control Fizic %]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="204"
+						y="0"
+						width="60"
+						height="65"
+						key="staticText-8"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Total vehicule]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="474"
+						y="0"
+						width="60"
+						height="65"
+						key="staticText-10"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Timp mediu]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="0"
+						width="20"
+						height="65"
+						key="staticText-15"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Nr.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="24"
+						y="0"
+						width="25"
+						height="65"
+						key="staticText-32"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Cod]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="21"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="149"
+						y="0"
+						width="55"
+						height="21"
+						key="textField-7"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SYS_OPR_TYPE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="49"
+						y="0"
+						width="100"
+						height="21"
+						key="textField-9"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{POST}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="0"
+						width="20"
+						height="21"
+						key="textField-14"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="204"
+						y="0"
+						width="60"
+						height="21"
+						key="textField-5"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{VEHICULE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="264"
+						y="0"
+						width="45"
+						height="21"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{CONTR_FIZ}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="309"
+						y="0"
+						width="45"
+						height="21"
+						key="textField-3"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{IREG}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="354"
+						y="0"
+						width="60"
+						height="21"
+						key="textField-2"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{MIN1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="414"
+						y="0"
+						width="60"
+						height="21"
+						key="textField-8"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{MAX1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="474"
+						y="0"
+						width="60"
+						height="21"
+						key="textField-10"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{AVG1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="24"
+						y="0"
+						width="25"
+						height="21"
+						key="textField-34"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{IDE_CUO_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="107"
+						y="18"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="307"
+						y="18"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-15"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="496"
+						y="18"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="5"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-18"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="109"
+						y="18"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="309"
+						y="18"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-19"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="498"
+						y="18"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-20"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,319 @@
+/*
+ *
+ * composite.css
+ *
+ * Copyright (c) 2005 UTI Systems. All Rights Reserved.
+ *
+ * This source file may not be copied, modified or redistributed,
+ * in whole or in part, in any form or for any reason, without the express
+ * written consent of UTI Systems.
+ *
+ */
+
+/* ------------------------------------------------------------------------- *\
+ * Generic Styles                                                            *
+\* ------------------------------------------------------------------------- */
+
+.composite-text {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:normal;
+	color: #676767;
+}
+
+.composite-hidden {
+    display: none;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+table.composite-title-table {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+table.composite-title-table th {
+	border: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	color: #0065B3;
+    padding: 7px 7px 7px 7px;
+}
+
+table.composite-subtitle-table {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+table.composite-subtitle-table th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #0065B3;
+    background: #FFFFFF;
+    padding: 2px 2px 2px 2px;
+}
+
+td.composite-errors-cell {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:#FF0000;
+	margin: 4px;
+	padding: 4px;
+}
+
+td.composite-messages-cell {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:#009933;
+	margin: 4px;
+	padding: 4px;
+}
+
+table.composite-recordslist-table {
+	color: #336699;
+	background: #EFF3FF;
+	border: 1px solid #336699;
+	margin: 0px;
+	padding: 1px;
+}
+
+table.composite-viewedit-table {
+	color: #336699;
+	background: #FFFFFF;
+	margin: 0px;
+	padding: 3px;
+}
+
+/* ------------------------------------------------------------------------- *\
+ * Image Styles.                                                             *
+\* ------------------------------------------------------------------------- */
+
+img.composite-quest-icon {
+    border: none;
+    vertical-align: middle;
+    cursor: help;
+}
+
+img.composite-image-button {
+    border: none;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------------------- *\
+ * Styles for FORM elements.                                                 *
+\* ------------------------------------------------------------------------- */
+
+.composite-element-label {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #676767;
+}
+
+select.composite-selectbox {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color:#676767;
+}
+
+input.composite-inputtext {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color:#676767;
+}
+
+input.composite-inputfile {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color:#676767;
+}
+
+textarea.composite-textarea  {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color:#676767;
+}
+
+input.composite-generic-selection {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color:#676767;
+}
+
+select.composite-generic-selection-multiple {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+    background: #DAE7FD;
+    border: 1px solid white;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+tr.composite-filter-top-buttons-row {
+}
+
+td.composite-filter-bottom-buttons-row {
+}
+
+tr.composite-filter-top-buttons-row td, tr.composite-filter-bottom-buttons-row td {
+	color:#336699;
+	background-color: #DEEFFF;
+	border-top:1px solid #336699;
+	border-bottom:1px solid #336699;
+	padding:2px;
+	margin: 0px;
+}
+
+/* ------------------------------------------------------------------------- *\
+ * Styles for master component.                                              *
+\* ------------------------------------------------------------------------- */
+
+td.composite-master-cell {
+    padding: 10px;
+}
+
+/* ------------------------------------------------------------------------- *\
+ * Styles used when details are rendered using tabs.                         *
+\* ------------------------------------------------------------------------- */
+
+/* The style used for the cell that contains the table with tab elements */
+td.composite-tabs-cell {
+}
+
+/* The style used for the cell that contains the buttons rendered after tab elements */
+td.composite-tabs-buttons-cell {
+    border-bottom: 1px solid #336699;
+    vertical-align: middle;
+}
+
+/* The style used for the only cell of the row that separates the tab elements and content elements. */
+td.composite-tabs-separator-row-cell {
+    height: 15px;
+
+    background: #0066CC;
+
+    border-left: 1px solid #336699;
+    border-right: 1px solid #336699;
+}
+
+/* The style used for the cell that displays the content for a detail (or tab). */
+td.composite-tabs-detail-content-cell {
+    border: 1px solid #336699;
+    border-top: none;
+    padding: 10px;
+}
+
+/* The style used for separator cells (created between tab cells). */
+td.composite-tab-separator {
+    padding-right: 3px;
+    border-bottom: 1px solid #336666;
+}
+
+/* The default style used for tab cells. */
+td.composite-tab-normal {
+    font: normal 11px Verdana, Arial, Helvetica, sans-serif;
+
+    color:#000066;
+    background: #FFFFFF;
+
+    border-bottom: 1px solid #336666;
+
+    padding: 3px 5px 3px 5px;
+    cursor: pointer;
+}
+
+/* The style used for the cell of a tab, when the mouse is over it. */
+td.composite-tab-normal-mouseover {
+    font: normal 11px Verdana, Arial, Helvetica, sans-serif;
+
+    color: #FFFFFF;
+    background: #0066CC;
+
+    border: 1px solid #336699;
+    border-bottom: 1px solid #0066CC;
+
+    padding: 2px 4px 2px 4px;
+    cursor: pointer;
+}
+
+/* The style used for the cell of selected tab. */
+td.composite-tab-selected {
+    font: bold 11px Verdana, Arial, Helvetica, sans-serif;
+
+    color: #FFFFFF;
+    background: #0066CC;
+
+    border: 1px solid #336699;
+    border-bottom: none;
+
+    padding: 3px 5px 3px 5px;
+}
+
+/* The style used for the cell of selected tab, when the mouse is over it. */
+td.composite-tab-selected-mouseover {
+    font: bold 11px Verdana, Arial, Helvetica, sans-serif;
+
+    color: #FFFFFF;
+    background: #0066CC;
+
+    border: 1px solid #336699;
+    border-bottom: none;
+
+    padding: 3px 5px 3px 5px;
+}
+
+/* The style added to a tab cell if tab's error flag is set. */
+td.composite-tab-error {
+    color: red;
+}
+
+/* ------------------------------------------------------------------------- *\
+ * Styles used when details are rendered as LIST.                            *
+\* ------------------------------------------------------------------------- */
+
+/* The style used for the table that contains the rows for each detail */
+table.composite-details-table {
+}
+
+/* The style used for a detail's title row */
+tr.composite-detail-title-row {
+    color: #FFFFFF;
+	background: #0066CC;
+}
+
+td.composite-detail-title-cell {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+/* The style used for the cells from detail's title row */
+tr.composite-detail-title-row td {
+    padding: 3px;
+}
+
+/* The style used for the cell that displays the content for a detail. */
+td.composite-detail-content-cell {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+    color:#444444;
+    padding: 10px;
+}
+
+/* The style added to cell with detail's title when the detail has the error flag set. */
+tr.composite-detail-title-row td.error {
+    color: red;
+}

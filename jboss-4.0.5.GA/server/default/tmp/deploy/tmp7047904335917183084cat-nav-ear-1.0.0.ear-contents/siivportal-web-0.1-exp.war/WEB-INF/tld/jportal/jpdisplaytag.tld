@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+    <tlibversion>1.0</tlibversion>
+    <jspversion>1.2</jspversion>
+    <shortname>display</shortname>
+    <info>
+        The display tag library is an suite of custom tags that provide high level
+        web presentation patterns which will work in a MVC model, and provide a
+        significant amount of functionality while still being simple and
+        straight-forward to use. The primary tag in the library is the Table tag.
+    </info>
+    <tag>
+        <name>table</name>
+        <tagclass>ro.uti.waf.taglib.table.TableTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+            Displays a list in an html table, formatting each item in the list according
+            to the Column tags or Line tags nested inside of this tag. Use the list
+            attribute to indicate the Collection of data, in some scope, that the tag
+            should operate on.
+            The contents of the list can be sorted, and the list can be broken
+            into individual pages for display. If you use this tag in Struts, or
+            in some other framework where the page is included via a jsp:include, you should
+            use the requestURI attribute to indicate where tag generated links should point.
+        </info>
+
+        <!-- The name of the List object which contain the result to be displayed  -->
+        <attribute>
+            <name>list</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the key of the resource property file declared in struts-config.xml -->
+        <attribute>
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- use this parameter whe you want to use a switch action in struts -->
+        <attribute>
+            <name>prefix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--number of records in a page -->
+        <attribute>
+            <name>pagesize</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--Fully qualified class name for a TableDecorator. Use a TableDecorator
+            to provide custom operations  against the whole list, such as computing
+            totals. Must extend org.displaytag.decorator.TableDecorator.
+        -->
+        <attribute>
+            <name>decorator</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the url where to post actions -->
+        <attribute>
+            <name>requestURI</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--html pass through attribute-->
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--html pass through attribute-->
+        <attribute>
+            <name>cellspacing</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- html pass through attribute. Better using "padding" css
+            attribute in style or class-->
+        <attribute>
+            <name>cellpadding</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+            presentation attributes using css.-->
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--the id of the html table, used with getELementByID.-->
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the method to be executed , as in struts 1.2 or null in rest -->
+        <attribute>
+            <name>method</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- signal the display of the row number columns -->
+        <attribute>
+            <name>crt</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- specify that there is no need for the navigation form and links-->
+        <attribute>
+            <name>singlepage</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated; html attribute. Use "style" or "class" to set presentation
+        attributes using css.-->
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- The table will be displayed without a table header-->
+        <attribute>
+            <name>noHeader</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- The Title of the table-->
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--set the color for rows-->
+        <attribute>
+            <name>multiplerowcolor</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <name>column</name>
+        <tagclass>ro.uti.waf.taglib.table.ColumnTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+            Displays a property of a row object inside a table. MUST be nested
+            inside of a Table tag. The value displayed will be the results of a decorator
+            (if any); else the property named by the 'property' attribute; or if the
+            'property' attribute is null, then the results of evaluating the JSP
+            body of the tag.
+        </info>
+        <!-- name of the property in the bean specified in the parent table tag
+            (via the "name" attribute) mapped to this column-->
+        <attribute>
+            <name>property</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <!-- the key of the resource property file declared in struts-config.xml -->
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--  name of the property in the bean specified in the parent table tag
+           (via the "name" attribute) which will be used to sort values in the column.
+            This can be used when the column body is filled or a decorator is used
+            and column should sort on real values not the decorated one. -->
+        <attribute>
+            <name>sortProperty</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--title of the column (text for the th cell)-->
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--Set to 'column name' to make the column sortable. Defaults to 'false'.-->
+        <attribute>
+            <name>sortable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--If this attribute is provided, then the column's displayed is limited
+        to this number of characters.-->
+        <attribute>
+            <name>maxLength</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--If this attribute is provided, then the column's displayed is limited
+        to this number of words.-->
+        <attribute>
+            <name>maxWords</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated; html attribute. Use "style" or "class" to set presentation
+        attributes using css.-->
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--"class" html attribute added only for header cells.-->
+        <attribute>
+            <name>headerClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--html pass through attribute.-->
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+            presentation attributes using css.-->
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+            presentation attributes using css.-->
+        <attribute>
+            <name>background</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+           presentation attributes using css.-->
+        <attribute>
+            <name>bgcolor</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <!--@deprecated html attribute. Use "style" or "class" to set
+         presentation attributes using css.-->
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+            presentation attributes using css.-->
+        <attribute>
+            <name>nowrap</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set
+            presentation attributes using css.-->
+        <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--
+        The grouping level (starting at 1 and incrementing) of this column
+        (indicates if successive contain the same values, then they should not be displayed).
+        The level indicates that if a lower level no longer matches, then the
+        matching for this higher level should start over as well. If this
+        attribute is not included, then no grouping is performed.
+         @not implemented
+         -->
+        <attribute>
+            <name>group</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--
+         The fully qualified class name of a class that should be used to "decorate"
+         the underlying object being displayed. The class should implement
+         org.displaytag.decorator.ColumnDecorator. If a decorator is
+         specified for the entire table, then this decorator will decorate that decorator.
+        -->
+        <attribute>
+            <name>decorator</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the name of the column that is primary key -->
+        <attribute>
+            <name>pkName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- This is the prefix passed to the decorators to prefix their messages,
+        it is used mostly in generic decorators -->
+        <attribute>
+            <name>keyprefix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- signal the display of the row number columns -->
+        <attribute>
+            <name>rowspan</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>line</name>
+        <tagclass>ro.uti.waf.taglib.table.LineTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+            Displays a property of a row object inside a table. MUST be nested inside
+            of a Table tag. The value displayed will be the results of a decorator
+            (if any); else the property named by the 'property' attribute; or if the
+            'property' attribute is null, then the results of evaluating the JSP body
+            of the tag.
+        </info>
+        <!-- name of the property in the bean specified in the parent table tag
+          (via the "name" attribute) mapped to this column-->
+        <attribute>
+            <name>property</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <!-- the key of the resource property file declared in struts-config.xml -->
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--  name of the property in the bean specified in the parent table tag
+        (via the "name" attribute) which will be used to sort values in the column.
+        This can be used when the column body is filled or a decorator is used
+        and column should sort on undeorated values. -->
+        <attribute>
+            <name>sortProperty</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--title of the column (text for the th cell)-->
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--Set to 'column name' to make the column sortable. Defaults to 'false'.-->
+        <attribute>
+            <name>sortable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--If this attribute is provided, then the column's displayed is limited
+            to this number of characters.-->
+        <attribute>
+            <name>maxLength</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--If this attribute is provided, then the column's displayed is limited
+            to this number of words.-->
+        <attribute>
+            <name>maxWords</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated; html attribute. Use "style" or "class" to set presentation
+            attributes using css.-->
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--"class" html attribute added only for header cells.-->
+        <attribute>
+            <name>headerClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--html pass through attribute.-->
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set presentation
+            attributes using css.-->
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set presentation
+            attributes using css.-->
+        <attribute>
+            <name>background</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set presentation
+        attributes using css.-->
+        <attribute>
+            <name>bgcolor</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <!--@deprecated html attribute. Use "style" or "class" to set presentation
+          attributes using css.-->
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set presentation
+        attributes using css.-->
+        <attribute>
+            <name>nowrap</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--@deprecated html attribute. Use "style" or "class" to set presentation
+        attributes using css.-->
+        <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--
+            The grouping level (starting at 1 and incrementing) of this column
+            (indicates if successive contain the same values, then they should
+            not be displayed). The level indicates that if a lower level no longer
+            matches, then the matching for this higher level should start over
+            as well. If this attribute is not included, then no grouping is performed.
+            @not implemented
+         -->
+        <attribute>
+            <name>group</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--
+         The fully qualified class name of a class that should be used to "decorate"
+         the underlying object being displayed. The class should implement
+         TableDecorator. If a decorator is specified for the entire table,
+         then this decorator will decorate that column.
+        -->
+        <attribute>
+            <name>decorator</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the name of the column that is primary key -->
+        <attribute>
+            <name>pkName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>nav</name>
+        <tagclass>ro.uti.waf.taglib.table.PaginationTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+        </info>
+    </tag>
+    <tag>
+        <name>params</name>
+        <tagclass>ro.uti.waf.taglib.table.ParamTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+        </info>
+    </tag>
+
+</taglib>

@@ -1,0 +1,23 @@
+<taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<tlib-version>1.0</tlib-version>
+	<short-name>systags</short-name>
+	<uri>sys</uri>
+<!-- check if there is a gatesafe in front and rewrite the base to gatesafe-->
+	<tag-file>
+		<name>base</name>
+		<path>/WEB-INF/tags/jportal/sys/base.tag</path>
+	</tag-file>
+<!-- change the current module -->
+	<tag-file>
+		<name>cmodule</name>
+		<path>/WEB-INF/tags/jportal/sys/cmodule.tag</path>
+	</tag-file>
+    <tag-file>
+	    <name>ldata</name>
+	    <path>/WEB-INF/tags/jportal/sys/data.tag</path>
+    </tag-file>
+
+</taglib>

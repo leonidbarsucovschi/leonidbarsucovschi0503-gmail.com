@@ -1,0 +1,228 @@
+/*
+ *
+ * records.css
+ *
+ * Copyright (c) 2005 UTI Systems. All Rights Reserved.
+ *
+ * This source file may not be copied, modified or redistributed,
+ * in whole or in part, in any form or for any reason, without the express
+ * written consent of UTI Systems.
+ *
+ */
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+table.records-table {
+    table-layout: fixed;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+table.records-navigation-table {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #003366;
+}
+
+table.records-navigation-table img {
+    vertical-align: bottom;
+}
+
+a.records-page {
+}
+
+span.records-current-page {
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+}
+
+select.records-records-per-page {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+    background: #FFFFFF;
+    border: 1px solid white;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+img.records-image-button {
+    border: none;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+img.records-image-button-disabled {
+    border: none;
+    vertical-align: middle;
+}
+
+.records-hidden {
+    display: none;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+table.records-list-table {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+table.records-list-table th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+
+    background: #E1DBD1;
+	border: 1px solid #FFFFFF;
+
+	padding: 1px;
+}
+
+tr.records-filter-row {
+}
+
+tr.records-filter-row td.records-filter-row-idx-cell {
+}
+
+tr.records-filter-row td {
+    padding: 2px;
+}
+
+tr.records-form-row-even {	
+}
+
+tr.records-form-row-odd {	
+}
+
+tr.records-form-row td {
+}
+
+tr.records-form-row td.records-form-row-idx-cell {
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+table.records-list-table th.sortable {
+    background: #E1DBD1 url(../image/arrow_down.png) right center no-repeat;
+    cursor: pointer;
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+table.records-list-table th.sorted-ascending {
+    background: #E1DBD1 url(../image/arrow_down.png) right center no-repeat;
+    cursor: pointer;
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+table.records-list-table th.sorted-descending {
+    background: #E1DBD1 url(../image/arrow_down.png) right center no-repeat;
+    cursor: pointer;
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+th.records-header-idx-cell {
+    background-color:#E1DBD1;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+th.records-header-idx-cell-printmode {
+    text-align: center;
+    width: 30;
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+tr.records-row-even {
+    background-color:#F5F5F5;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+tr.records-row-odd {
+    background-color:#FFFFFF;
+    FONT-FAMILY:Arial, Helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: normal;
+    color:#444444;
+}
+
+tr.records-row-selected {
+    color: red;
+}
+
+td.record-property-cell {
+    padding: 2px;
+}
+
+td.records-row-idx-cell {
+    text-align: center;
+    padding-left: 20px;
+
+    background-image: url(../image/checkbox.gif);
+    background-position: 10% center;
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+}
+
+td.records-row-idx-cell-printmode {
+    text-align: center;
+}
+
+td.records-row-idx-cell-selected {
+    background-image: url(../image/checkbox_checked.gif);
+}
+
+/* ------------------------------------------------------------------------- *\
+ *                                                                           *
+\* ------------------------------------------------------------------------- */
+
+span.mandatory_property {
+    color: #FF0000;
+}
+
+div.non-edit-mode-div{
+	display: none;
+	position: absolute;
+}
+
+div.edit-mode-div{
+	position: absolute;
+}

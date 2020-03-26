@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<!--
+ # Module   : sys
+ # File     : WEB-INF/sys/struts-config.xml
+ # Creation : 07.07.2005
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+	<form-beans>
+		<form-bean name="form_AdmRoleForm"
+			type="ro.uti.apmc.sys.command.AdmRoleForm">
+		</form-bean>
+		<form-bean name="form_AdmMenuEntryForm"
+			type="ro.uti.apmc.sys.command.AdmMenuEntryForm">
+		</form-bean>
+		<form-bean name="form_AdmMenuEntryRoleForm"
+			type="ro.uti.apmc.sys.command.AdmMenuEntryRoleForm">
+		</form-bean>
+		<form-bean name="form_AdmOperationTypeForm"
+			type="ro.uti.apmc.sys.command.AdmOperationTypeForm">
+		</form-bean>
+		<form-bean name="form_AdmRoleHierarchyForm"
+			type="ro.uti.apmc.sys.command.AdmRoleHierarchyForm">
+		</form-bean>
+		<form-bean name="form_AdmSessionOperationForm"
+			type="ro.uti.apmc.sys.command.AdmSessionOperationForm">
+		</form-bean>
+		<form-bean name="form_AdmUserForm"
+			type="ro.uti.apmc.sys.command.AdmUserForm">
+		</form-bean>
+		<form-bean name="form_AdmUserSessionForm"
+			type="ro.uti.apmc.sys.command.AdmUserSessionForm">
+		</form-bean>
+		<form-bean name="form_AdmParametriiConfigForm"
+			type="ro.uti.apmc.sys.command.AdmParametriiConfigForm">
+		</form-bean>
+		<form-bean name="form_DictionarForm" type="ro.uti.apmc.sys.dictionary.command.DictionarForm">
+		</form-bean>
+
+		<form-bean name="form_AdmUserExtForm"
+				   type="ro.uti.apmc.sys.command.AdmUserExtForm"/>
+		<form-bean name="form_AdmUserInregForm"
+				   type="ro.uti.apmc.sys.command.AdmUserInregForm"/>
+        <form-bean   name="form_AdmMessageTemplateForm" type="ro.uti.apmc.sys.command.AdmMessageTemplateForm" >
+        </form-bean>
+        <form-bean   name="form_JobImportForm" type="ro.uti.waf.components.databasejobs.action.JobImportForm" >
+		</form-bean>
+		<form-bean name="form_RecuperareParolaForm" type="ro.uti.apmc.sys.command.RecuperareParolaForm"></form-bean>
+	</form-beans>
+	<global-forwards type="org.apache.struts.action.ActionForward">
+		<forward redirect="true" path="/userservice/tbl_appl_user_session.do" name="/sw" contextRelative="true"/>
+	</global-forwards>
+
+	<action-mappings>
+
+		<action path="/admuserext"
+				type="ro.uti.apmc.sys.command.AdmUserExtAction"
+				name="form_AdmUserExtForm"
+				attribute="form_AdmUserExtForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="showAdd,add,showAddRoles:527"/>
+			<set-property property="accessRoles" value="showEdit,update,showEditRoles:528"/>
+			<set-property property="accessRoles" value="addRol,addRoles,delRol,showListLDAP,showRoles|527,528"/>
+            <set-property property="accessRoles" value="showDelete,delete:529"/>
+			<set-property property="accessRoles" value="showRecord:526"/>
+			<set-property property="accessRoles" value="list,search,refresh,showList:525"/>
+			<set-property property="accessRoles" value="showEditUser,updateEditUser:519"/>
+			<forward name="showAdd" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/add_admuserext"/>
+			<forward name="showRoles" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/add_roles_admuserext"/>
+			<forward name="showDelete" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/del_admuserext"/>
+			<forward name="showEdit" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/add_admuserext"/>
+            <forward name="showEditUser" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/edituser_admuserext"/>
+			<forward name="failure" contextRelative="true"
+					 path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/list_admuserext"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/list_admuserext"/>
+			<forward name="showRecord" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserext/view_admuserext"/>
+             <forward name="showMessage" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/message"/>
+             <forward name="accessDenied" path="/template.jsp?page=denied" contextRelative="true"/>
+             <forward name="showListLDAP" contextRelative="true" path="/treetemplate.jsp?page=web/sys/admuserinreg/list_ldap"/>
+		</action>
+
+		<action path="/admuserinreg"
+				type="ro.uti.apmc.sys.command.AdmUserInregAction"
+				name="form_AdmUserInregForm"
+				attribute="form_AdmUserInregForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+            <set-property property="accessRoles" value="showAddRoles:527"/>
+            <set-property property="accessRoles" value="search,refresh,list,showList:525"/>
+            <set-property property="accessRoles" value="showRecord:526"/>
+            <set-property property="accessRoles" value="showEdit,showEditPas1,showEditPas3,addFirma,editFirma,addRol,delRol,addUser,nextEdit,prevEdit,showListLDAP:527"/>
+            <set-property property="accessRoles" value="update:527"/>
+            <set-property property="accessRoles" value="showDelete,delete:529"/>
+			<forward name="showAdd" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/sys/admuserinreg/add_pas1"/>
+			<forward name="showPas1" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/sys/admuserinreg/add_pas1"/>
+			<forward name="showPas3" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/sys/admuserinreg/add_pas3"/>
+			<forward name="showMessage" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/sys/admuserinreg/message"/>
+            <forward name="showDescriereApp" contextRelative="true"
+					 path="/treetemplate.jsp?page=web/sys/admuserinreg/descriereApp"/>
+            <forward name="showEdit" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/edit_pas1"/>
+			<forward name="showEditPas1" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/edit_pas1"/>
+			<forward name="showEditPas3" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/edit_pas3"/>
+			<forward name="showDelete" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/del_admuserinreg"/>
+             <forward name="showMessageT" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/message"/>
+			<forward name="failure" contextRelative="true"
+					 path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/list_admuserinreg"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/list_admuserinreg"/>
+			<forward name="showRecord" contextRelative="true"
+					 path="/template.jsp?page=web/sys/admuserinreg/view_admuserinreg"/>
+			<forward name="showListLDAP" contextRelative="true" path="/treetemplate.jsp?page=web/sys/admuserinreg/list_ldap"/>
+		</action>
+		<action path="/recuperareparola"
+			type="ro.uti.apmc.sys.command.AdmUserInregAction"
+			name="form_RecuperareParolaForm"
+			attribute="form_RecuperareParolaForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+	      <forward name="showRecuperareParola" contextRelative="true"  path="/portaltemplate.jsp?page=web/sys/admuserinreg/recuperare_parola"/>
+		  <forward name="showMessage" contextRelative="true" path="/portaltemplate.jsp?page=web/sys/admuserinreg/message"/>
+		</action>
+
+		<action path="/admrole"
+			type="ro.uti.apmc.sys.command.AdmRoleAction"
+			name="form_AdmRoleForm"
+			attribute="form_AdmRoleForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+            <set-property property="accessRoles" value="search,refresh,list,showMapRoles:540"/>
+			<set-property property="accessRoles" value="showRecord:541"/>
+            <set-property property="accessRoles" value="showAdd,add:542"/>
+            <set-property property="accessRoles" value="showEdit,update:543"/>
+            <set-property property="accessRoles" value="showDelete,delete:544"/>
+			<set-property property="accessRoles" value="showSystemRoles,showUserRoles:502"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admrole/add_admrole"/>
+			<forward name="showPrint" contextRelative="true" path="/template_print.jsp?page=web/sys/admrole/print_admrole"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admrole/del_admrole"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admrole/add_admrole"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admrole/list_admrole"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admrole/list_admrole"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admrole/view_admrole"/>
+			<forward name="showAddRoles" contextRelative="true" path="/template.jsp?page=web/sys/admrole/add_roles_admrole" />
+			<forward name="showListAction" contextRelative="false" path="/admrole.do?method=list" />
+			<forward name="showSystemRoles" contextRelative="true" path="/template.jsp?page=web/sys/admrole/map_system_roles"/>
+			<forward name="showUserRoles" contextRelative="true" path="/template.jsp?page=web/sys/admrole/map_user_roles"/>
+		</action>
+
+		<action path="/admmenuentry"
+			type="ro.uti.apmc.sys.command.AdmMenuEntryAction"
+			name="form_AdmMenuEntryForm"
+			attribute="form_AdmMenuEntryForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:505"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=/web/sys/admmenuentry/add_admmenuentry"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/print_admmenuentry"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/del_admmenuentry"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/add_admmenuentry"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/list_admmenuentry"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/list_admmenuentry"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/view_admmenuentry"/>
+            <forward name="showTranslate" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentry/translate_menu"/>
+            <forward name="showTree" contextRelative="true" path="/web/sys/admmenuentry/treeMenu.jsp"/>
+		</action>
+
+		<action path="/admmenuentryrole"
+			type="ro.uti.apmc.sys.command.AdmMenuEntryRoleAction"
+			name="form_AdmMenuEntryRoleForm"
+			attribute="form_AdmMenuEntryRoleForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:505"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/add_admmenuentryrole"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/print_admmenuentryrole"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/del_admmenuentryrole"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/add_admmenuentryrole"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/list_admmenuentryrole"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/list_admmenuentryrole"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admmenuentryrole/view_admmenuentryrole"/>
+		</action>
+
+		<!-- action path="/admoperationtype"
+			type="ro.uti.apmc.sys.command.AdmOperationTypeAction"
+			name="form_AdmOperationTypeForm"
+			attribute="form_AdmOperationTypeForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/add_admoperationtype"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/print_admoperationtype"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/del_admoperationtype"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/add_admoperationtype"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/list_admoperationtype"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/list_admoperationtype"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admoperationtype/view_admoperationtype"/>
+		</action-->
+
+		<!-- action path="/admrolehierarchy"
+			type="ro.uti.apmc.sys.command.AdmRoleHierarchyAction"
+			name="form_AdmRoleHierarchyForm"
+			attribute="form_AdmRoleHierarchyForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/add_admrolehierarchy"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/print_admrolehierarchy"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/del_admrolehierarchy"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/add_admrolehierarchy"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/list_admrolehierarchy"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/list_admrolehierarchy"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admrolehierarchy/view_admrolehierarchy"/>
+		</action-->
+
+		<action path="/admsessionoperation"
+			type="ro.uti.apmc.sys.command.AdmSessionOperationAction"
+			name="form_AdmSessionOperationForm"
+			attribute="form_AdmSessionOperationForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="showList,showRecord:1010"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admsessionoperation/print_admsessionoperation"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admsessionoperation/list_admsessionoperation"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admsessionoperation/list_admsessionoperation"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admsessionoperation/view_admsessionoperation"/>
+		</action>
+
+		<action path="/admuser"
+			type="ro.uti.apmc.sys.command.AdmUserAction"
+			name="form_AdmUserForm"
+			attribute="form_AdmUserForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="search,refresh,list:520"/>
+			<set-property property="accessRoles" value="showRecord:521"/>
+            <set-property property="accessRoles" value="showAdd, add, cautLDAP, cd, showListLDAP:522"/>
+            <set-property property="accessRoles" value="showEdit, update, cautLDAP, cautLDAPm, cdm, showListLDAP:523"/>
+            <set-property property="accessRoles" value="showDelete, delete:524"/>
+			<set-property property="accessRoles" value="showEditUser,updateEditUser:545"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admuser/add_admuser"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admuser/print_admuser"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admuser/del_admuser"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admuser/add_admuser"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admuser/list_admuser"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admuser/list_admuser"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admuser/view_admuser"/>
+			<forward name="showAddRoles" contextRelative="true" path="/template.jsp?page=web/sys/admuser/add_roles_admuser" />
+			<forward name="showListAction" contextRelative="false" path="/admuser.do?method=list" />            
+			<forward name="showListLDAP" contextRelative="true" path="/treetemplate.jsp?page=web/sys/admuserinreg/list_ldap"/>
+			<forward name="showEditUser" contextRelative="true" path="/template.jsp?page=web/sys/admuser/edituser_admuser"/>
+			<forward name="showMessage" contextRelative="true" path="/template.jsp?page=web/sys/admuserinreg/message"/>
+		</action>
+
+		<action path="/admusersession"
+			type="ro.uti.apmc.sys.command.AdmUserSessionAction"
+			name="form_AdmUserSessionForm"
+			attribute="form_AdmUserSessionForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/add_admusersession"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/print_admusersession"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/del_admusersession"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/add_admusersession"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/list_admusersession"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/list_admusersession"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admusersession/view_admusersession"/>
+		</action>
+
+		<action path="/admparametriiconfig"
+			type="ro.uti.apmc.sys.command.AdmParametriiConfigAction"
+			name="form_AdmParametriiConfigForm"
+			attribute="form_AdmParametriiConfigForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="list:530"/>
+            <set-property property="accessRoles" value="showEdit:531"/>
+            <set-property property="accessRoles" value="showResetToDefault:532"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/add_admparametriiconfig"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/print_admparametriiconfig"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/del_admparametriiconfig"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/add_admparametriiconfig"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/list_admparametriiconfig"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/list_admparametriiconfig"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/view_admparametriiconfig"/>
+            <forward name="showResetToDefault" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfig/reset_admparametriiconfig"/>
+		</action>
+        <action path="/admparametriiconfigstire"
+			type="ro.uti.apmc.sys.command.AdmParametriiConfigStireAction"
+			name="form_AdmParametriiConfigForm"
+			attribute="form_AdmParametriiConfigForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:503"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/add_admparametriiconfig"/>
+			<forward name="showPrint" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/print_admparametriiconfig"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/del_admparametriiconfig"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/add_admparametriiconfig"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/list_admparametriiconfig"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/list_admparametriiconfig"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admparametriiconfigstire/view_admparametriiconfig"/>
+		</action>
+		<!-- action path="/dictionar"
+			type="ro.uti.apmc.sys.dictionary.command.DictionarAction"
+			name="form_DictionarForm"
+			attribute="form_DictionarForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/add_dictionar"/>
+			<forward name="showPrint" contextRelative="true" path="/template_print.jsp?page=web/sys/dictionary/dictionar/print_dictionar"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/del_dictionar"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/add_dictionar"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/list_dictionar"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/list_dictionar"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/dictionary/dictionar/view_dictionar"/>
+		</action-->
+        <action    path="/admmessagetemplate"
+            type="ro.uti.apmc.sys.command.AdmMessageTemplateAction"
+            name="form_AdmMessageTemplateForm"
+            attribute="form_AdmMessageTemplateForm"
+            className="ro.uti.waf.web.security.StrutsPermissionMapping"
+            scope="request"
+            parameter="method"
+            validate="false">
+            <set-property property="accessRoles" value="default:535"/>
+            <forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/add_admmessagetemplate"/>
+            <forward name="showPrint" contextRelative="true" path="/template_print.jsp?page=web/sys/admmessagetemplate/print_admmessagetemplate"/>
+            <forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/del_admmessagetemplate"/>
+            <forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/add_admmessagetemplate"/>
+            <forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+            <forward name="default" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/list_admmessagetemplate"/>
+            <forward name="showList" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/list_admmessagetemplate"/>
+            <forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/view_admmessagetemplate"/>
+            <forward name="showTranslate" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/translate_messagetemplate"/>
+            <forward name="showDeleteTraducere" contextRelative="true" path="/template.jsp?page=web/sys/admmessagetemplate/del_traducere_messagetemplate"/>
+        </action>
+
+        <action    path="/jobimport"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="form_JobImportForm"
+            attribute="form_JobImportForm"
+            className="ro.uti.waf.web.security.StrutsPermissionMapping"
+            scope="request"
+            parameter="method"
+            validate="false">
+            <!--<set-property property="accessRoles" value="default:535"/>-->
+           <forward name="showList" contextRelative="true" path="/template.jsp?page=web/components/databasejobs/lista"/>
+            <forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/components/databasejobs/editJob"/>
+        </action>
+
+        <action validate="false" type="ro.uti.waf.util.ViewImageMediaTypeCommand" scope="request" path="/viewmediaimage">
+			<forward contextRelative="true" path="/template.jsp?page=error" name="failure"/>
+		</action>
+		<action path="/lang"
+			type="ro.uti.waf.web.action.I18nAction"
+			scope="request">
+			<forward name="default" path="tbl_user.do"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+		</action>
+		<action type="org.apache.struts.actions.SwitchAction" path="/switch">
+			<forward path="/userservice/tbl_appl_session_operation.do" name="default"/>
+		</action>
+	</action-mappings>
+
+	<controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/sys/validation.xml" property="pathnames"/>
+	</plug-in>
+</struts-config>

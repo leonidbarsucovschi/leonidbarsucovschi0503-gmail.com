@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="rg2_excel"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="822"
+		 columnSpacing="0"
+		 leftMargin="10"
+		 rightMargin="10"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false"
+		 isIgnorePagination="true">
+	<property name="ireport.zoom" value="0.9090909090909107" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="DTE1" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="5;" />
+		<property name="table_column" value="realizationdate" />
+		<property name="tooltip" value="scriti perioada, varog" />
+		<parameterDescription><![CDATA[Scriti perioada:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Birou" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="nomenclator_table" value="AFV.BV" />
+		<property name="required" value="false" />
+		<property name="nomenclator_id" value="BVCOD" />
+		<property name="nomenclator_descr" value="NME" />
+		<property name="multiple" value="9" />
+		<property name="table_column" value="BVCOD" />
+		<parameterDescription><![CDATA[Selectati biroul]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Contravenient" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="table_column" value="IDNP" />
+		<property name="visible" value="true" />
+		<parameterDescription><![CDATA[IDNP/IDNO]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TipContra" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="table_column" value="LEGAL_CLSS" />
+		<property name="multiple" value="1" />
+		<property name="nomenclator_table" value="AFV.NN" />
+		<property name="nomenclator_id" value="ID" />
+		<property name="nomenclator_code" value="NME" />
+		<property name="nomenclator_desc" value="NME" />
+		<parameterDescription><![CDATA[Tipul contraventiei]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROCES_STATE" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="AFV.STATUS" />
+		<property name="nomenclator_id" value="NME" />
+		<property name="nomenclator_descr" value="NME" />
+		<property name="multiple" value="9" />
+		<property name="table_column" value="tipStatus" />
+		<parameterDescription><![CDATA[Starea procesului]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="options" isForPrompting="false" class="java.lang.String">
+		<property name="excelReport" value="true" />
+		<property name="visible" value="false" />
+	</parameter>
+	<queryString><![CDATA[SELECT DISTINCT TIPP,bvcod AS CODBIROU, realizationdate, DECODE(TIPP, 1, 'PF', 2, 'PJ') AS TIPPERSOANA,
+       DECODE(TIPP, 1, idnp, 2, idno) AS IDNP,
+       DECODE(TIPP, 1, nume|| ' ' ||prenume || ' ' ||patronimic , 2, denumire) AS NUME,
+       tipContra AS INCADRARE_JURIDICA, tipStatus AS STATUS_PROCES
+, NVL2(AMENDESTABLISHEDINMDL, AMENDESTABLISHEDINMDL, 0) AS SUMA
+, NVL2(AMENDCOLLECTEDINMDL, AMENDCOLLECTEDINMDL, 0) AS SUMA_COLECTATA
+, NR
+, cod
+       FROM
+       (
+          select
+   CC.ID,  NVL2(cc.contravenient_pj, 2, 1) AS TIPP, NVL2(cc.contravenient_pj, cc.contravenient_pj, cc.contravenient_pf) AS TIPID,legal_clss,status,
+    (ppf.birthdate), (ppf.idnp), (ppf.nume), (ppf.prenume), (ppf.patronimic),
+    (ccm.cmtype), (ccm.cmsubtype), (ccm.cmquantity),(ccm.cmmanufacturer), (ccm.cmbrand), (ccm.cmmu),
+    CC.AMENDESTABLISHEDINMDL, cc.AMENDCOLLECTEDINMDL, status.nme AS tipStatus,
+    nn.nme AS tipContra
+, TO_CHAR(CC.realizationdate, 'dd/mm/yyyy') realizationdate,
+    (ppj.idno), (ppj.data_inreg),(ppj.forma_j), (ppj.denumire),birou.bvcod
+, CC.NR
+, post.cod
+    FROM afv.contravention_cause cc
+LEFT JOIN afv.crs_pnt post ON post.id = cc.crossingpoints
+                    LEFT JOIN afv.bv birou ON birou.id = cc.bv
+                    LEFT JOIN afv.pj ppj ON cc.contravenient_pj = ppj.id
+                    LEFT JOIN afv.pf ppf ON cc.contravenient_pf = ppf.id
+                    LEFT JOIN afv.nn ON afv.nn.id = cc.legal_clss
+                    LEFT JOIN afv.status ON afv.status.id = cc.status
+                    LEFT JOIN (
+                                SELECT DISTINCT INFHEAD, CCM.id, (ccm.cmtype), (ccm.cmsubtype), (ccm.cmquantity),
+                                  (ccm.cmmanufacturer), (ccm.cmbrand), (ccm.cmmu)
+                                  FROM  (AFV.INFHEAD_SUBJ iSUB
+                                         JOIN AFV.SUBIECT SUB ON ISUB.SUBIECT=SUB.ID)
+                                               JOIN AFV.CM CCM ON CCM.ID = SUB.ID
+                               ) ccm ON cc.ID = ccm.infhead
+
+        )
+
+WHERE
+	(1 = 1)
+	$P!{Birou}
+	$P!{Contravenient}
+	$P!{PROCES_STATE}
+	$P!{TipContra}
+
+ORDER BY
+	bvcod, cod, nr]]></queryString>
+
+	<field name="TIPP" class="java.math.BigDecimal"/>
+	<field name="CODBIROU" class="java.lang.String"/>
+	<field name="REALIZATIONDATE" class="java.lang.String"/>
+	<field name="TIPPERSOANA" class="java.lang.String"/>
+	<field name="IDNP" class="java.lang.String"/>
+	<field name="NUME" class="java.lang.String"/>
+	<field name="INCADRARE_JURIDICA" class="java.lang.String"/>
+	<field name="STATUS_PROCES" class="java.lang.String"/>
+	<field name="SUMA" class="java.lang.String"/>
+	<field name="SUMA_COLECTATA" class="java.lang.String"/>
+	<field name="NR" class="java.lang.String"/>
+	<field name="COD" class="java.lang.String"/>
+
+	<variable name="DTE1" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{DTE1}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{DTE1}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{DTE1}.substring($P{DTE1}.toUpperCase().indexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{DTE1}.substring($P{DTE1}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{DTE1}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{DTE1}.substring($P{DTE1}.toUpperCase().indexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{DTE1}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{DTE1}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{DTE1}.indexOf("'") >= 0 ?
+            $P{DTE1}.substring($P{DTE1}.indexOf("'")+1,$P{DTE1}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{DTE1}.indexOf(">=") > 0 && $P{DTE1}.indexOf("<=") > 0 ?
+              $P{DTE1}.substring( $P{DTE1}.indexOf(">=")+2, $P{DTE1}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{DTE1}.substring($P{DTE1}.lastIndexOf("<=")+2, $P{DTE1}.length() )
+              : ( $P{DTE1}.indexOf(">") > 0 && $P{DTE1}.indexOf("=") > 0 && $P{DTE1}.indexOf("<") < 0 ?
+                $P{DTE1}.substring($P{DTE1}.indexOf(">="),$P{DTE1}.length() )
+                : ( $P{DTE1}.indexOf("<") > 0 && $P{DTE1}.indexOf("=") > 0 && $P{DTE1}.indexOf(">") < 0 ?
+                  $P{DTE1}.substring($P{DTE1}.indexOf("<="),$P{DTE1}.length() )
+                  : ( $P{DTE1}.indexOf(">") > 0 && $P{DTE1}.indexOf("=") < 0 ?
+                    $P{DTE1}.substring($P{DTE1}.indexOf(">"),$P{DTE1}.length() )
+                    : ($P{DTE1}.indexOf("<") > 0 && $P{DTE1}.indexOf("=") < 0 ?
+                      $P{DTE1}.substring($P{DTE1}.indexOf("<"), $P{DTE1}.length() )
+                      : ( $P{DTE1}.indexOf("=") > 0 ?
+                        $P{DTE1}.substring($P{DTE1}.indexOf("=")+1, $P{DTE1}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="Birou" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{Birou}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{Birou}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{Birou}.substring($P{Birou}.toUpperCase().indexOf("TO_DATE")+9, $P{Birou}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{Birou}.substring($P{Birou}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{Birou}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{Birou}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{Birou}.substring($P{Birou}.toUpperCase().indexOf("TO_DATE")+9, $P{Birou}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{Birou}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{Birou}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{Birou}.indexOf("'") >= 0 ?
+            $P{Birou}.substring($P{Birou}.indexOf("'")+1,$P{Birou}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{Birou}.indexOf(">=") > 0 && $P{Birou}.indexOf("<=") > 0 ?
+              $P{Birou}.substring( $P{Birou}.indexOf(">=")+2, $P{Birou}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{Birou}.substring($P{Birou}.lastIndexOf("<=")+2, $P{Birou}.length() )
+              : ( $P{Birou}.indexOf(">") > 0 && $P{Birou}.indexOf("=") > 0 && $P{Birou}.indexOf("<") < 0 ?
+                $P{Birou}.substring($P{Birou}.indexOf(">="),$P{Birou}.length() )
+                : ( $P{Birou}.indexOf("<") > 0 && $P{Birou}.indexOf("=") > 0 && $P{Birou}.indexOf(">") < 0 ?
+                  $P{Birou}.substring($P{Birou}.indexOf("<="),$P{Birou}.length() )
+                  : ( $P{Birou}.indexOf(">") > 0 && $P{Birou}.indexOf("=") < 0 ?
+                    $P{Birou}.substring($P{Birou}.indexOf(">"),$P{Birou}.length() )
+                    : ($P{Birou}.indexOf("<") > 0 && $P{Birou}.indexOf("=") < 0 ?
+                      $P{Birou}.substring($P{Birou}.indexOf("<"), $P{Birou}.length() )
+                      : ( $P{Birou}.indexOf("=") > 0 ?
+                        $P{Birou}.substring($P{Birou}.indexOf("=")+1, $P{Birou}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TipContra" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TipContra}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TipContra}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TipContra}.substring($P{TipContra}.toUpperCase().indexOf("TO_DATE")+9, $P{TipContra}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TipContra}.substring($P{TipContra}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TipContra}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TipContra}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TipContra}.substring($P{TipContra}.toUpperCase().indexOf("TO_DATE")+9, $P{TipContra}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TipContra}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TipContra}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TipContra}.indexOf("'") >= 0 ?
+            $P{TipContra}.substring($P{TipContra}.indexOf("'")+1,$P{TipContra}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TipContra}.indexOf(">=") > 0 && $P{TipContra}.indexOf("<=") > 0 ?
+              $P{TipContra}.substring( $P{TipContra}.indexOf(">=")+2, $P{TipContra}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TipContra}.substring($P{TipContra}.lastIndexOf("<=")+2, $P{TipContra}.length() )
+              : ( $P{TipContra}.indexOf(">") > 0 && $P{TipContra}.indexOf("=") > 0 && $P{TipContra}.indexOf("<") < 0 ?
+                $P{TipContra}.substring($P{TipContra}.indexOf(">="),$P{TipContra}.length() )
+                : ( $P{TipContra}.indexOf("<") > 0 && $P{TipContra}.indexOf("=") > 0 && $P{TipContra}.indexOf(">") < 0 ?
+                  $P{TipContra}.substring($P{TipContra}.indexOf("<="),$P{TipContra}.length() )
+                  : ( $P{TipContra}.indexOf(">") > 0 && $P{TipContra}.indexOf("=") < 0 ?
+                    $P{TipContra}.substring($P{TipContra}.indexOf(">"),$P{TipContra}.length() )
+                    : ($P{TipContra}.indexOf("<") > 0 && $P{TipContra}.indexOf("=") < 0 ?
+                      $P{TipContra}.substring($P{TipContra}.indexOf("<"), $P{TipContra}.length() )
+                      : ( $P{TipContra}.indexOf("=") > 0 ?
+                        $P{TipContra}.substring($P{TipContra}.indexOf("=")+1, $P{TipContra}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="Contravenient" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{Contravenient}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{Contravenient}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{Contravenient}.substring($P{Contravenient}.toUpperCase().indexOf("TO_DATE")+9, $P{Contravenient}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{Contravenient}.substring($P{Contravenient}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{Contravenient}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{Contravenient}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{Contravenient}.substring($P{Contravenient}.toUpperCase().indexOf("TO_DATE")+9, $P{Contravenient}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{Contravenient}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{Contravenient}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{Contravenient}.indexOf("'") >= 0 ?
+            $P{Contravenient}.substring($P{Contravenient}.indexOf("'")+1,$P{Contravenient}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{Contravenient}.indexOf(">=") > 0 && $P{Contravenient}.indexOf("<=") > 0 ?
+              $P{Contravenient}.substring( $P{Contravenient}.indexOf(">=")+2, $P{Contravenient}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{Contravenient}.substring($P{Contravenient}.lastIndexOf("<=")+2, $P{Contravenient}.length() )
+              : ( $P{Contravenient}.indexOf(">") > 0 && $P{Contravenient}.indexOf("=") > 0 && $P{Contravenient}.indexOf("<") < 0 ?
+                $P{Contravenient}.substring($P{Contravenient}.indexOf(">="),$P{Contravenient}.length() )
+                : ( $P{Contravenient}.indexOf("<") > 0 && $P{Contravenient}.indexOf("=") > 0 && $P{Contravenient}.indexOf(">") < 0 ?
+                  $P{Contravenient}.substring($P{Contravenient}.indexOf("<="),$P{Contravenient}.length() )
+                  : ( $P{Contravenient}.indexOf(">") > 0 && $P{Contravenient}.indexOf("=") < 0 ?
+                    $P{Contravenient}.substring($P{Contravenient}.indexOf(">"),$P{Contravenient}.length() )
+                    : ($P{Contravenient}.indexOf("<") > 0 && $P{Contravenient}.indexOf("=") < 0 ?
+                      $P{Contravenient}.substring($P{Contravenient}.indexOf("<"), $P{Contravenient}.length() )
+                      : ( $P{Contravenient}.indexOf("=") > 0 ?
+                        $P{Contravenient}.substring($P{Contravenient}.indexOf("=")+1, $P{Contravenient}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="PROCES_STATE" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{PROCES_STATE}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{PROCES_STATE}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{PROCES_STATE}.substring($P{PROCES_STATE}.toUpperCase().indexOf("TO_DATE")+9, $P{PROCES_STATE}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{PROCES_STATE}.substring($P{PROCES_STATE}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{PROCES_STATE}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{PROCES_STATE}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{PROCES_STATE}.substring($P{PROCES_STATE}.toUpperCase().indexOf("TO_DATE")+9, $P{PROCES_STATE}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{PROCES_STATE}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{PROCES_STATE}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{PROCES_STATE}.indexOf("'") >= 0 ?
+            $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf("'")+1,$P{PROCES_STATE}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{PROCES_STATE}.indexOf(">=") > 0 && $P{PROCES_STATE}.indexOf("<=") > 0 ?
+              $P{PROCES_STATE}.substring( $P{PROCES_STATE}.indexOf(">=")+2, $P{PROCES_STATE}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{PROCES_STATE}.substring($P{PROCES_STATE}.lastIndexOf("<=")+2, $P{PROCES_STATE}.length() )
+              : ( $P{PROCES_STATE}.indexOf(">") > 0 && $P{PROCES_STATE}.indexOf("=") > 0 && $P{PROCES_STATE}.indexOf("<") < 0 ?
+                $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf(">="),$P{PROCES_STATE}.length() )
+                : ( $P{PROCES_STATE}.indexOf("<") > 0 && $P{PROCES_STATE}.indexOf("=") > 0 && $P{PROCES_STATE}.indexOf(">") < 0 ?
+                  $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf("<="),$P{PROCES_STATE}.length() )
+                  : ( $P{PROCES_STATE}.indexOf(">") > 0 && $P{PROCES_STATE}.indexOf("=") < 0 ?
+                    $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf(">"),$P{PROCES_STATE}.length() )
+                    : ($P{PROCES_STATE}.indexOf("<") > 0 && $P{PROCES_STATE}.indexOf("=") < 0 ?
+                      $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf("<"), $P{PROCES_STATE}.length() )
+                      : ( $P{PROCES_STATE}.indexOf("=") > 0 ?
+                        $P{PROCES_STATE}.substring($P{PROCES_STATE}.indexOf("=")+1, $P{PROCES_STATE}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="136"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="802"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Raport RG2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="20"
+						width="802"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font size="14"/>
+					</textElement>
+				<text><![CDATA[Date generale despre contraventiii]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="53"
+						width="128"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Perioada:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="53"
+						width="684"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{DTE1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="67"
+						width="128"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod birou vamal:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="67"
+						width="684"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Birou}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="81"
+						width="128"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Contravenient:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="81"
+						width="684"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Contravenient}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="95"
+						width="128"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Tip contraventie:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="95"
+						width="684"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TipContra}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="109"
+						width="128"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Stare proces:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="109"
+						width="684"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{PROCES_STATE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="60"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="33"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod Birou Vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="33"
+						y="0"
+						width="43"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod post vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="76"
+						y="0"
+						width="65"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="141"
+						y="0"
+						width="67"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Nr. proces verbal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="208"
+						y="0"
+						width="20"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Tip contravenient]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="228"
+						y="0"
+						width="92"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod IDNO\ IDNP]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="320"
+						y="0"
+						width="230"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Nume Contravenient]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="550"
+						y="0"
+						width="142"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Incadrarea juridica a contravenientei]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="692"
+						y="0"
+						width="34"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Stare proces verbal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="726"
+						y="0"
+						width="47"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Suma amenzii aplicate        (  lei )]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="773"
+						y="0"
+						width="49"
+						height="60"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Suma amenzii colectate (  lei )]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="14"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="33"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CODBIROU}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="33"
+						y="0"
+						width="43"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="76"
+						y="0"
+						width="65"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{REALIZATIONDATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="141"
+						y="0"
+						width="67"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="208"
+						y="0"
+						width="20"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TIPPERSOANA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="0"
+						width="92"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{IDNP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="320"
+						y="0"
+						width="230"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NUME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="550"
+						y="0"
+						width="142"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{INCADRARE_JURIDICA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="692"
+						y="0"
+						width="34"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{STATUS_PROCES}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="726"
+						y="0"
+						width="47"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SUMA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="773"
+						y="0"
+						width="49"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SUMA_COLECTATA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="27"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

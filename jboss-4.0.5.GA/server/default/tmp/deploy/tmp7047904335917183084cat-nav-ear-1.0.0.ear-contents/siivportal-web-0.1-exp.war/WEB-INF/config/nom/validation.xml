@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE form-validation PUBLIC
+        "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
+        "http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
+
+<!--
+ # Module   : nom
+ # File     : WEB-INF/nom/validation.xml
+ # Creation :
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<form-validation>
+	<formset>
+		<!-- FORMA  nom_limba -->
+		<form name="form_NomLimbaForm">
+			<field property="values.den_limba" depends="required,maxlength,mask">
+				<msg name="mask" bundle="nomlimba" key="nomlimba.prompt.den_limba.alphanum"/>
+				<arg position="0" bundle="nomlimba" key="nom_limba.prompt.denumire"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength" resource="false"/>
+				<arg position="3" bundle="nomlimba" key="nomlimba.prompt.den_limba.alphanum"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>20</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9 ]*$</var-value>
+				</var>
+			</field>
+			<field property="values.cod_limba" depends="required,maxlength,mask">
+				<msg name="mask" bundle="nomlimba" key="nomlimba.prompt.cod_limba.alphanum"/>
+				<arg position="0" bundle="nomlimba" key="nom_limba.prompt.cod_limba"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength" resource="false"/>
+				<arg position="3" bundle="nomlimba" key="nomlimba.prompt.cod_limba.alphanum"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9 ]*$</var-value>
+				</var>
+			</field>
+		</form>
+	</formset>
+</form-validation>

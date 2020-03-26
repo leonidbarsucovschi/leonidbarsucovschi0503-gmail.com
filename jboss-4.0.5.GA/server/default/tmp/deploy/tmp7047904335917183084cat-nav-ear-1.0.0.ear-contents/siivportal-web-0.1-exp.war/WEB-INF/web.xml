@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <description>
+        SIIV Portal Application
+    </description>
+    <display-name>UTI JPortal Framework</display-name>
+    <listener>
+        <listener-class>
+            ro.uti.apmc.sys.util.ApmcSessionListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>
+            ro.uti.apmc.sys.util.ApmcServletContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/config/spring/webContext-service.xml</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>ro.uti.waf.web.JPortalActionServlet</servlet-class>
+
+<!--  *************************************************************************
+        GENERIC SELECTION START
+************************************************************************* -->
+        <init-param>
+            <param-name>jndi_ds</param-name>
+            <param-value>java:/ds/oracle/siiv</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/selectionComponent</param-name>
+            <param-value>
+                /selectionComponent/WEB-INF/struts-sel-comp.xml</param-value>
+        </init-param>
+
+<!--  *************************************************************************
+        STRUTS CONFIGURATION START
+************************************************************************* -->
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/config/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/sys</param-name>
+            <param-value>/WEB-INF/config/sys/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/nom</param-name>
+            <param-value>/WEB-INF/config/nom/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/publishing</param-name>
+            <param-value>
+                /WEB-INF/config/publishing/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/portal</param-name>
+            <param-value>/WEB-INF/config/portal/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/audit</param-name>
+            <param-value>/WEB-INF/config/audit/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/reports</param-name>
+            <param-value>/WEB-INF/config/reports/struts-config.xml</param-value>
+        </init-param>
+		<init-param>
+			<param-name>config/contrapositions</param-name>
+			<param-value>/WEB-INF/config/contrapositions/struts-config.xml</param-value>
+		</init-param>
+		<init-param>
+            <param-name>detail</param-name>
+            <param-value>1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>nocache</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>convertNull</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>mail.host</param-name>
+            <param-value>mail.uti.ro</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+<!--  *************************************************************************
+    QUARTZ START
+************************************************************************* -->
+    <servlet>
+        <servlet-name>QuartzInitializer</servlet-name>
+        <servlet-class> org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Captcha</servlet-name>
+        <servlet-class>nl.captcha.servlet.CaptchaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Captcha</servlet-name>
+        <url-pattern>/Captcha.jpg</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <!--
+     Not found 404:
+    The server has not found anything matching the URI given
+    -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/system/codes/404.jsp</location>
+    </error-page>
+    <!--
+    Forbidden 403:
+    The request is for something forbidden. Authorization will not help.
+    -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/system/codes/403.jsp</location>
+    </error-page>
+
+    <!--filter>
+        <filter-name>CacheFilterStaticContent</filter-name>
+        <filter-class>com.opensymphony.oscache.web.filter.CacheFilter</filter-class>
+        <init-param>
+            <param-name>expires</param-name>
+            <param-value>600</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CacheFilterStaticContent</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheFilterStaticContent</filter-name>
+        <url-pattern>*.htm</url-pattern>
+    </filter-mapping-->
+<!--
+    <filter-mapping>
+        <filter-name>CacheFilterStaticContent</filter-name>
+        <url-pattern>/portal/*</url-pattern>
+    </filter-mapping>
+-->
+    <!--
+     Unauthorized 401:
+    The parameter to this message gives a specification of authorization schemes
+    which are acceptable. The client should retry the request with a suitable
+    Authorization header.
+    -->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/system/codes/401.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/system/errors/exception.jsp</location>
+    </error-page>
+    <!--  *************************************************************************
+    JSP CONFIGURATION START
+    ************************************************************************* -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/WEB-INF/jportal.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/jportal.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/gui.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/gui/gui.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/sys.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/sys/sys.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/WEB-INF/jpdisplaytag.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/jpdisplaytag.tld</taglib-location>
+        </taglib>
+
+		<taglib>
+			<taglib-uri>/WEB-INF/pagination.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/jportal/pagination.tld</taglib-location>
+		</taglib>
+
+		<!-- STRUTS BEGIN-->
+        <taglib>
+            <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/struts/struts-bean.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/struts/struts-html.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/struts/struts-logic.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/struts-nested.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/struts/struts-nested.tld</taglib-location>
+        </taglib>
+        <!-- STRUTS END-->
+
+        <!-- BEGIN JSTL -->
+        <taglib>
+            <taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jstl1.1/c.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jstl1.1/fmt.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jstl1.1/fn.tld</taglib-location>
+        </taglib>
+        <!-- END JSTL -->
+        <taglib>
+            <taglib-uri>selectionComponent</taglib-uri>
+            <taglib-location>/selectionComponent/WEB-INF/selectionComponent.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/WEB-INF/taglibs-string.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jakarta-taglibs/taglibs-string.tld</taglib-location>
+        </taglib>
+
+        <!-- Composite Entities tag libraries -->
+        <taglib>
+            <taglib-uri>/WEB-INF/composite.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/composite.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>/WEB-INF/records.tld</taglib-uri>
+            <taglib-location>/WEB-INF/tld/jportal/records.tld</taglib-location>
+        </taglib>
+        <!-- end Composite Entities tag libraries -->
+
+        <!--  *************************************************************************
+        ENABLE EL IN ALL JSP
+        ************************************************************************* -->
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <url-pattern>*.tag</url-pattern>
+            <el-ignored>false</el-ignored>
+        </jsp-property-group>
+    </jsp-config>
+
+
+</web-app>

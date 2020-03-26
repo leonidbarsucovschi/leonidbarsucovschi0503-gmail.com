@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="RG4"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="802"
+		 columnSpacing="0"
+		 leftMargin="20"
+		 rightMargin="20"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.1000000000000025" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="DTE1" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="5;" />
+		<property name="table_column" value="realizationdate" />
+		<property name="tooltip" value="Introduceti perioada!" />
+		<parameterDescription><![CDATA[Introduceti perioada:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Birou" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="multiple" value="9" />
+		<property name="nomenclator_table" value="afv.bv" />
+		<property name="nomenclator_id" value="BVCOD" />
+		<property name="nomenclator_descr" value="NME" />
+		<property name="table_column" value="BVCOD" />
+		<parameterDescription><![CDATA[Selectati biroul:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TipMarfa" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="AFV.GOODS_TYPE" />
+		<property name="nomenclator_descr" value="NME" />
+		<property name="nomenclator_id" value="GOODS_TYPE.ID" />
+		<property name="table_column" value="CMTYPE" />
+		<property name="multiple" value="9" />
+		<parameterDescription><![CDATA[Marfuri care au servit obiect al contraventiei]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+      bvcod, CONTRA_ID, TO_CHAR(realizationdate, 'dd.mm.yy') AS RDATA,
+       NVL(goodsNME, ' ') AS TIP_MARFA
+	, cmtype
+	, NVL(cmsubtype, ' ') AS SUBTIP_MARFA
+	, NVL(cmdsc, ' ') AS DESCRIERE
+	, NVL(cmquantity, ' ') AS CANTITATE
+	, NVL(cmmu, ' ') AS UNM
+	, NVL(cmvalue, '') AS VALOARE,
+       DECODE(TIPP, 1, 'F', 2, 'J') AS TIP,
+       DECODE(TIPP, 1, idnp, 2, idno) AS COD,
+       DECODE(TIPP, 1, nume|| ' ' ||prenume || ' ' ||patronimic , 2, denumire) AS NUME,
+       NVL2(AMENDESTABLISHEDINMDL, AMENDESTABLISHEDINMDL, 0) AS AMENDA_STABILITA,
+       NVL2(AMENDCOLLECTEDINMDL, AMENDCOLLECTEDINMDL, 0) AS AMENDTA_PERCEPUTA
+
+       FROM
+       (
+             select
+   CC.ID AS CONTRA_ID,  NVL2(cc.contravenient_pj, 2, 1) AS TIPP, NVL2(cc.contravenient_pj, cc.contravenient_pj, cc.contravenient_pf) AS TIPID,legal_clss,status,
+    (ppf.birthdate), (ppf.idnp), (ppf.nume), (ppf.prenume), (ppf.patronimic),
+    (ccm.cmtype), (ccm.cmsubtype), (ccm.cmquantity),(ccm.cmmanufacturer), (ccm.cmbrand), (ccm.cmmu), ccm.cmvalue, ccm.cmdsc,
+    CC.AMENDESTABLISHEDINMDL, cc.AMENDCOLLECTEDINMDL, status.nme AS tipStatus,
+    nn.nme AS tipContra, CC.realizationdate,
+    (ppj.idno), (ppj.data_inreg),(ppj.forma_j), (ppj.denumire), birou.bvcod, afv.nn.nme, goodsNME
+
+    FROM afv.contravention_cause cc
+                    LEFT JOIN afv.bv birou ON birou.id = cc.bv
+                    LEFT JOIN afv.pj ppj ON cc.contravenient_pj = ppj.id
+                    LEFT JOIN afv.pf ppf ON cc.contravenient_pf = ppf.id
+                    LEFT JOIN afv.nn ON afv.nn.id = cc.legal_clss
+                    LEFT JOIN afv.status ON afv.status.id = cc.status
+                    LEFT JOIN (
+                                SELECT DISTINCT INFHEAD, CCM.id, (ccm.cmtype), (ccm.cmsubtype), (ccm.cmquantity),
+                                  (ccm.cmmanufacturer), (ccm.cmbrand), (ccm.cmmu), ccm.cmvalue, ccm.cmdsc, goods.nme AS goodsNME
+                                  FROM  (AFV.INFHEAD_SUBJ iSUB
+                                         JOIN AFV.SUBIECT SUB ON ISUB.SUBIECT=SUB.ID)
+                                               JOIN AFV.CM CCM ON CCM.ID = SUB.ID
+                                               JOIN AFV.GOODS_TYPE goods ON goods.id = ccm.cmtype
+                               ) ccm ON cc.ID = ccm.infhead
+
+        )
+
+WHERE
+	(1 = 1)
+	$P!{DTE1}
+	$P!{Birou}
+	$P!{TipMarfa}
+ORDER BY bvcod, CONTRA_ID]]></queryString>
+
+	<field name="BVCOD" class="java.lang.String"/>
+	<field name="CONTRA_ID" class="java.math.BigDecimal"/>
+	<field name="RDATA" class="java.lang.String"/>
+	<field name="TIP_MARFA" class="java.lang.String"/>
+	<field name="CMTYPE" class="java.math.BigDecimal"/>
+	<field name="SUBTIP_MARFA" class="java.lang.String"/>
+	<field name="DESCRIERE" class="java.lang.String"/>
+	<field name="CANTITATE" class="java.lang.String"/>
+	<field name="UNM" class="java.lang.String"/>
+	<field name="VALOARE" class="java.lang.String"/>
+	<field name="TIP" class="java.lang.String"/>
+	<field name="COD" class="java.lang.String"/>
+	<field name="NUME" class="java.lang.String"/>
+	<field name="AMENDA_STABILITA" class="java.lang.String"/>
+	<field name="AMENDTA_PERCEPUTA" class="java.lang.String"/>
+
+	<variable name="DTE1" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{DTE1}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{DTE1}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{DTE1}.substring($P{DTE1}.toUpperCase().indexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{DTE1}.substring($P{DTE1}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{DTE1}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{DTE1}.substring($P{DTE1}.toUpperCase().indexOf("TO_DATE")+9, $P{DTE1}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{DTE1}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{DTE1}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{DTE1}.indexOf("'") >= 0 ?
+            $P{DTE1}.substring($P{DTE1}.indexOf("'")+1,$P{DTE1}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{DTE1}.indexOf(">=") > 0 && $P{DTE1}.indexOf("<=") > 0 ?
+              $P{DTE1}.substring( $P{DTE1}.indexOf(">=")+2, $P{DTE1}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{DTE1}.substring($P{DTE1}.lastIndexOf("<=")+2, $P{DTE1}.length() )
+              : ( $P{DTE1}.indexOf(">") > 0 && $P{DTE1}.indexOf("=") > 0 && $P{DTE1}.indexOf("<") < 0 ?
+                $P{DTE1}.substring($P{DTE1}.indexOf(">="),$P{DTE1}.length() )
+                : ( $P{DTE1}.indexOf("<") > 0 && $P{DTE1}.indexOf("=") > 0 && $P{DTE1}.indexOf(">") < 0 ?
+                  $P{DTE1}.substring($P{DTE1}.indexOf("<="),$P{DTE1}.length() )
+                  : ( $P{DTE1}.indexOf(">") > 0 && $P{DTE1}.indexOf("=") < 0 ?
+                    $P{DTE1}.substring($P{DTE1}.indexOf(">"),$P{DTE1}.length() )
+                    : ($P{DTE1}.indexOf("<") > 0 && $P{DTE1}.indexOf("=") < 0 ?
+                      $P{DTE1}.substring($P{DTE1}.indexOf("<"), $P{DTE1}.length() )
+                      : ( $P{DTE1}.indexOf("=") > 0 ?
+                        $P{DTE1}.substring($P{DTE1}.indexOf("=")+1, $P{DTE1}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="Birou" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{Birou}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{Birou}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{Birou}.substring($P{Birou}.toUpperCase().indexOf("TO_DATE")+9, $P{Birou}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{Birou}.substring($P{Birou}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{Birou}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{Birou}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{Birou}.substring($P{Birou}.toUpperCase().indexOf("TO_DATE")+9, $P{Birou}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{Birou}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{Birou}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{Birou}.indexOf("'") >= 0 ?
+            $P{Birou}.substring($P{Birou}.indexOf("'")+1,$P{Birou}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{Birou}.indexOf(">=") > 0 && $P{Birou}.indexOf("<=") > 0 ?
+              $P{Birou}.substring( $P{Birou}.indexOf(">=")+2, $P{Birou}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{Birou}.substring($P{Birou}.lastIndexOf("<=")+2, $P{Birou}.length() )
+              : ( $P{Birou}.indexOf(">") > 0 && $P{Birou}.indexOf("=") > 0 && $P{Birou}.indexOf("<") < 0 ?
+                $P{Birou}.substring($P{Birou}.indexOf(">="),$P{Birou}.length() )
+                : ( $P{Birou}.indexOf("<") > 0 && $P{Birou}.indexOf("=") > 0 && $P{Birou}.indexOf(">") < 0 ?
+                  $P{Birou}.substring($P{Birou}.indexOf("<="),$P{Birou}.length() )
+                  : ( $P{Birou}.indexOf(">") > 0 && $P{Birou}.indexOf("=") < 0 ?
+                    $P{Birou}.substring($P{Birou}.indexOf(">"),$P{Birou}.length() )
+                    : ($P{Birou}.indexOf("<") > 0 && $P{Birou}.indexOf("=") < 0 ?
+                      $P{Birou}.substring($P{Birou}.indexOf("<"), $P{Birou}.length() )
+                      : ( $P{Birou}.indexOf("=") > 0 ?
+                        $P{Birou}.substring($P{Birou}.indexOf("=")+1, $P{Birou}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TipMarfa" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TipMarfa}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TipMarfa}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TipMarfa}.substring($P{TipMarfa}.toUpperCase().indexOf("TO_DATE")+9, $P{TipMarfa}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TipMarfa}.substring($P{TipMarfa}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TipMarfa}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TipMarfa}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TipMarfa}.substring($P{TipMarfa}.toUpperCase().indexOf("TO_DATE")+9, $P{TipMarfa}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TipMarfa}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TipMarfa}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TipMarfa}.indexOf("'") >= 0 ?
+            $P{TipMarfa}.substring($P{TipMarfa}.indexOf("'")+1,$P{TipMarfa}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TipMarfa}.indexOf(">=") > 0 && $P{TipMarfa}.indexOf("<=") > 0 ?
+              $P{TipMarfa}.substring( $P{TipMarfa}.indexOf(">=")+2, $P{TipMarfa}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TipMarfa}.substring($P{TipMarfa}.lastIndexOf("<=")+2, $P{TipMarfa}.length() )
+              : ( $P{TipMarfa}.indexOf(">") > 0 && $P{TipMarfa}.indexOf("=") > 0 && $P{TipMarfa}.indexOf("<") < 0 ?
+                $P{TipMarfa}.substring($P{TipMarfa}.indexOf(">="),$P{TipMarfa}.length() )
+                : ( $P{TipMarfa}.indexOf("<") > 0 && $P{TipMarfa}.indexOf("=") > 0 && $P{TipMarfa}.indexOf(">") < 0 ?
+                  $P{TipMarfa}.substring($P{TipMarfa}.indexOf("<="),$P{TipMarfa}.length() )
+                  : ( $P{TipMarfa}.indexOf(">") > 0 && $P{TipMarfa}.indexOf("=") < 0 ?
+                    $P{TipMarfa}.substring($P{TipMarfa}.indexOf(">"),$P{TipMarfa}.length() )
+                    : ($P{TipMarfa}.indexOf("<") > 0 && $P{TipMarfa}.indexOf("=") < 0 ?
+                      $P{TipMarfa}.substring($P{TipMarfa}.indexOf("<"), $P{TipMarfa}.length() )
+                      : ( $P{TipMarfa}.indexOf("=") > 0 ?
+                        $P{TipMarfa}.substring($P{TipMarfa}.indexOf("=")+1, $P{TipMarfa}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="117"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="802"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Raport RG4]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="20"
+						width="802"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14"/>
+					</textElement>
+				<text><![CDATA[Date detaliate despre contraventiii]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="52"
+						width="121"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Perioada:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="66"
+						width="121"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod birou vamal:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="80"
+						width="121"
+						height="14"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[Tip Marfa]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="157"
+						y="52"
+						width="644"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{DTE1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="157"
+						y="66"
+						width="644"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{Birou}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="157"
+						y="80"
+						width="644"
+						height="14"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TipMarfa}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="40"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="33"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Biroul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="33"
+						y="0"
+						width="51"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Sesizare data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="84"
+						y="0"
+						width="18"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Tip]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="102"
+						y="0"
+						width="89"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cod Contravenient]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="289"
+						y="0"
+						width="273"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Denumire marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="562"
+						y="0"
+						width="44"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Cantitate, UNM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="606"
+						y="0"
+						width="65"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Valoare marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="671"
+						y="0"
+						width="65"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Amenda stabilita]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="736"
+						y="0"
+						width="65"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Amenda perceputa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="191"
+						y="0"
+						width="98"
+						height="40"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Nume Contravenient]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="40"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="33"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{BVCOD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="33"
+						y="0"
+						width="51"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{RDATA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="84"
+						y="0"
+						width="18"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TIP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="102"
+						y="0"
+						width="89"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="289"
+						y="0"
+						width="273"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TIP_MARFA} + ", " + $F{SUBTIP_MARFA} + ", " + $F{DESCRIERE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="562"
+						y="0"
+						width="44"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CANTITATE} + ", " + $F{UNM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="606"
+						y="0"
+						width="65"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VALOARE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="671"
+						y="0"
+						width="65"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{AMENDA_STABILITA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="736"
+						y="0"
+						width="65"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{AMENDTA_PERCEPUTA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="191"
+						y="0"
+						width="98"
+						height="40"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isPdfEmbedded ="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NUME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="27"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

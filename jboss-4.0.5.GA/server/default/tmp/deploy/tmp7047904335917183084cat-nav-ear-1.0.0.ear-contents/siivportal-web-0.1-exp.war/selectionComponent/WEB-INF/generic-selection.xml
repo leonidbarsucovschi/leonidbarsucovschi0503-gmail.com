@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE generic-selection [
+<!--
+	Root element pentru XML
+   generic-search poate contine unul sau mai multe cazuri "case"
+ -->
+<!ELEMENT generic-selection (case*)>
+
+<!--
+	"case" contine toate elementele si atributele pentru un caz de cautare
+ -->
+<!ELEMENT case (result-set,master-pk,connect-by?,details,search-columns?,group-by?,filters?,property*)>
+<!ATTLIST case
+	id	   ID  		    #REQUIRED
+	label  CDATA 	    #REQUIRED
+        bundle CDATA #IMPLIED
+        module CDATA #IMPLIED
+    tree   (true|false) #IMPLIED
+	authorised-roles CDATA   #IMPLIED>
+
+<!-- defineste tabelele folosite si legaturile dintre ele -->
+<!ELEMENT result-set (table, join*)>
+
+<!-- defineste o tabela, prin nume si alias -->
+<!ELEMENT table EMPTY>
+<!ATTLIST table
+    name  CDATA #REQUIRED
+    alias CDATA #REQUIRED>
+
+<!-- join cu o noua tabela, definita prin nume, alias si conditia de join -->
+<!ELEMENT join EMPTY>
+<!ATTLIST join
+    type (inner|right|left|full) #IMPLIED
+    table CDATA                  #REQUIRED
+    alias CDATA                  #REQUIRED
+    condition CDATA #REQUIRED>
+
+<!-- master-pk -->
+<!ELEMENT master-pk EMPTY>
+<!ATTLIST master-pk
+	table-alias     CDATA #IMPLIED
+	column		CDATA #IMPLIED
+        expression      CDATA #IMPLIED
+        >
+
+<!ELEMENT connect-by EMPTY>
+<!ATTLIST connect-by
+	table-alias  CDATA       #REQUIRED
+	column		 CDATA       #REQUIRED
+    root-pattern (null-reference|self-reference) #REQUIRED>
+
+<!-- description -->
+<!ELEMENT description (column+)>
+
+<!-- column -->
+<!ELEMENT column (nomenclator?)>
+<!ATTLIST column
+	name CDATA #REQUIRED
+    columnAlias CDATA #IMPLIED
+	table-alias CDATA #IMPLIED
+	label CDATA #REQUIRED
+	type (string|number|integer|date|timestamp|boolean) "string"
+    gui (input|text|textarea|checkbox|radio|single-select|multi-select) #IMPLIED
+	authorised-roles CDATA #IMPLIED
+    mandatory (yes | no | true | false) "no"
+    visible (yes | no | true | false) "yes"
+    width CDATA #IMPLIED>
+
+<!-- nomenclator -->
+<!ELEMENT nomenclator EMPTY>
+<!ATTLIST nomenclator
+	table-name 				CDATA #REQUIRED
+	session-name			CDATA #IMPLIED
+	id-column				CDATA #REQUIRED
+	description-column	    CDATA #REQUIRED
+    where-portion	        CDATA #IMPLIED>
+
+<!-- details -->
+<!ELEMENT details (column+)>
+
+<!-- searchColumns -->
+<!ELEMENT search-columns (column+)>
+
+<!-- group-by -->
+<!ELEMENT group-by (column+)>
+
+<!-- filters -->
+<!ELEMENT filters (filter+)>
+
+<!-- filter -->
+<!ELEMENT filter (#PCDATA)>
+
+<!ATTLIST filter
+        id CDATA #REQUIRED
+        pk (yes | no | true | false) "no">
+
+<!-- property -->
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+	name 	CDATA #REQUIRED
+	value   CDATA #REQUIRED>
+ ]>
+
+<generic-selection>
+	<case id="testSelectie" label="test.selectie.title" authorised-roles="" module="" bundle="app">
+		<result-set>
+			<table name="adm_user" alias="u"/>
+		</result-set>
+		<master-pk column="id_user" table-alias="u"/>
+		<details>
+			<column name="u.user_login" columnAlias="login" label="test.selectie.login" type="string" width="45%"/>
+			<column name="u.user_passwd" columnAlias="pass" label="test.selectie.pass" type="string" width="45%"/>
+		</details>
+		<search-columns>
+			<column name="user_login" table-alias="u" label="test.selectie.login" type="string"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[lower(u.user_login) like lower( &knownField )  || '%']]></filter>
+		</filters>
+		<property name="records-on-page" value="10"/>
+	</case>
+	<case id="nomLimba" label="nom_limba.selectie.title" authorised-roles="" module="" bundle="nomlimba">
+		<result-set>
+			<table name="NOM_Limba" alias="lmb"/>
+		</result-set>
+		<master-pk column="ID_Limba" table-alias="lmb"/>
+		<details>
+			<column name="lmb.den_limba" columnAlias="denumire" label="nom_limba.selectie.denumire" type="string" width="70%"/>
+			<column name="lmb.cod_limba" columnAlias="cod" label="nom_limba.selectie.cod" type="string" width="30%"/>
+		</details>
+		<search-columns>
+			<column name="den_limba" table-alias="lmb" label="nom_limba.selectie.denumire" type="string"/>
+			<column name="cod_limba" table-alias="lmb" label="nom_limba.selectie.cod" type="string"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[lower(lmb.cod_limba) like lower( &knownField )]]></filter>
+		</filters>
+		<property name="records-on-page" value="10"/>
+	</case>
+
+
+
+	<case id="unhs2tab" label="report.nomenclator.special.unhs2tab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="unhs2tab" alias="hs2"/>
+		</result-set>
+		<master-pk column="hs2_cod" table-alias="hs2"/>
+		<details>
+			<column name="hs2.hs2_cod" columnAlias="cod" label="report.nomenclator.special.unhs2tab.hs2_cod" type="string" width="20%"/>
+			<column name="hs2.hs2_dsc" columnAlias="dsc" label="report.nomenclator.special.unhs2tab.hs2_dsc" type="string" width="60%"/>
+			<column name="hs2.valid_from" columnAlias="validfrom" label="report.nomenclator.special.unhs2tab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="hs2_cod" table-alias="hs2" label="report.nomenclator.special.unhs2tab.hs2_cod" type="string"/>
+			<column name="hs2_dsc" table-alias="hs2" label="report.nomenclator.special.unhs2tab.hs2_dsc" type="string"/>
+			<column name="valid_from" table-alias="hs2" label="report.nomenclator.special.unhs2tab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[hs2.hs2_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="unhs4tab" label="report.nomenclator.special.unhs2tab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="unhs4tab" alias="hs4"/>
+		</result-set>
+		<master-pk column="hs4_cod" table-alias="hs4"/>
+		<details>
+			<column name="hs4.hs4_cod" columnAlias="cod" label="report.nomenclator.special.unhs4tab.hs4_cod" type="string" width="20%"/>
+			<column name="hs4.hs4_dsc" columnAlias="dsc" label="report.nomenclator.special.unhs4tab.hs4_dsc" type="string" width="60%"/>
+			<column name="hs4.valid_from" columnAlias="validfrom" label="report.nomenclator.special.unhs4tab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="hs4_cod" table-alias="hs4" label="report.nomenclator.special.unhs4tab.hs4_cod" type="string"/>
+			<column name="hs4_dsc" table-alias="hs4" label="report.nomenclator.special.unhs4tab.hs4_dsc" type="string"/>
+			<column name="valid_from" table-alias="hs4" label="report.nomenclator.special.unhs4tab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[hs4.hs4_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="unhs6tab" label="report.nomenclator.special.unhs2tab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="unhs6tab" alias="hs6"/>
+		</result-set>
+		<master-pk column="hs6_cod" table-alias="hs6"/>
+		<details>
+			<column name="hs6.hs6_cod" columnAlias="cod" label="report.nomenclator.special.unhs6tab.hs6_cod" type="string" width="20%"/>
+			<column name="hs6.hs6_dsc" columnAlias="dsc" label="report.nomenclator.special.unhs6tab.hs6_dsc" type="string" width="60%"/>
+			<column name="hs6.valid_from" columnAlias="validfrom" label="report.nomenclator.special.unhs6tab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="hs6_cod" table-alias="hs6" label="report.nomenclator.special.unhs6tab.hs6_cod" type="string"/>
+			<column name="hs6_dsc" table-alias="hs6" label="report.nomenclator.special.unhs6tab.hs6_dsc" type="string"/>
+			<column name="valid_from" table-alias="hs6" label="report.nomenclator.special.unhs6tab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[hs6.hs6_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="untartab" label="report.nomenclator.special.untartab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="untartab" alias="hs8"/>
+		</result-set>
+		<master-pk column="CONCAT(hs8.hs6_cod,hs8.tar_pr1)" table-alias="hs8" expression="CONCAT(hs6_cod,tar_pr1)"/>
+		<details>
+			<column name="CONCAT(hs8.hs6_cod,hs8.tar_pr1)" columnAlias="cod" label="report.nomenclator.special.untartab.hs6_cod" type="string" width="20%"/>
+			<column name="hs8.tar_dsc" columnAlias="dsc" label="report.nomenclator.special.untartab.tar_dsc" type="string" width="60%"/>
+			<column name="hs8.valid_from" columnAlias="validfrom" label="report.nomenclator.special.untartab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="hs6_cod" table-alias="hs8" label="report.nomenclator.special.untartab.hs6_cod" type="string"/>
+			<column name="tar_pr1" table-alias="hs8" label="report.nomenclator.special.untartab.tar_pr1" type="string"/>
+			<column name="tar_dsc" table-alias="hs8" label="report.nomenclator.special.untartab.tar_dsc" type="string"/>
+			<column name="valid_from" table-alias="hs8" label="report.nomenclator.special.untartab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter pk="yes" id="tar_pr1"><![CDATA[tar_pr1 NOT LIKE '%*%']]></filter>
+			<filter pk="yes" id="tar_pr2"><![CDATA[tar_pr2 LIKE '%**%']]></filter>
+			<filter pk="yes" id="valid_from"><![CDATA[SYSDATE > hs8.valid_from]]></filter>
+			<filter pk="yes" id="valid_to"><![CDATA[SYSDATE <= NVL(hs8.valid_to, SYSDATE)]]></filter>
+			<filter id="codText"><![CDATA[CONCAT(hs8.hs6_cod,hs8.tar_pr1) = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="codes8" label="report.nomenclator.special.untartab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="mdgdsdsc" alias="c8"/>
+		</result-set>
+		<master-pk column="cod" table-alias="c8"/>
+		<details>
+			<column name="c8.cod" columnAlias="cod" label="report.nomenclator.special.untartab.hs6_cod" type="string" width="20%"/>
+			<column name="c8.dsc" columnAlias="dsc" label="report.nomenclator.special.untartab.tar_dsc" type="string" width="60%"/>
+			<column name="c8.valid_from" columnAlias="validfrom" label="report.nomenclator.special.untartab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="cod" table-alias="c8" label="report.nomenclator.special.untartab.hs6_cod" type="string"/>
+			<column name="dsc" table-alias="c8" label="report.nomenclator.special.untartab.tar_dsc" type="string"/>
+			<column name="valid_from" table-alias="c8" label="report.nomenclator.special.untartab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter pk="yes" id="valid_from"><![CDATA[SYSDATE > c8.valid_from]]></filter>
+			<filter pk="yes" id="valid_to"><![CDATA[SYSDATE <= NVL(c8.valid_to, SYSDATE)]]></filter>
+			<filter pk="yes" id="length"><![CDATA[length(c8.cod) = 8]]></filter>
+			<filter id="codText"><![CDATA[c8.cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+
+
+	<case id="uncuotab" label="report.nomenclator.special.uncuotab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="uncuotab" alias="uncuotab"/>
+		</result-set>
+		<master-pk column="cuo_cod" table-alias="uncuotab"/>
+		<details>
+			<column name="uncuotab.cuo_cod" columnAlias="cod" label="report.nomenclator.special.uncuotab.cuo_cod" type="string" width="20%"/>
+			<column name="uncuotab.cuo_nam" columnAlias="dsc" label="report.nomenclator.special.uncuotab.cuo_nam" type="string" width="60%"/>
+			<column name="uncuotab.valid_from" columnAlias="validfrom" label="report.nomenclator.special.uncuotab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="cuo_cod" table-alias="uncuotab" label="report.nomenclator.special.uncuotab.cuo_cod" type="string"/>
+			<column name="cuo_nam" table-alias="uncuotab" label="report.nomenclator.special.uncuotab.cuo_nam" type="string"/>
+			<column name="valid_from" table-alias="uncuotab" label="report.nomenclator.special.uncuotab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[uncuotab.cuo_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="uncpptabA" label="report.nomenclator.special.uncpptabA.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="uncpptab" alias="uncpptab"/>
+		</result-set>
+		<master-pk column="cpp_cod" table-alias="uncpptab"/>
+		<details>
+			<column name="uncpptab.cpp_cod" columnAlias="cod" label="report.nomenclator.special.uncpptab.cpp_cod" type="string" width="20%"/>
+			<column name="uncpptab.cpp_dsc" columnAlias="dsc" label="report.nomenclator.special.uncpptab.cpp_dsc" type="string" width="60%"/>
+			<column name="uncpptab.valid_from" columnAlias="validfrom" label="report.nomenclator.special.uncpptab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="cpp_cod" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.cpp_cod" type="string"/>
+			<column name="cpp_dsc" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.cpp_dsc" type="string"/>
+			<column name="valid_from" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[uncpptab.cpp_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="uncpptabB" label="report.nomenclator.special.uncpptabB.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="uncpptab" alias="uncpptab"/>
+		</result-set>
+		<master-pk column="cpp_cod" table-alias="uncpptab"/>
+		<details>
+			<column name="uncpptab.cpp_cod" columnAlias="cod" label="report.nomenclator.special.uncpptab.cpp_cod" type="string" width="20%"/>
+			<column name="uncpptab.cpp_dsc" columnAlias="dsc" label="report.nomenclator.special.uncpptab.cpp_dsc" type="string" width="60%"/>
+			<column name="uncpptab.valid_from" columnAlias="validfrom" label="report.nomenclator.special.uncpptab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="cpp_cod" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.cpp_cod" type="string"/>
+			<column name="cpp_dsc" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.cpp_dsc" type="string"/>
+			<column name="valid_from" table-alias="uncpptab" label="report.nomenclator.special.uncpptab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[uncpptab.cpp_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="uncp3tab" label="report.nomenclator.special.uncp3tab.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="uncp3tab" alias="uncp3tab"/>
+		</result-set>
+		<master-pk column="cp3_cod" table-alias="uncp3tab"/>
+		<details>
+			<column name="uncp3tab.cp3_cod" columnAlias="cod" label="report.nomenclator.special.uncp3tab.cp3_cod" type="string" width="20%"/>
+			<column name="uncp3tab.cp3_dsc" columnAlias="dsc" label="report.nomenclator.special.uncp3tab.cp3_dsc" type="string" width="60%"/>
+			<column name="uncp3tab.valid_from" columnAlias="validfrom" label="report.nomenclator.special.uncp3tab.valid_from" type="date" width="20%"/>
+		</details>
+		<search-columns>
+			<column name="cp3_cod" table-alias="uncp3tab" label="report.nomenclator.special.uncp3tab.cp3_cod" type="string"/>
+			<column name="cp3_dsc" table-alias="uncp3tab" label="report.nomenclator.special.uncp3tab.cp3_dsc" type="string"/>
+			<column name="valid_from" table-alias="uncp3tab" label="report.nomenclator.special.uncp3tab.valid_from" type="date"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[uncp3tab.cp3_cod = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+
+	<case id="nom_countryA2" label="report.nomenclator.special.nom_country.title" authorised-roles="" module="" bundle="report">
+		<result-set>
+			<table name="nom_country" alias="nom_country"/>
+		</result-set>
+		<master-pk column="country_alpha_2" table-alias="nom_country"/>
+		<details>
+			<column name="nom_country.country_alpha_2" columnAlias="cod" label="report.nomenclator.special.nom_country.code" type="string" width="20%"/>
+			<column name="nom_country.country_name" columnAlias="dsc" label="report.nomenclator.special.nom_country.name" type="string" width="60%"/>
+		</details>
+		<search-columns>
+			<column name="country_alpha_2" table-alias="nom_country" label="report.nomenclator.special.nom_country.code" type="string"/>
+			<column name="country_name" table-alias="nom_country" label="report.nomenclator.special.nom_country.name" type="string"/>
+		</search-columns>
+		<filters>
+			<filter id="codText"><![CDATA[nom_country.country_alpha_2 = &knownField]]></filter>
+		</filters>
+		<property name="records-on-page" value="15"/>
+	</case>
+</generic-selection>

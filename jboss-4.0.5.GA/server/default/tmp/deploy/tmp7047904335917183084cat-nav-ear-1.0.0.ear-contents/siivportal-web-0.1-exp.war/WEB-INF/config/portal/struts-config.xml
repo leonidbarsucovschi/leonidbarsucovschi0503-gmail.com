@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+		"http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<!--
+ # Module   : portal
+ # File     : WEB-INF/config/portal/struts-config.xml
+ # Creation : 13.07.2005
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+	<form-beans>
+		<form-bean name="form_StireForm"
+				   type="ro.uti.apmc.portal.components.command.StireForm">
+		</form-bean>
+		<form-bean name="form_VizStireForm"
+				   type="ro.uti.apmc.portal.components.command.StireForm">
+		</form-bean>
+		<form-bean name="form_StaticContentForm"
+				   type="ro.uti.apmc.staticcontent.view.command.StaticContentForm">
+		</form-bean>
+		<form-bean name="form_upload"
+				   type="ro.uti.apmc.portal.components.command.UploadForm">
+		</form-bean>
+		<form-bean name="form_MesajSiteForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+		<form-bean name="form_MesajFwForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+		<form-bean name="form_MesajReForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+		<form-bean name="form_MesajArForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+		<form-bean name="form_MesajSearchForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+		<form-bean name="form_MesajSearchArhForm"
+				   type="ro.uti.apmc.portal.components.command.MesajSiteForm">
+		</form-bean>
+	</form-beans>
+
+
+
+	<action-mappings>
+		<action path="/upload"
+				type="ro.uti.apmc.portal.components.command.UploadAction"
+				name="form_upload"
+				attribute="form_upload"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="showUpload,upload:916"/>
+			<forward name="showUpload" contextRelative="true"
+					 path="/template.jsp?page=web/portal/prognozameteo/upload_file"/>
+			<forward name="showModifyUpload" contextRelative="true"
+					 path="/template.jsp?page=web/portal/upload/modify_file"/>
+			<forward name="modifyfaild" contextRelative="true"
+					 path="/template.jsp?page=web/portal/upload/modifyupload_faild"/>
+			<forward name="upload" contextRelative="true"
+					 path="/template.jsp?page=web/portal/prognozameteo/upload_list"/>
+			<forward name="faild" contextRelative="true"
+					 path="/template.jsp?page=web/portal/prognozameteo/upload_faild"/>
+			<forward name="showUploadBuletinInformativ" contextRelative="true"
+					 path="/template.jsp?page=web/portal/buletininformativ/upload_file"/>
+			<forward name="uploadSuccess" contextRelative="true"
+					 path="/template.jsp?page=web/portal/buletininformativ/upload_list"/>
+			<forward name="uploadFail" contextRelative="true"
+					 path="/template.jsp?page=web/portal/buletininformativ/upload_faild"/>
+		</action>
+
+		<action path="/map"
+				type="ro.uti.apmc.portal.components.command.ViewMapAction"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<forward name="showMap" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/portal/map/interactivemap"/>
+		</action>
+
+		<action path="/fluxmap"
+				type="ro.uti.apmc.portal.components.command.ViewFluxMapAction"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<forward name="showMap" contextRelative="true"
+					 path="/template.jsp?page=web/portal/map/fluxmap"/>
+		</action>
+
+		<action path="/stire"
+				type="ro.uti.apmc.portal.components.command.StireAction"
+				name="form_StireForm"
+				attribute="form_StireForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles"
+						  value="search, refresh, list, showRecord|105, 110, 115, 130, 132"/>
+			<set-property property="accessRoles"
+						  value="showAdd, add|100, 106, 111, 116, 133"/>
+			<set-property property="accessRoles"
+						  value="showEdit, update|102, 107, 112, 117, 134"/>
+			<set-property property="accessRoles"
+						  value="showDelete, delete|103, 108, 113, 118, 135"/>
+			<set-property property="accessRoles"
+						  value="showPublishing, publica|104, 109, 114, 119, 136"/>
+			<set-property property="accessRoles"
+						  value="showTranslate, addTranslate, showDeleteTranslate, deleteTranslate, updateTranslate|121, 122, 123, 124, 137"/>
+			<forward name="showAdd" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/add_stire"/>
+			<forward name="showPrint" contextRelative="true"
+					 path="/template_print.jsp?page=web/portal/stire/print_stire"/>
+			<forward name="showDelete" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/del_stire"/>
+			<forward name="showEdit" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/add_stire"/>
+			<forward name="failure" contextRelative="true"
+					 path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/list_stire"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/list_stire"/>
+			<forward name="showRecord" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/view_stire"/>
+			<forward name="showTranslate" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/translate_stire"/>
+			<forward name="showPublishing" contextRelative="true"
+					 path="/template.jsp?page=web/portal/stire/pub_stire"/>
+			<forward name="accessDenied" path="/template.jsp?page=denied"
+					 contextRelative="true"/>
+		</action>
+
+		<action path="/vizstire"
+				type="ro.uti.apmc.portal.components.command.VizStireAction"
+				name="form_VizStireForm"
+				attribute="form_VizStireForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<forward name="showNews" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/portal/stire/viz_stire"/>
+			<forward name="showNewsDetailList" contextRelative="true"
+					 path="/portaltemplate.jsp?page=lista_detaliata_stiri"/>
+			<forward name="showPortletStiri" contextRelative="true"
+					 path="/web/portal/stire/portlet_stiri.jsp"/>
+			<forward name="showPortletPoliticaUE" contextRelative="true"
+					 path="/web/portal/stire/portlet_politica_ue.jsp"/>
+			<forward name="showPortletMoveStiri" contextRelative="true"
+					 path="/web/portal/stire/portlet_move_stiri.jsp"/>
+			<forward name="showNewsArchiveList" contextRelative="true"
+					 path="/portaltemplate.jsp?page=lista_detaliata_arhiva_stiri"/>
+			<forward name="failure" contextRelative="true"
+					 path="/portaltemplate.jsp?page=missing"/>
+
+		</action>
+		<action path="/static"
+				type="ro.uti.apmc.staticcontent.view.command.StaticContentAction"
+				name="form_StaticContentForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="x"
+				validate="false">
+			<forward name="load" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/portal/staticcontent/view/view"/>
+
+		</action>
+		<action path="/staticpopup"
+				type="ro.uti.apmc.staticcontent.view.command.StaticContentAction"
+				name="form_StaticContentForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="x"
+				validate="false">
+			<forward name="load" contextRelative="true"
+					 path="/popuptemplate.jsp?page=web/portal/staticcontent/view/view"/>
+
+		</action>
+		<action path="/getstatic"
+				type="ro.uti.apmc.staticcontent.view.command.GetContentAction"
+				name="form_ImageForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="x"
+				validate="false">
+			<forward name="load" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/portal/staticcontent/view/view"/>
+
+		</action>
+		<action path="/mesajsite"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajSiteForm"
+				attribute="form_MesajSiteForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="list:931"/>
+			<set-property property="accessRoles" value="showRecord:932"/>
+			<set-property property="accessRoles" value="showDelete:933"/>
+			<set-property property="accessRoles" value="showArchive:934"/>
+			<set-property property="accessRoles" value="showForward:935"/>
+			<set-property property="accessRoles" value="showReply:936"/>
+			<set-property property="accessRoles"
+						  value="showMultipleArchive:937"/>
+			<set-property property="accessRoles"
+						  value="showMultipleForward:938"/>
+			<set-property property="accessRoles" value="showMultipleReply:939"/>
+			<set-property property="accessRoles" value="multipleDelete:940"/>
+			<set-property property="accessRoles" value="listArchive:951"/>
+			<set-property property="accessRoles" value="showRecordArh:952"/>
+			<set-property property="accessRoles" value="multipleDeleteArh:953"/>
+			<forward name="showAdd" contextRelative="true"
+					 path="/portaltemplate.jsp?page=web/portal/mesajsite/add_mesajsite"/>
+			<forward name="showPrint" contextRelative="true"
+					 path="/template_print.jsp?page=web/portal/mesajsite/print_mesajsite"/>
+			<forward name="showDelete" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/del_mesajsite"/>
+			<forward name="showEdit" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/add_mesajsite"/>
+			<forward name="failure" contextRelative="true"
+					 path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+			<forward name="showArchiveList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_arhiva_mesajsite"/>
+			<forward name="showRecord" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/view_mesajsite"/>
+			<forward name="showReply" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/reply_mesajsite"/>
+			<forward name="showForward" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/forward_mesajsite"/>
+			<forward name="showArchive" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/archive_mesajsite"/>
+			<forward name="showRecordArh" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/view_mesajsite_arh"/>
+			<forward name="index" contextRelative="true" path="/index.jsp"/>
+			<forward name="showMultiple" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_multiple"/>
+		</action>
+
+		<action path="/mesajfw"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajFwForm"
+				attribute="form_MesajFwForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="showForward:935"/>
+			<forward name="showForward" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajfw/forward_mesajsite"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+		</action>
+		<action path="/mesajre"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajReForm"
+				attribute="form_MesajReForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="showReply:936"/>
+			<forward name="showReply" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajfw/reply_mesajsite"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+		</action>
+		<action path="/mesajar"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajArForm"
+				attribute="form_MesajArForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<set-property property="accessRoles" value="showArchive:934"/>
+			<forward name="showArchive" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajfw/archive_mesajsite"/>
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+		</action>
+		<action path="/mesajsearch"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajSearchForm"
+				attribute="form_MesajSearchForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<forward name="showList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_mesajsite"/>
+		</action>
+		<action path="/mesajsearcharh"
+				type="ro.uti.apmc.portal.components.command.MesajSiteAction"
+				name="form_MesajSearchArhForm"
+				attribute="form_MesajSearchArhForm"
+				className="ro.uti.waf.web.security.StrutsPermissionMapping"
+				scope="request"
+				parameter="method"
+				validate="false">
+			<forward name="showArchiveList" contextRelative="true"
+					 path="/template.jsp?page=web/portal/mesajsite/list_arhiva_mesajsite"/>
+		</action>
+
+		<action path="/lang"
+				type="ro.uti.waf.web.action.I18nAction"
+				scope="request">
+			<forward name="default" path="tbl_user.do"/>
+			<forward name="failure" path="/template.jsp?page=error"/>
+		</action>
+		<action type="org.apache.struts.actions.SwitchAction" path="/switch">
+			<forward path="/userservice/tbl_appl_session_operation.do"
+					 name="default"/>
+		</action>
+
+	  </action-mappings>
+    <controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	 <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/portal/validation.xml" property="pathnames"/>
+    </plug-in>
+</struts-config>

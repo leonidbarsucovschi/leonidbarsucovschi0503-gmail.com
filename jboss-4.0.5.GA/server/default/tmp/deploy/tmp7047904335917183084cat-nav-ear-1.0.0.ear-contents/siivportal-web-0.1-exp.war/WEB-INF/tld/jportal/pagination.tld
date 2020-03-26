@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+    <tlibversion>1.0</tlibversion>
+    <jspversion>1.2</jspversion>
+    <shortname>pagination</shortname>
+    <info>
+		Pagination
+	</info>
+    <tag>
+        <name>pager</name>
+        <tagclass>ro.uti.waf.taglib.pagination.PaginationTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+        <info>
+			Pagination
+		</info>
+
+        <!-- The name of the List object which contain the result to be displayed  -->
+        <attribute>
+            <name>list</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the key of the resource property file declared in struts-config.xml -->
+        <attribute>
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- use this parameter whe you want to use a switch action in struts -->
+        <attribute>
+            <name>prefix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!--number of records in a page -->
+        <attribute>
+            <name>pagesize</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the url where to post actions -->
+        <attribute>
+            <name>requestURI</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- the method to be executed , as in struts 1.2 or null in rest -->
+        <attribute>
+            <name>method</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <!-- The Title of the table-->
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>

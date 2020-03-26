@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="R9_4_Nr_Decl_Transport"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="0;1;2;3;4;5;" />
+		<property name="table_column" value="SAD_GENERAL_SEGMENT.IDE_REG_DAT" />
+		<parameterDescription><![CDATA[Perioada de inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_GENERAL_SEGMENT.IDE_REG_DAT BETWEEN TO_DATE('01/12/2005','dd/mm/yyyy') AND TO_DATE('31/12/2006','dd/mm/yyyy') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UNRATTAB.CUR_COD" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="true" />
+		<property name="nomenclator_table" value="UNRATTAB" />
+		<property name="nomenclator_id" value="CUR_COD" />
+		<property name="nomenclator_code" value="CUR_COD" />
+		<property name="nomenclator_descr" value="CUR_COD" />
+		<property name="default" value="MDL" />
+		<property name="multiple" value="1" />
+		<parameterDescription><![CDATA[Moneda:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and UNRATTAB.CUR_COD = 'EUR' "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MDTYPDEC.COD" isForPrompting="false" class="java.lang.String">
+		<property name="nomenclator_table" value="MDTYPDEC" />
+		<property name="nomenclator_id" value="COD" />
+		<property name="nomenclator_code" value="COD" />
+		<property name="nomenclator_descr" value="DSC" />
+		<parameterDescription><![CDATA[Tip operatiune:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and MDTYPDEC.COD in ('IM','TZ')"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UNMOTTAB.MOT_COD" isForPrompting="false" class="java.lang.String">
+		<property name="nomenclator_table" value="UNMOTTAB" />
+		<property name="nomenclator_id" value="MOT_COD" />
+		<property name="nomenclator_code" value="MOT_COD" />
+		<property name="nomenclator_descr" value="MOT_DSC" />
+		<parameterDescription><![CDATA[Tip transport:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select sysdate from dual]]></queryString>
+
+	<field name="SYSDATE" class="java.sql.Timestamp"/>
+
+	<variable name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="P_DataI" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="P_DataF" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="MDTYPDEC.COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{MDTYPDEC.COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{MDTYPDEC.COD}.indexOf("'") >= 0 ?
+            $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("'")+1,$P{MDTYPDEC.COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{MDTYPDEC.COD}.indexOf(">=") > 0 && $P{MDTYPDEC.COD}.indexOf("<=") > 0 ?
+              $P{MDTYPDEC.COD}.substring( $P{MDTYPDEC.COD}.indexOf(">=")+2, $P{MDTYPDEC.COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.lastIndexOf("<=")+2, $P{MDTYPDEC.COD}.length() )
+              : ( $P{MDTYPDEC.COD}.indexOf(">") > 0 && $P{MDTYPDEC.COD}.indexOf("=") > 0 && $P{MDTYPDEC.COD}.indexOf("<") < 0 ?
+                $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf(">="),$P{MDTYPDEC.COD}.length() )
+                : ( $P{MDTYPDEC.COD}.indexOf("<") > 0 && $P{MDTYPDEC.COD}.indexOf("=") > 0 && $P{MDTYPDEC.COD}.indexOf(">") < 0 ?
+                  $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("<="),$P{MDTYPDEC.COD}.length() ) 
+                  : ( $P{MDTYPDEC.COD}.indexOf(">") > 0 && $P{MDTYPDEC.COD}.indexOf("=") < 0 ?
+                    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf(">"),$P{MDTYPDEC.COD}.length() )
+                    : ($P{MDTYPDEC.COD}.indexOf("<") > 0 && $P{MDTYPDEC.COD}.indexOf("=") < 0 ?
+                      $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("<"), $P{MDTYPDEC.COD}.length() )
+                      : ( $P{MDTYPDEC.COD}.indexOf("=") > 0 ?
+                        $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("=")+1, $P{MDTYPDEC.COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{MDTYPDEC.COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+9, $P{MDTYPDEC.COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{MDTYPDEC.COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{MDTYPDEC.COD}.indexOf("'") >= 0 ?
+            $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("'")+1,$P{MDTYPDEC.COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{MDTYPDEC.COD}.indexOf(">=") > 0 && $P{MDTYPDEC.COD}.indexOf("<=") > 0 ?
+              $P{MDTYPDEC.COD}.substring( $P{MDTYPDEC.COD}.indexOf(">=")+2, $P{MDTYPDEC.COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.lastIndexOf("<=")+2, $P{MDTYPDEC.COD}.length() )
+              : ( $P{MDTYPDEC.COD}.indexOf(">") > 0 && $P{MDTYPDEC.COD}.indexOf("=") > 0 && $P{MDTYPDEC.COD}.indexOf("<") < 0 ?
+                $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf(">="),$P{MDTYPDEC.COD}.length() )
+                : ( $P{MDTYPDEC.COD}.indexOf("<") > 0 && $P{MDTYPDEC.COD}.indexOf("=") > 0 && $P{MDTYPDEC.COD}.indexOf(">") < 0 ?
+                  $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("<="),$P{MDTYPDEC.COD}.length() ) 
+                  : ( $P{MDTYPDEC.COD}.indexOf(">") > 0 && $P{MDTYPDEC.COD}.indexOf("=") < 0 ?
+                    $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf(">"),$P{MDTYPDEC.COD}.length() )
+                    : ($P{MDTYPDEC.COD}.indexOf("<") > 0 && $P{MDTYPDEC.COD}.indexOf("=") < 0 ?
+                      $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("<"), $P{MDTYPDEC.COD}.length() )
+                      : ( $P{MDTYPDEC.COD}.indexOf("=") > 0 ?
+                        $P{MDTYPDEC.COD}.substring($P{MDTYPDEC.COD}.indexOf("=")+1, $P{MDTYPDEC.COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="UNMOTTAB.MOT_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{UNMOTTAB.MOT_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNMOTTAB.MOT_COD}.indexOf("'") >= 0 ?
+            $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("'")+1,$P{UNMOTTAB.MOT_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNMOTTAB.MOT_COD}.indexOf(">=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("<=") > 0 ?
+              $P{UNMOTTAB.MOT_COD}.substring( $P{UNMOTTAB.MOT_COD}.indexOf(">=")+2, $P{UNMOTTAB.MOT_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.lastIndexOf("<=")+2, $P{UNMOTTAB.MOT_COD}.length() )
+              : ( $P{UNMOTTAB.MOT_COD}.indexOf(">") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("<") < 0 ?
+                $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf(">="),$P{UNMOTTAB.MOT_COD}.length() )
+                : ( $P{UNMOTTAB.MOT_COD}.indexOf("<") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf(">") < 0 ?
+                  $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("<="),$P{UNMOTTAB.MOT_COD}.length() ) 
+                  : ( $P{UNMOTTAB.MOT_COD}.indexOf(">") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") < 0 ?
+                    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf(">"),$P{UNMOTTAB.MOT_COD}.length() )
+                    : ($P{UNMOTTAB.MOT_COD}.indexOf("<") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") < 0 ?
+                      $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("<"), $P{UNMOTTAB.MOT_COD}.length() )
+                      : ( $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 ?
+                        $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("=")+1, $P{UNMOTTAB.MOT_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{UNMOTTAB.MOT_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNMOTTAB.MOT_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNMOTTAB.MOT_COD}.indexOf("'") >= 0 ?
+            $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("'")+1,$P{UNMOTTAB.MOT_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNMOTTAB.MOT_COD}.indexOf(">=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("<=") > 0 ?
+              $P{UNMOTTAB.MOT_COD}.substring( $P{UNMOTTAB.MOT_COD}.indexOf(">=")+2, $P{UNMOTTAB.MOT_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.lastIndexOf("<=")+2, $P{UNMOTTAB.MOT_COD}.length() )
+              : ( $P{UNMOTTAB.MOT_COD}.indexOf(">") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("<") < 0 ?
+                $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf(">="),$P{UNMOTTAB.MOT_COD}.length() )
+                : ( $P{UNMOTTAB.MOT_COD}.indexOf("<") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf(">") < 0 ?
+                  $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("<="),$P{UNMOTTAB.MOT_COD}.length() ) 
+                  : ( $P{UNMOTTAB.MOT_COD}.indexOf(">") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") < 0 ?
+                    $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf(">"),$P{UNMOTTAB.MOT_COD}.length() )
+                    : ($P{UNMOTTAB.MOT_COD}.indexOf("<") > 0 && $P{UNMOTTAB.MOT_COD}.indexOf("=") < 0 ?
+                      $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("<"), $P{UNMOTTAB.MOT_COD}.length() )
+                      : ( $P{UNMOTTAB.MOT_COD}.indexOf("=") > 0 ?
+                        $P{UNMOTTAB.MOT_COD}.substring($P{UNMOTTAB.MOT_COD}.indexOf("=")+1, $P{UNMOTTAB.MOT_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="UNRATTAB.CUR_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{UNRATTAB.CUR_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNRATTAB.CUR_COD}.indexOf("'") >= 0 ?
+            $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("'")+1,$P{UNRATTAB.CUR_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNRATTAB.CUR_COD}.indexOf(">=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<=") > 0 ?
+              $P{UNRATTAB.CUR_COD}.substring( $P{UNRATTAB.CUR_COD}.indexOf(">=")+2, $P{UNRATTAB.CUR_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.lastIndexOf("<=")+2, $P{UNRATTAB.CUR_COD}.length() )
+              : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<") < 0 ?
+                $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">="),$P{UNRATTAB.CUR_COD}.length() )
+                : ( $P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf(">") < 0 ?
+                  $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<="),$P{UNRATTAB.CUR_COD}.length() ) 
+                  : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">"),$P{UNRATTAB.CUR_COD}.length() )
+                    : ($P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                      $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<"), $P{UNRATTAB.CUR_COD}.length() )
+                      : ( $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 ?
+                        $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("=")+1, $P{UNRATTAB.CUR_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{UNRATTAB.CUR_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNRATTAB.CUR_COD}.indexOf("'") >= 0 ?
+            $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("'")+1,$P{UNRATTAB.CUR_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNRATTAB.CUR_COD}.indexOf(">=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<=") > 0 ?
+              $P{UNRATTAB.CUR_COD}.substring( $P{UNRATTAB.CUR_COD}.indexOf(">=")+2, $P{UNRATTAB.CUR_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.lastIndexOf("<=")+2, $P{UNRATTAB.CUR_COD}.length() )
+              : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<") < 0 ?
+                $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">="),$P{UNRATTAB.CUR_COD}.length() )
+                : ( $P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf(">") < 0 ?
+                  $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<="),$P{UNRATTAB.CUR_COD}.length() ) 
+                  : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">"),$P{UNRATTAB.CUR_COD}.length() )
+                    : ($P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                      $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<"), $P{UNRATTAB.CUR_COD}.length() )
+                      : ( $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 ?
+                        $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("=")+1, $P{UNRATTAB.CUR_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="135"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="44"
+						width="781"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="781"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="159"
+						y="3"
+						width="465"
+						height="40"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Tipurile de transport folosite in operatiile de comert exterior in perioada\n" + $V{SAD_GENERAL_SEGMENT.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="10"
+						y="50"
+						width="134"
+						height="15"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="10"
+						y="67"
+						width="134"
+						height="15"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Perioada de inregistrare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="150"
+						y="67"
+						width="624"
+						height="15"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_GENERAL_SEGMENT.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="150"
+						y="50"
+						width="624"
+						height="15"
+						forecolor="#000000"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="10"
+						y="84"
+						width="134"
+						height="15"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Tip operatiune:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="150"
+						y="84"
+						width="624"
+						height="15"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{MDTYPDEC.COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="10"
+						y="101"
+						width="134"
+						height="15"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Tip transport:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="150"
+						y="101"
+						width="624"
+						height="15"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{UNMOTTAB.MOT_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="10"
+						y="118"
+						width="134"
+						height="15"
+						forecolor="#000000"
+						key="staticText-6"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Moneda de raportare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="150"
+						y="118"
+						width="624"
+						height="15"
+						forecolor="#000000"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{UNRATTAB.CUR_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="30"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="30"
+						key="subreport-2"/>
+					<subreportParameter  name="P_DataF">
+						<subreportParameterExpression><![CDATA[$V{P_DataF}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="P_DataI">
+						<subreportParameterExpression><![CDATA[$V{P_DataI}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="UNRATTAB.CUR_COD">
+						<subreportParameterExpression><![CDATA[$P{UNRATTAB.CUR_COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="MDTYPDEC.COD">
+						<subreportParameterExpression><![CDATA[$P{MDTYPDEC.COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="UNMOTTAB.MOT_COD">
+						<subreportParameterExpression><![CDATA[$P{UNMOTTAB.MOT_COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "R9_4_Nr_Decl_Transport 1.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="22"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="573"
+						y="2"
+						width="170"
+						height="19"
+						forecolor="#000000"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="746"
+						y="2"
+						width="36"
+						height="19"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="2"
+						width="469"
+						height="19"
+						forecolor="#FF0033"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="31"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="31"
+						key="subreport-3"
+						stretchType="RelativeToTallestObject"/>
+					<subreportParameter  name="UNRATTAB.CUR_COD">
+						<subreportParameterExpression><![CDATA[$P{UNRATTAB.CUR_COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="MDTYPDEC.COD">
+						<subreportParameterExpression><![CDATA[$P{MDTYPDEC.COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="UNMOTTAB.MOT_COD">
+						<subreportParameterExpression><![CDATA[$P{UNMOTTAB.MOT_COD}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="P_DataI">
+						<subreportParameterExpression><![CDATA[$V{P_DataI}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="P_DataF">
+						<subreportParameterExpression><![CDATA[$V{P_DataF}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "R9_4_Nr_Decl_Transport 2.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+"http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+  <form-beans>
+
+
+    <!-- SelectionForm -->
+    <form-bean name="selectionForm" type="ro.uti.waf.components.selectionComponent.selectionPopup.web.SelectionForm"/>
+
+    <form-bean name="form_loadDetailsForm"
+      type="ro.uti.waf.components.selectionComponent.autoload.LoadDetailsForm">
+      <form-property name="tableName" type="java.lang.String"/>
+      <form-property name="idTableName" type="java.lang.String"/>
+      <form-property name="knownFieldName" type="java.lang.String"/>
+      <form-property name="knownFieldVale" type="java.lang.String"/>
+      <form-property name="detailsFieldName" type="java.lang.String"/>
+      <form-property name="idTableValue" type="java.lang.String"/>
+      <form-property name="detailsFieldValue" type="java.lang.String"/>
+    </form-bean>
+  </form-beans>
+
+  <action-mappings>
+
+    <action path="/initSelect"
+      type="ro.uti.waf.components.selectionComponent.selectionPopup.web.InitSelectionAction"
+      name="selectionForm"
+      attribute="selectionForm"
+      scope="session"
+      input="toSelection"
+      validate="true">
+      <forward name="toSelection" path="/popup/selection.jsp"/>
+    </action>
+
+    <action path="/select"
+      type="ro.uti.waf.components.selectionComponent.selectionPopup.web.SelectionAction"
+      name="selectionForm"
+      attribute="selectionForm"
+      scope="session"
+      input="toSelection"
+      validate="true">
+      <forward name="toSelection" path="/popup/selection.jsp"/>
+    </action>
+
+    <action path="/loadDetails"
+      type="ro.uti.waf.components.selectionComponent.autoload.LoadDetailsAction"
+      name="form_loadDetailsForm"
+      attribute="form_loadDetailsForm"
+      scope="request"
+      validate="false">
+      <forward name="result" path="/autoload/loadDetailsResult.jsp"/>
+      <forward name="failureIframe" path="/autoload/failureIframe.jsp"/>
+    </action>
+  </action-mappings>
+
+  <controller>
+    <set-property value="true" property="inputForward"/>
+  </controller>
+
+<!--  bundle de mesaje dummy pus ca sa nu crape strutsu-->
+  <message-resources parameter="" />
+
+  <message-resources parameter="ro.uti.waf.components.selectionComponent.selectionPopup.Application" key="selectionComponentMessages" null="false" />
+
+
+
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property value="/WEB-INF/validator-rules.xml,/selectionComponent/WEB-INF/validation.xml" property="pathnames"/>
+  </plug-in>
+
+
+  <plug-in className="ro.uti.waf.components.selectionComponent.selectionPopup.web.GenericSelectionSettings">
+    <set-property value="/selectionComponent/WEB-INF/generic-selection.xml" property="desctiptorPath"/>
+  </plug-in>
+
+</struts-config>

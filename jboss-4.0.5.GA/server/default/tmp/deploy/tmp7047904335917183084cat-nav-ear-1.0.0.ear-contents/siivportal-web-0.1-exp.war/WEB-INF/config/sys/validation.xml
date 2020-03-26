@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE form-validation PUBLIC
+		"-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
+		"http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
+
+<!--
+ # Module   : sys
+ # File     : WEB-INF/sys/validation.xml
+ # Creation : 
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<form-validation>
+	<formset>
+		<!-- FORMA  adm_user_ext -->
+		<form name="form_AdmUserExtForm">
+			<field property="values.nume" depends="required,maxlength,mask">
+				<arg position="0" bundle="admuserext"
+					 key="adm_user_ext.prompt.nume"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z ]*$</var-value>
+				</var>
+			</field>
+			<field property="values.prenume" depends="required,maxlength,mask">
+				<arg position="0" bundle="admuserext"
+					 key="adm_user_ext.prompt.prenume"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z ]*$</var-value>
+				</var>
+			</field>
+			<field property="values.email" depends="required,maxlength,email">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.email_user"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.user_login"
+				   depends="required,maxlength,mask">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.user_login"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9\._-]*$</var-value>
+				</var>
+			</field>
+<!--			<field property="values.fk_limba" depends="required,integer">
+				<arg position="0" bundle="admuserext"
+					 key="adm_user_ext.prompt.fk_limba"/>
+			</field>-->
+			<field property="values.cd" depends="required,integer">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.mod_autentificare"/>
+			</field>
+			<field property="values.user_passwd"
+				   depends="validwhen,minlength,maxlength">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.user_password"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<arg position="1" key="${var:minlength}" name="minlength"
+					 resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((values.id_user_ext!=null) or (values.cd!=0)) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="c_user_password"
+				   depends="validwhen,minlength,maxlength">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.c_user_password"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<arg position="1" key="${var:minlength}" name="minlength"
+					 resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((values.id_user_ext!=null) or (values.cd!=0)) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.issuer_name" depends="validwhen">
+				<msg name="validwhen" bundle="admuserext"
+					 key="adm_user_ext.error.ldap_lipsa"/>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((values.id_user_ext!=null) or (values.cd!=1)) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.serial_number" depends="validwhen">
+				<msg name="validwhen" bundle="admuserext"
+					 key="adm_user_ext.error.ldap_lipsa"/>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((values.id_user_ext!=null) or (values.cd!=1)) or (*this*!= null))</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA recuperare_parola-->
+		<form name="form_RecuperareParolaForm">
+			<field property="user_login"
+				   depends="required,maxlength,mask">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.user_login"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9\._-]*$</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_user_inreg -->
+		<form name="form_AdmUserInregForm">
+			<field property="values.nume_user"
+				   depends="validwhen,maxlength,mask">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.nume_user"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z ]*$</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>((pas!=1) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.prenume_user"
+				   depends="validwhen,maxlength,mask">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.prenume_user"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z ]*$</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>((pas!=1) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.email_user"
+				   depends="validwhen,maxlength,email">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.email_user"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>((pas!=1) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.cd" depends="validwhen,integer">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.mod_autentificare"/>
+				<var>
+					<var-name>test</var-name>
+					<var-value>((pas!=1) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.user_login"
+				   depends="validwhen,maxlength,mask">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.user_login"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9\._-]*$</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>((pas!=1) or (*this*!= null))</var-value>
+				</var>
+			</field>
+			<field property="values.user_password"
+				   depends="validwhen,minlength,maxlength">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.user_password"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<arg position="1" key="${var:minlength}" name="minlength"
+					 resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((pas!=1) or (values.cd!=0)) or (*this*!=null))</var-value>
+				</var>
+			</field>
+			<field property="c_user_password"
+				   depends="validwhen,minlength,maxlength">
+				<arg position="0" bundle="admuserinreg"
+					 key="adm_user_inreg.prompt.c_user_password"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<arg position="1" key="${var:minlength}" name="minlength"
+					 resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>test</var-name>
+					<var-value>(((pas!=1) or (values.cd!=0)) or (*this*!=null))</var-value>
+				</var>
+			</field>
+		</form>
+
+		<!-- FORMA  contact -->
+		<form name="form_ContactForm">
+			<field property="values.nume_persoana_contact" depends="maxlength">
+				<arg position="0" bundle="contact"
+					 key="contact.prompt.nume_persoana_contact"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.prenume_pers_contact" depends="maxlength">
+				<arg position="0" bundle="contact"
+					 key="contact.prompt.prenume_pers_contact"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.email_pers_contact" depends="maxlength">
+				<arg position="0" bundle="contact"
+					 key="contact.prompt.email_pers_contact"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.tel_pers_contact" depends="maxlength">
+				<arg position="0" bundle="contact"
+					 key="contact.prompt.tel_pers_contact"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field>
+			<field property="values.observatii" depends="maxlength">
+				<arg position="0" bundle="contact"
+					 key="contact.prompt.observatii"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+			</field>
+		</form>
+
+		<!-- FORMA  adm_menu_entry -->
+		<form name="form_AdmMenuEntryForm">
+			<field property="values.fk_menu_entry" depends="integer">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.fk_menu_entry"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.menu_key" depends="maxlength">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_key"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.link_menu_name" depends="integer">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.link_menu_name"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.menu_name"
+				   depends="required,maxlength,mask">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.link_menu_name"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>30</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9 \,-\/\\]*$</var-value>
+				</var>
+			</field>
+			<field property="values.menu_url_dir" depends="required,maxlength">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_url"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<field property="values.menu_type" depends="required,integer">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_type"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.menu_order" depends="required,integer">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_order"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.menu_description" depends="maxlength">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_description"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<field property="values.menu_icon" depends="">
+				<arg position="0" bundle="admmenuentry"
+					 key="adm_menu_entry.prompt.menu_icon"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4000</var-value>
+				</var>
+			</field>
+			<field property="values.id_limba" depends="required,integer">
+				<arg position="0" bundle="admmenuentry"
+					 key="admmenuentry.prompt.nom_limba"/>
+			</field>
+		</form>
+		<!-- FORMA  adm_operation_type -->
+		<form name="form_AdmOperationTypeForm">
+			<field property="values.fk_operation_type" depends="integer">
+				<arg position="0" bundle="admoperationtype"
+					 key="adm_operation_type.prompt.fk_operation_type"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.opp_name" depends="required,maxlength">
+				<arg position="0" bundle="admoperationtype"
+					 key="adm_operation_type.prompt.opp_name"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.description" depends="maxlength">
+				<arg position="0" bundle="admoperationtype"
+					 key="adm_operation_type.prompt.description"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_role_hierarchy -->
+		<form name="form_AdmRoleHierarchyForm">
+			<field property="values.fk_role_parent" depends="integer">
+				<arg position="0" bundle="admrolehierarchy"
+					 key="adm_role_hierarchy.prompt.fk_role_parent"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.fk_role_child" depends="integer">
+				<arg position="0" bundle="admrolehierarchy"
+					 key="adm_role_hierarchy.prompt.fk_role_child"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_role -->
+		<form name="form_AdmRoleForm">
+			<field property="values.role_name" depends="required,maxlength">
+				<arg position="0" bundle="admrole"
+					 key="adm_role.prompt.role_name"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.role_description" depends="maxlength">
+				<arg position="0" bundle="admrole"
+					 key="adm_role.prompt.role_description"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<!--<field property="values.role_type" depends="required,integer">-->
+			<!--<arg position="0" bundle="admrole" key="adm_role.prompt.role_type"/>-->
+			<!--<arg position="1" key="${var:maxlength}" name="maxlength" resource="false"/>-->
+			<!--<var>-->
+			<!--<var-name>maxlength</var-name>-->
+			<!--<var-value>22</var-value>-->
+			<!--</var>-->
+			<!--</field>-->
+			<field property="values.role_code" depends="maxlength">
+				<arg position="0" bundle="admrole"
+					 key="adm_role.prompt.role_code"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>30</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_role_hierarchy -->
+		<form name="form_AdmRoleHierarchyForm">
+			<field property="values.fk_role1" depends="integer">
+				<arg position="0" bundle="admrolehierarchy"
+					 key="adm_role_hierarchy.prompt.fk_role1"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.tbl_id_appl_role" depends="integer">
+				<arg position="0" bundle="admrolehierarchy"
+					 key="adm_role_hierarchy.prompt.tbl_id_appl_role"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_session_operation -->
+		<form name="form_AdmSessionOperationForm">
+			<field property="values.fk_operation_type" depends="integer">
+				<arg position="0" bundle="admsessionoperation"
+					 key="adm_session_operation.prompt.fk_operation_type"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.fk_user_session" depends="integer">
+				<arg position="0" bundle="admsessionoperation"
+					 key="adm_session_operation.prompt.fk_user_session"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.operation_dateString"
+				   depends="required,date">
+				<arg position="0" bundle="admsessionoperation"
+					 key="adm_session_operation.prompt.operation_date"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>7</var-value>
+				</var>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value/>
+				</var>
+			</field>
+			<field property="values.description" depends="maxlength">
+				<arg position="0" bundle="admsessionoperation"
+					 key="adm_session_operation.prompt.description"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<field property="values.binary" depends="">
+				<arg position="0" bundle="admsessionoperation"
+					 key="adm_session_operation.prompt.binary"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4000</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_user -->
+		<form name="form_AdmUserForm">
+			<field property="values.user_login"
+				   depends="required,maxlength,mask">
+				<arg position="0" bundle="admuser"
+					 key="adm_user.prompt.user_login"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<arg position="1" bundle="admuser"
+					 key="adm_user.prompt.user_login.alphanum"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>25</var-value>
+				</var>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^[a-zA-Z0-9\._-]*$</var-value>
+				</var>
+			</field>
+			<field property="values.email" depends="required,maxlength,email">
+				<arg position="0" bundle="admuser" key="adm_user.prompt.email"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_user_session -->
+		<form name="form_AdmUserSessionForm">
+			<field property="values.fk_user" depends="integer">
+				<arg position="0" bundle="admusersession"
+					 key="adm_user_session.prompt.fk_user"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.fk_http_session"
+				   depends="required,maxlength">
+				<arg position="0" bundle="admusersession"
+					 key="adm_user_session.prompt.fk_http_session"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+			<field property="values.ip_address" depends="required,maxlength">
+				<arg position="0" bundle="admusersession"
+					 key="adm_user_session.prompt.ip_address"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>15</var-value>
+				</var>
+			</field>
+			<field property="values.login_dateString" depends="required
+											,date
+										">
+				<arg position="0" bundle="admusersession"
+					 key="adm_user_session.prompt.login_date"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>7</var-value>
+				</var>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value/>
+				</var>
+			</field>
+			<field property="values.logout_dateString" depends="date">
+				<arg position="0" bundle="admusersession"
+					 key="adm_user_session.prompt.logout_date"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>7</var-value>
+				</var>
+				<var>
+					<var-name>datePatternStrict</var-name>
+					<var-value>dd.MM.yyyy</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  adm_parametrii_config -->
+		<form name="form_AdmParametriiConfigForm">
+			<field property="values.denumire" depends="required,maxlength">
+				<arg position="0" bundle="admparametriiconfig"
+					 key="adm_parametrii_config.prompt.denumire"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="values.val_implicita" depends="required,maxlength">
+				<arg position="0" bundle="admparametriiconfig"
+					 key="adm_parametrii_config.prompt.val_implicita"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>1000</var-value>
+				</var>
+			</field>
+			<field property="values.val_curenta" depends="maxlength">
+				<arg position="0" bundle="admparametriiconfig"
+					 key="adm_parametrii_config.prompt.val_curenta"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>1000</var-value>
+				</var>
+			</field>
+		</form>
+		<!-- FORMA  dictionar -->
+		<form name="form_DictionarForm">
+			<field property="values.fk_limba" depends="required,integer">
+				<arg position="0" bundle="dictionar"
+					 key="dictionar.prompt.fk_limba"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.traducere" depends="required,maxlength">
+				<arg position="0" bundle="dictionar"
+					 key="dictionar.prompt.traducere"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>1000</var-value>
+				</var>
+			</field>
+			<field property="values.camp_id" depends="required,integer">
+				<arg position="0" bundle="dictionar"
+					 key="dictionar.prompt.camp_id"/>
+				<arg position="1" key="${var:maxlength}" resource="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="form_AdmMessageTemplateForm">
+			<field property="values.fk_limba" depends="required,integer">
+				<arg position="0" bundle="admmessagetemplate"
+					 key="adm_message_template.prompt.fk_limba"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>22</var-value>
+				</var>
+			</field>
+			<field property="values.mkey" depends="required,maxlength">
+				<arg position="0" bundle="admmessagetemplate"
+					 key="adm_message_template.prompt.mkey"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>64</var-value>
+				</var>
+			</field>
+			<field property="values.message" depends="required,maxlength">
+				<arg position="0" bundle="admmessagetemplate"
+					 key="adm_message_template.prompt.message"/>
+				<arg position="1" key="${var:maxlength}" name="maxlength"
+					 resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4000</var-value>
+				</var>
+			</field>
+		</form>
+	</formset>
+</form-validation>

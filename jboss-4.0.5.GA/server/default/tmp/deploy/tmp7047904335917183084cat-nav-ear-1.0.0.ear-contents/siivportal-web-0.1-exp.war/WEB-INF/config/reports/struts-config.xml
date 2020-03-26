@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+		"http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+
+<struts-config>
+	<form-beans>
+		<form-bean name="form_ReportForm"
+			type="ro.uti.siiv.reports.ReportForm"/>
+
+		<form-bean name="form_PrintForm"
+			type="ro.uti.siiv.reports.PrintForm"/>
+
+		<form-bean name="form_ReportMenuForm"
+			type="ro.uti.siiv.reports.ReportMenuForm"/>
+	</form-beans>
+
+	<action-mappings>
+		<action path="/report" type="ro.uti.siiv.reports.ReportAction"
+			name="form_ReportForm"
+			attribute="form_ReportForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+
+			<set-property property="accessRoles" value="default:1001"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/reports/add_report"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/reports/del_report"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/reports/edit_report"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/reports/list_report"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/reports/list_report"/>
+			<forward name="showListMine" contextRelative="true" path="/template.jsp?page=web/reports/list_report_mine"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/reports/view_report"/>
+			<forward name="accessDenied" contextRelative="true" path="/template.jsp?page=denied"/>
+
+			<forward name="showUploadJsp" contextRelative="true" path="/template.jsp?page=web/reports/upload_report"/>
+			<forward name="showStep1Jsp" contextRelative="true" path="/template.jsp?page=web/reports/step1_report"/>
+			<forward name="showReportJsp" contextRelative="true" path="/template.jsp?page=web/reports/show_report"/>
+		</action>
+
+		<action path="/reportmenu"
+			type="ro.uti.siiv.reports.ReportMenuAction"
+			name="form_ReportMenuForm"
+			attribute="form_ReportMenuForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:1002"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/reports/add_reportmenu"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/reports/del_reportmenu"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/reports/add_reportmenu"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/reports/list_reportmenu"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/reports/list_reportmenu"/>
+		</action>
+
+
+		<action path="/print" type="ro.uti.siiv.reports.PrintAction"
+			name="form_PrintForm"
+			attribute="form_PrintForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+
+			<forward name="showPrintJsp" contextRelative="true" path="/template.jsp?page=web/reports/show_print"/>
+			<forward name="showHTMLReport" contextRelative="true" path="/template.jsp?page=web/reports/show_html_report"/>
+			<forward name="printHTML" contextRelative="true" path="/template.jsp?page=web/reports/print_report_html"/>
+		</action>
+	</action-mappings>
+
+
+	<controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/reports/validation.xml" property="pathnames"/>
+	</plug-in>
+</struts-config>

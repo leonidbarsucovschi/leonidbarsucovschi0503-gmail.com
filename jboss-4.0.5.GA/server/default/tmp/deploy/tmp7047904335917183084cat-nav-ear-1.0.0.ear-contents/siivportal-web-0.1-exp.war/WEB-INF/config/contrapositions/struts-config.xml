@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+		"http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+
+<struts-config>
+	<form-beans>
+		<form-bean name="form_FileOperationForm"
+			type="ro.uti.siiv.contrapositions.FileOperationForm"/>
+
+		<form-bean name="form_FileExportForm"
+			type="ro.uti.siiv.contrapositions.FileExportForm"/>
+
+		<form-bean name="form_ContrapositionForm"
+			type="ro.uti.siiv.contrapositions.ContrapositionForm"/>
+
+		<form-bean name="form_CompanyForm"
+			type="ro.uti.siiv.contrapositions.CompanyForm"/>
+	</form-beans>
+
+	<action-mappings>
+
+		<action path="/fileoperation"
+			type="ro.uti.siiv.contrapositions.FileOperationAction"
+			name="form_FileOperationForm"
+			attribute="form_FileOperationForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:1021"/>
+			<forward name="showUpload" contextRelative="true" path="/template.jsp?page=web/contrapositions/upload_fileoperation"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/contrapositions/del_fileoperation"/>
+			<forward name="showConfirm" contextRelative="true" path="/template.jsp?page=web/contrapositions/confirm_fileoperation"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/contrapositions/list_fileoperation"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/contrapositions/list_fileoperation"/>
+		</action>
+
+		<action path="/fileexport"
+			type="ro.uti.siiv.contrapositions.FileExportAction"
+			name="form_FileExportForm"
+			attribute="form_FileExportForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:1021"/>
+			<forward name="showDownload" contextRelative="true" path="/template.jsp?page=web/contrapositions/show_download"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/contrapositions/show_download"/>
+		</action>
+
+
+		<action path="/contraposition"
+			type="ro.uti.siiv.contrapositions.ContrapositionAction"
+			name="form_ContrapositionForm"
+			attribute="form_ContrapositionForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:1022"/>
+			<forward name="showContraposition" contextRelative="true" path="/template.jsp?page=web/contrapositions/show_contraposition"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/contrapositions/list_fileoperation"/>
+		</action>
+
+
+		<action path="/company"
+			type="ro.uti.siiv.contrapositions.CompanyAction"
+			name="form_CompanyForm"
+			attribute="form_CompanyForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+			<set-property property="accessRoles" value="default:1022"/>
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/contrapositions/add_company"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/contrapositions/edit_company"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/contrapositions/view_company"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/contrapositions/del_company"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/contrapositions/list_company"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/contrapositions/list_company"/>
+		</action>
+	</action-mappings>
+
+
+	<controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/contrapositions/validation.xml" property="pathnames"/>
+	</plug-in>
+</struts-config>

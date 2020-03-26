@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="R9_14_Expt_Marfuri_Accizate"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="0;1;2;3;4;5;" />
+		<property name="table_column" value="SAD_GENERAL_SEGMENT.IDE_REG_DAT" />
+		<parameterDescription><![CDATA[Perioada de inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SAD_GENERAL_SEGMENT.IDE_REG_DAT > TO_DATE('01/01/2007','dd/mm/yyyy') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UNRATTAB.CUR_COD" isForPrompting="false" class="java.lang.String">
+		<property name="required" value="true" />
+		<property name="default" value="MDL" />
+		<property name="multiple" value="1" />
+		<property name="nomenclator_table" value="UNRATTAB" />
+		<property name="nomenclator_id" value="CUR_COD" />
+		<property name="nomenclator_code" value="CUR_COD" />
+		<property name="nomenclator_descr" value="CUR_COD" />
+		<parameterDescription><![CDATA[Moneda:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and UNRATTAB.CUR_COD = 'USD' "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MDGDSNBR.NBR" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="nomenclator_table" value="MDGDSNBR" />
+		<property name="nomenclator_id" value="NBR" />
+		<property name="nomenclator_code" value="NBR" />
+		<property name="nomenclator_descr" value="NBR" />
+		<property name="multiple" value="1" />
+		<property name="default" value="2" />
+		<parameterDescription><![CDATA[Lungime cod marfa:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND MDGDSNBR.NBR IN ('6') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.GDS_DSC" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Denumire marfa:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" and SAD_ITEM.GDS_DSC like 'MASINI%' "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAD_ITEM.TAR_HSC_NB" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Cod marfa:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select
+    PARENT_DSC1,
+    PARENT_COD2,
+    PARENT_DSC2,
+    PARENT_COD4,
+    PARENT_DSC4,
+    PARENT_COD6,
+    PARENT_DSC6,
+    cod_poz_tarif,
+    denumire_marfa,
+    UM,
+    round(sum(Cantitate),4) Cantitate,
+    sum(Greut_Neta) Greut_Neta,
+    --sum(Valoare) Valoare_Stat,
+    round(sum(valoare_valuta)/1000,1) valoare_Moneda,
+    round(sum(valoare_valuta)/sum(Cantitate),1) Pret_Mediu,
+    round(sum(TAX_LIN_AMT)/1000,1) TAX_LIN_AMT
+FROM (
+SELECT
+case when MDGDSDSC.PARENT_DSC1 is not null then MDGDSDSC.PARENT_DSC1 end PARENT_DSC1,
+case when MDGDSDSC.PARENT_COD2 is not null then MDGDSDSC.PARENT_COD2 end PARENT_COD2,
+case when MDGDSDSC.PARENT_COD2 is not null then MDGDSDSC.PARENT_DSC2 end PARENT_DSC2,
+case when MDGDSDSC.PARENT_COD4 is not null then MDGDSDSC.PARENT_COD4 end PARENT_COD4,
+case when MDGDSDSC.PARENT_COD4 is not null then MDGDSDSC.PARENT_DSC4 end PARENT_DSC4,
+case when MDGDSDSC.PARENT_COD6 is not null then MDGDSDSC.PARENT_COD6 end PARENT_COD6,
+case when MDGDSDSC.PARENT_COD6 is not null then MDGDSDSC.PARENT_DSC6 end PARENT_DSC6,
+SAD_ITEM.TAR_HSC_NB cod_poz_tarif,
+MDGDSDSC.DSC denumire_marfa,
+decode(SAD_ITEM.TAR_SUP_NAM,null,'Kg',SAD_ITEM.TAR_SUP_NAM) UM,
+decode(SAD_ITEM.TAR_SUP_QTY,null,SAD_ITEM.VIT_WGT_NET,SAD_ITEM.TAR_SUP_QTY) Cantitate,
+SAD_ITEM.VIT_WGT_NET Greut_Neta,
+SAD_ITEM.VIT_STV*decode(substr($P{UNRATTAB.CUR_COD},instr($P{UNRATTAB.CUR_COD},'''')+1,3),'MDL',1,nvl((                    
+                            select UNRATTAB.CUR_REF/UNRATTAB.RAT_EXC from UNRATTAB
+                            where 1 = 1
+		                $P!{UNRATTAB.CUR_COD}
+                            AND SAD_GENERAL_SEGMENT.IDE_REG_DAT+0.1 >= UNRATTAB.VALID_FROM AND SAD_GENERAL_SEGMENT.IDE_REG_DAT+0.1 < UNRATTAB.VALID_TO),0)) valoare_valuta, 
+nvl(SAD_TAX.TAX_LIN_AMT,0) TAX_LIN_AMT
+FROM SAD_GENERAL_SEGMENT, (Select
+    INSTANCEID,
+    substr(TAR_HSC_NB, 1, to_number(replace(substr($P{MDGDSNBR.NBR}, instr($P{MDGDSNBR.NBR},'''')+1, 2),'''',''))) TAR_HSC_NB,
+    TAR_SUP_NAM, TAR_SUP_QTY, VIT_WGT_NET, VIT_STV,
+    TAR_PRC_EXT, GDS_DSC from SAD_ITEM ) SAD_ITEM,
+SAD_TAX, MDGDSDSC 
+WHERE SAD_GENERAL_SEGMENT.INSTANCEID = SAD_ITEM.INSTANCEID
+    and SAD_ITEM.INSTANCEID = SAD_TAX.INSTANCEID(+)
+    and SAD_ITEM.TAR_HSC_NB = MDGDSDSC.COD(+)
+    AND SAD_GENERAL_SEGMENT.STATUS IN ('Assessed','Paid')
+    AND SAD_GENERAL_SEGMENT.IDE_TYP_SAD = 'EX'
+    and SAD_ITEM.TAR_PRC_EXT in (1000, 1023, 1041, 1042, 1051, 1055,  1056, 1078, 1100,
+                            2100, 2141, 2151, 2155, 2156,2300,
+                            3100, 3151, 3153, 3154, 3155, 3156, 3157, 3171, 3178, 3191, 3196,3878,
+                            4000, 4053,4100, 4121, 4153, 4200, 4253,4800,
+                            5100, 5153, 5300, 5400,5500, 5521, 5553,5600, 5621, 5653,
+                            6121, 6123,6321, 6323,6721,7100,7800,9100,9200,9600)
+    and decode(SAD_ITEM.TAR_PRC_EXT,2300,decode(sign(365-nvl(SAD_GENERAL_SEGMENT.WHS_COD,0)),0,1,-1,1,0),
+                                5300,decode(sign(365-nvl(SAD_GENERAL_SEGMENT.WHS_COD,0)),0,1,-1,1,0),
+                                5400,decode(sign(365-nvl(SAD_GENERAL_SEGMENT.WHS_COD,0)),0,1,-1,1,0),
+                                1) = 1
+and SAD_TAX.TAX_LIN_COD = '010'
+$P!{SAD_GENERAL_SEGMENT.IDE_REG_DAT} -- perioada de inregistrare 
+$P!{SAD_ITEM.TAR_HSC_NB}  -- pentru pozitia tarifara
+$P!{SAD_ITEM.GDS_DSC} --pentru denumire marfa
+)
+Group by 
+    PARENT_DSC1,
+    PARENT_COD2,
+    PARENT_DSC2,
+    PARENT_COD4,
+    PARENT_DSC4,
+    PARENT_COD6,
+    PARENT_DSC6,
+    cod_poz_tarif,
+    denumire_marfa,
+    UM
+order by
+    PARENT_COD2,
+    PARENT_COD4,
+    PARENT_COD6,
+    cod_poz_tarif,
+    UM]]></queryString>
+
+	<field name="PARENT_DSC1" class="java.lang.String"/>
+	<field name="PARENT_COD2" class="java.lang.String"/>
+	<field name="PARENT_DSC2" class="java.lang.String"/>
+	<field name="PARENT_COD4" class="java.lang.String"/>
+	<field name="PARENT_DSC4" class="java.lang.String"/>
+	<field name="PARENT_COD6" class="java.lang.String"/>
+	<field name="PARENT_DSC6" class="java.lang.String"/>
+	<field name="COD_POZ_TARIF" class="java.lang.String"/>
+	<field name="DENUMIRE_MARFA" class="java.lang.String"/>
+	<field name="UM" class="java.lang.String"/>
+	<field name="CANTITATE" class="java.math.BigDecimal"/>
+	<field name="GREUT_NETA" class="java.math.BigDecimal"/>
+	<field name="VALOARE_MONEDA" class="java.math.BigDecimal"/>
+	<field name="PRET_MEDIU" class="java.math.BigDecimal"/>
+	<field name="TAX_LIN_AMT" class="java.math.BigDecimal"/>
+
+	<variable name="SAD_GENERAL_SEGMENT.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("'")+1,$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+              : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<="),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() ) 
+                  : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf(">"),$P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                    : ($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<") > 0 && $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("<"), $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                      : ( $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.substring($P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.indexOf("=")+1, $P{SAD_GENERAL_SEGMENT.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="UNRATTAB.CUR_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[($P{UNRATTAB.CUR_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNRATTAB.CUR_COD}.indexOf("'") >= 0 ?
+            $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("'")+1,$P{UNRATTAB.CUR_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNRATTAB.CUR_COD}.indexOf(">=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<=") > 0 ?
+              $P{UNRATTAB.CUR_COD}.substring( $P{UNRATTAB.CUR_COD}.indexOf(">=")+2, $P{UNRATTAB.CUR_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.lastIndexOf("<=")+2, $P{UNRATTAB.CUR_COD}.length() )
+              : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<") < 0 ?
+                $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">="),$P{UNRATTAB.CUR_COD}.length() )
+                : ( $P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf(">") < 0 ?
+                  $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<="),$P{UNRATTAB.CUR_COD}.length() ) 
+                  : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">"),$P{UNRATTAB.CUR_COD}.length() )
+                    : ($P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                      $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<"), $P{UNRATTAB.CUR_COD}.length() )
+                      : ( $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 ?
+                        $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("=")+1, $P{UNRATTAB.CUR_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[($P{UNRATTAB.CUR_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{UNRATTAB.CUR_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{UNRATTAB.CUR_COD}.indexOf("'") >= 0 ?
+            $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("'")+1,$P{UNRATTAB.CUR_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{UNRATTAB.CUR_COD}.indexOf(">=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<=") > 0 ?
+              $P{UNRATTAB.CUR_COD}.substring( $P{UNRATTAB.CUR_COD}.indexOf(">=")+2, $P{UNRATTAB.CUR_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.lastIndexOf("<=")+2, $P{UNRATTAB.CUR_COD}.length() )
+              : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("<") < 0 ?
+                $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">="),$P{UNRATTAB.CUR_COD}.length() )
+                : ( $P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 && $P{UNRATTAB.CUR_COD}.indexOf(">") < 0 ?
+                  $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<="),$P{UNRATTAB.CUR_COD}.length() ) 
+                  : ( $P{UNRATTAB.CUR_COD}.indexOf(">") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                    $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf(">"),$P{UNRATTAB.CUR_COD}.length() )
+                    : ($P{UNRATTAB.CUR_COD}.indexOf("<") > 0 && $P{UNRATTAB.CUR_COD}.indexOf("=") < 0 ?
+                      $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("<"), $P{UNRATTAB.CUR_COD}.length() )
+                      : ( $P{UNRATTAB.CUR_COD}.indexOf("=") > 0 ?
+                        $P{UNRATTAB.CUR_COD}.substring($P{UNRATTAB.CUR_COD}.indexOf("=")+1, $P{UNRATTAB.CUR_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_VALOARE_MONEDA_1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{VALOARE_MONEDA}]]></variableExpression>
+	</variable>
+	<variable name="SUM_TAX_LIN_AMT_1" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{TAX_LIN_AMT}]]></variableExpression>
+	</variable>
+	<variable name="MDGDSNBR.NBR" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{MDGDSNBR.NBR}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{MDGDSNBR.NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{MDGDSNBR.NBR}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{MDGDSNBR.NBR}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{MDGDSNBR.NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{MDGDSNBR.NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{MDGDSNBR.NBR}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{MDGDSNBR.NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{MDGDSNBR.NBR}.indexOf("'") >= 0 ?
+            $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf("'")+1,$P{MDGDSNBR.NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{MDGDSNBR.NBR}.indexOf(">=") > 0 && $P{MDGDSNBR.NBR}.indexOf("<=") > 0 ?
+              $P{MDGDSNBR.NBR}.substring( $P{MDGDSNBR.NBR}.indexOf(">=")+2, $P{MDGDSNBR.NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.lastIndexOf("<=")+2, $P{MDGDSNBR.NBR}.length() )
+              : ( $P{MDGDSNBR.NBR}.indexOf(">") > 0 && $P{MDGDSNBR.NBR}.indexOf("=") > 0 && $P{MDGDSNBR.NBR}.indexOf("<") < 0 ?
+                $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf(">="),$P{MDGDSNBR.NBR}.length() )
+                : ( $P{MDGDSNBR.NBR}.indexOf("<") > 0 && $P{MDGDSNBR.NBR}.indexOf("=") > 0 && $P{MDGDSNBR.NBR}.indexOf(">") < 0 ?
+                  $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf("<="),$P{MDGDSNBR.NBR}.length() ) 
+                  : ( $P{MDGDSNBR.NBR}.indexOf(">") > 0 && $P{MDGDSNBR.NBR}.indexOf("=") < 0 ?
+                    $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf(">"),$P{MDGDSNBR.NBR}.length() )
+                    : ($P{MDGDSNBR.NBR}.indexOf("<") > 0 && $P{MDGDSNBR.NBR}.indexOf("=") < 0 ?
+                      $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf("<"), $P{MDGDSNBR.NBR}.length() )
+                      : ( $P{MDGDSNBR.NBR}.indexOf("=") > 0 ?
+                        $P{MDGDSNBR.NBR}.substring($P{MDGDSNBR.NBR}.indexOf("=")+1, $P{MDGDSNBR.NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="SAD_ITEM.GDS_DSC" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.GDS_DSC}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_DSC}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_ITEM.GDS_DSC}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_ITEM.GDS_DSC}.indexOf("'") >= 0 ?
+            $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf("'")+1,$P{SAD_ITEM.GDS_DSC}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_ITEM.GDS_DSC}.indexOf(">=") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("<=") > 0 ?
+              $P{SAD_ITEM.GDS_DSC}.substring( $P{SAD_ITEM.GDS_DSC}.indexOf(">=")+2, $P{SAD_ITEM.GDS_DSC}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.lastIndexOf("<=")+2, $P{SAD_ITEM.GDS_DSC}.length() )
+              : ( $P{SAD_ITEM.GDS_DSC}.indexOf(">") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("=") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("<") < 0 ?
+                $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf(">="),$P{SAD_ITEM.GDS_DSC}.length() )
+                : ( $P{SAD_ITEM.GDS_DSC}.indexOf("<") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("=") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf(">") < 0 ?
+                  $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf("<="),$P{SAD_ITEM.GDS_DSC}.length() ) 
+                  : ( $P{SAD_ITEM.GDS_DSC}.indexOf(">") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("=") < 0 ?
+                    $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf(">"),$P{SAD_ITEM.GDS_DSC}.length() )
+                    : ($P{SAD_ITEM.GDS_DSC}.indexOf("<") > 0 && $P{SAD_ITEM.GDS_DSC}.indexOf("=") < 0 ?
+                      $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf("<"), $P{SAD_ITEM.GDS_DSC}.length() )
+                      : ( $P{SAD_ITEM.GDS_DSC}.indexOf("=") > 0 ?
+                        $P{SAD_ITEM.GDS_DSC}.substring($P{SAD_ITEM.GDS_DSC}.indexOf("=")+1, $P{SAD_ITEM.GDS_DSC}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="SAD_ITEM.TAR_HSC_NB" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SAD_ITEM.TAR_HSC_NB}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+9, $P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{SAD_ITEM.TAR_HSC_NB}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{SAD_ITEM.TAR_HSC_NB}.indexOf("'") >= 0 ?
+            $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf("'")+1,$P{SAD_ITEM.TAR_HSC_NB}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SAD_ITEM.TAR_HSC_NB}.indexOf(">=") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("<=") > 0 ?
+              $P{SAD_ITEM.TAR_HSC_NB}.substring( $P{SAD_ITEM.TAR_HSC_NB}.indexOf(">=")+2, $P{SAD_ITEM.TAR_HSC_NB}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.lastIndexOf("<=")+2, $P{SAD_ITEM.TAR_HSC_NB}.length() )
+              : ( $P{SAD_ITEM.TAR_HSC_NB}.indexOf(">") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("=") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("<") < 0 ?
+                $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf(">="),$P{SAD_ITEM.TAR_HSC_NB}.length() )
+                : ( $P{SAD_ITEM.TAR_HSC_NB}.indexOf("<") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("=") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf(">") < 0 ?
+                  $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf("<="),$P{SAD_ITEM.TAR_HSC_NB}.length() ) 
+                  : ( $P{SAD_ITEM.TAR_HSC_NB}.indexOf(">") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("=") < 0 ?
+                    $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf(">"),$P{SAD_ITEM.TAR_HSC_NB}.length() )
+                    : ($P{SAD_ITEM.TAR_HSC_NB}.indexOf("<") > 0 && $P{SAD_ITEM.TAR_HSC_NB}.indexOf("=") < 0 ?
+                      $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf("<"), $P{SAD_ITEM.TAR_HSC_NB}.length() )
+                      : ( $P{SAD_ITEM.TAR_HSC_NB}.indexOf("=") > 0 ?
+                        $P{SAD_ITEM.TAR_HSC_NB}.substring($P{SAD_ITEM.TAR_HSC_NB}.indexOf("=")+1, $P{SAD_ITEM.TAR_HSC_NB}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+
+		<group  name="PARENT_DSC1" >
+			<groupExpression><![CDATA[$F{PARENT_DSC1}]]></groupExpression>
+			<groupHeader>
+			<band height="7"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="7"
+						key="textField-11"
+						stretchType="RelativeToTallestObject"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean($F{PARENT_DSC1}.length() > 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="5"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Sectiunea: " + $F{PARENT_DSC1}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="PARENT_COD2" >
+			<groupExpression><![CDATA[$F{PARENT_COD2}]]></groupExpression>
+			<groupHeader>
+			<band height="7"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="7"
+						key="textField-12"
+						stretchType="RelativeToTallestObject"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean($F{PARENT_COD2}.length() > 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="5"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Capitol " + $F{PARENT_COD2} + ": " + $F{PARENT_DSC2}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="PARENT_COD4" >
+			<groupExpression><![CDATA[$F{PARENT_COD4}]]></groupExpression>
+			<groupHeader>
+			<band height="7"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="7"
+						key="textField-13"
+						stretchType="RelativeToTallestObject"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean($F{PARENT_COD4}.length() > 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="5"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARENT_COD4} + " : " + $F{PARENT_DSC4}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="PARENT_COD6" >
+			<groupExpression><![CDATA[$F{PARENT_COD6}]]></groupExpression>
+			<groupHeader>
+			<band height="7"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="7"
+						key="textField-14"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean($F{PARENT_COD6}.length() > 0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Oblique" size="5" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARENT_COD6} + " : " + $F{PARENT_DSC6}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="COD_POZ_TARIF" >
+			<groupExpression><![CDATA[$F{COD_POZ_TARIF}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="UM" >
+			<groupExpression><![CDATA[$F{UM}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="149"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="43"
+						width="781"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="781"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="8"
+						y="49"
+						width="129"
+						height="15"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="8"
+						y="64"
+						width="129"
+						height="15"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Perioada de inregistrare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="64"
+						width="569"
+						height="15"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_GENERAL_SEGMENT.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="142"
+						y="49"
+						width="569"
+						height="15"
+						forecolor="#000000"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="8"
+						y="131"
+						width="129"
+						height="15"
+						forecolor="#000000"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Moneda de raportare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="131"
+						width="569"
+						height="15"
+						forecolor="#000000"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{UNRATTAB.CUR_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="159"
+						y="5"
+						width="465"
+						height="37"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Exporturile de marfuri accizate in perioada\n"
++ $V{SAD_GENERAL_SEGMENT.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="8"
+						y="97"
+						width="129"
+						height="15"
+						forecolor="#000000"
+						key="staticText-7"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Cod marfa:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="97"
+						width="569"
+						height="15"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_ITEM.TAR_HSC_NB}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="8"
+						y="80"
+						width="129"
+						height="15"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Lungime cod marfa:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="80"
+						width="569"
+						height="15"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{MDGDSNBR.NBR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="8"
+						y="113"
+						width="129"
+						height="15"
+						key="staticText-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Descriere marfa:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="114"
+						width="569"
+						height="15"
+						key="textField-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="10" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SAD_ITEM.GDS_DSC}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="32"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="782"
+						height="32"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<line direction="BottomUp">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="BottomUp">
+					<reportElement
+						x="0"
+						y="31"
+						width="782"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="134"
+						y="0"
+						width="205"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Denumire marfa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="343"
+						y="0"
+						width="69"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Cantitate]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="416"
+						y="0"
+						width="77"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Greutate
+(tone)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="689"
+						y="0"
+						width="90"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Proceduri vamale
+(mii lei)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="78"
+						y="0"
+						width="52"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[UM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="74"
+						height="32"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Pozitia tarifara]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="497"
+						y="0"
+						width="90"
+						height="32"
+						forecolor="#FFFFFF"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Valoarea marfurilor\n(mii <" + $V{UNRATTAB.CUR_COD} + ">)"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="591"
+						y="0"
+						width="90"
+						height="32"
+						forecolor="#FFFFFF"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pretul mediu\n(<" + $V{UNRATTAB.CUR_COD} + ">)"]]></textFieldExpression>
+				</textField>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="17"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="76"
+						height="17"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COD_POZ_TARIF}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="80"
+						y="0"
+						width="54"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{UM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="138"
+						y="0"
+						width="205"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DENUMIRE_MARFA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="347"
+						y="0"
+						width="69"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{CANTITATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="420"
+						y="0"
+						width="77"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{GREUT_NETA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="##0.0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="501"
+						y="0"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{VALOARE_MONEDA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="##0.0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="595"
+						y="0"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{PRET_MEDIU}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="##0.0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="689"
+						y="0"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TAX_LIN_AMT}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="0"
+						width="782"
+						height="17"
+						key="rectangle-1"
+						stretchType="RelativeToBandHeight"/>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+				</rectangle>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="573"
+						y="0"
+						width="170"
+						height="16"
+						forecolor="#000000"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="746"
+						y="0"
+						width="36"
+						height="16"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="469"
+						height="15"
+						forecolor="#FF0033"
+						key="staticText-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="18"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="##0.0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="501"
+						y="0"
+						width="90"
+						height="17"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_VALOARE_MONEDA_1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="689"
+						y="0"
+						width="90"
+						height="17"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{SUM_TAX_LIN_AMT_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="6"
+						y="0"
+						width="206"
+						height="17"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[TOTAL GENERAL:]]></text>
+				</staticText>
+				<line direction="BottomUp">
+					<reportElement
+						x="0"
+						y="0"
+						width="782"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE taglib
+     PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+    "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<!--
+    records.tld
+
+    Copyright (c) 2005 UTI Systems. All Rights Reserved.
+
+    This source file may not be copied, modified or redistributed,
+    in whole or in part, in any form or for any reason, without the express
+    written consent of UTI Systems.
+
+    v1.0.1 Thursday, December 15, 2005
+    ====================================
+            + Added "evalBody" attribute for "records:property" tag. Updated
+        tag's documentation too.
+            + Replaced all tabs with space characters.
+
+    v1.0.2 Thursday, March 30, 2006
+    ====================================
+            + Added "buttons" tag.
+
+    v1.0.3 Monday, April 10, 2006
+    ====================================
+            + Updated description for "rppList" attribute of "records:config"
+        JSP tag.
+
+-->
+
+<taglib>
+    <tlib-version>1.0.3</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>Records Tag Library</short-name>
+    <description></description>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>table</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsTableTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Table</display-name>
+        <description>
+            The parent tag for all other JPS tags used for rendering a list 
+            of records. Its body must contain only the following JSP 
+            tags: "records:config", "records:properties", "records:filterRow", 
+            and "records:formRow". 
+            
+            Any other content is ignored.
+        </description>
+
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The WIDTH attribute of the HTML table. If not specified,
+                rendered table won't have a WIDTH attribute.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment attribute of the HTML table. If
+                not specified, rendered table won't have an ALIGN 
+                attribute.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>config</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsConfigTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Descriptor</display-name>
+        <description>
+                Tag's parent must be "records:table".
+
+                Allows configuration of various properties/attributes. Its
+            body must contain only one "records:viewBean", one
+            "records:recordsList" and one "records:buttons" JSP tags. Any other
+            content is ignored.
+        </description>
+
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    An ID that unique identifies the list of records. It 
+                is used mainly for generating unique DOM IDs and unique
+                JavaScript identifiers. Also, the value is passed to the
+                constructor of the JavaScript class that implements scripting 
+                functionality (see "jsClassName" tag attribute).
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The servlet context attribute key for the "MessageResources"
+                instance to use. If not specified, defaults to the 
+                application resources configured for current action servlet.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>locale</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The session attribute key for the Locale used to select
+                messages to be displayed. If not specified, defaults to
+                the Struts standard value.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>imagesPath</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The context relative path to images. Defaults to
+                "recordslib/image" value.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>templateFile</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The path, relative to current context root, of the
+                FreeMarker template file that will be used for generating
+                the HTML code. Defaults to "/recordslib/template/template.ftl"
+                value.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>stylesPrefix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The prefix to be used for the name of all CSS
+                classes. It allows to use a copy of default styles, which can
+                be customized as long as style's names respect the 
+                rule: the prefix + original style name. Defaults to an 
+                empty string.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>jsClassName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The name of the Javascript class that implements all
+                scripting functionality. The class must extend the "Records" 
+                JavaScript class defined in "records_js.jsp" file. An 
+                instance of the class will be created by 
+                rendered JavaScript code.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>rppList</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.List</type>
+            <description>
+                    A list of Integer objects which contains the values
+                that are displayed into the combobox from which the user selects
+                the size of a page (number of records per page). Defaults
+                to "RecordsConst.RECORDS_PER_PAGE_LIST", which contains
+                the 5, 10, 15, 20, 30 and 50 values. Note that any value which
+                is zero or negative will have the label specified
+                by "records.rpp.prompt.all" message key.
+
+                    An empty list or NULL value disables the rendering of
+                the combobox.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>printMode</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Boolean flag that specifies if the records are displayed
+                for printing. If TRUE, rendered HTML will be simpler, without
+                useless images and other decorations. The flag cannot be
+                used if the "records:table" tag contains a "records:formRow"
+                child.
+
+                    Defaults to FALSE.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>viewBean</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsViewBeanTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>ViewBean</display-name>
+        <description>
+                Tag's parent must be a "records:config" tag.
+
+                Allows configuration of "RecordsViewBean" instance that
+            stores presentation data (number of pages, current page, number 
+            of records per page etc...).
+        </description>
+
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
+            <description>
+                    The "RecordsViewBean" instance. If it's missing, the "name"
+                 and/or "property" attributes must be specified.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The attribute name from page context of
+                 the "RecordsViewBean" instance (if "property" is not specified),
+                 or the attribute name of the bean who's property is accessed
+                 to retrieve the instance.
+
+                    Ignored if "value" attribute is specified.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>property</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The name of the property to be accessed on the bean
+                 specified by "name" to retrieve the "RecordsViewBean" instance.
+                 If "name" is not specified, the bean associated with current
+                 Struts form tag is used instead.
+
+                    Ignored if "value" attribute is specified.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>recordsList</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsRecordsListTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>RecordsList</display-name>
+        <description>
+                Tags parent must be a "records:config" tag.
+
+                Allows configuraiton of the records list. Note that the tag
+            expects only the records that belong to current page.
+        </description>
+
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.List</type>
+            <description>
+                    The list of records. If it's missing, the "name" and/or
+                 "property" attributes must be specified.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The attribute name from page context of
+                 the list of records (if "property" is not specified),
+                 or the attribute name of the bean who's property is accessed
+                 to retrieve the list.
+
+                    Ignored if "value" attribute is specified.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>property</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The name of the property to be accessed on the bean
+                 specified by "name" to retrieve the list of records. If "name"
+                 is not specified, the bean associated with current Struts
+                 form tag is used instead.
+
+                    Ignored if "value" attribute is specified.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>buttons</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsButtonsTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>Buttons</display-name>
+        <description>
+                Tag's parent must be a "records:config" tag.
+
+                Allows buttons configuration. Since v2.0.2 of Composite Entities
+            framework.
+        </description>
+
+        <attribute>
+            <name>showAddBtn</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Specifies if the ADD RECORD button(s) should be rendered.
+                Defaults to TRUE.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>showDelBtn</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Specifies if the DELETE RECORD(s) button(s) should be
+                rendered. Defaults to TRUE.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>navigation</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsNavigationTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Navigation</display-name>
+        <description>
+                Allows records navigation configuration.
+                NOT IMPLEMENTED.
+        </description>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>properties</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsPropertiesTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Properties</display-name>
+        <description>
+                Tag's parent must be a "records:config" tag.
+
+                Allows configuration for the properties of a record. Its body
+            must contain one or multiple "records:property" JSP tags and
+            is evaluated once for each record. Any other content is
+            ignored.
+        </description>
+
+        <variable>
+            <name-from-attribute>id</name-from-attribute>
+            <variable-class>java.lang.Object</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                    The name of a scripting variable that will contain the
+                 current record on each iteration.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>property</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsPropertyTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Property</display-name>
+        <description>
+                Tag's parent must be a "records:properties" tag.
+
+                Allows configuration of a record property. The properties may
+            exist in the Java object used for storing a record on server side or
+            they may be "virtual". Virtual properties are specified using TRUE
+            for "evalBody" attribute and for them tag's body is evaluated for
+            each element from records list (see the ID property
+            of "records:properties") JSP tag) and the results represent
+            property's values. If "evalBody" is "FALSE" (which is the default
+            value), the property must exist in the Java object and its
+            values will be retrieved using Commons BeanUtils library.
+
+                The values will be displayed into property's column only if
+            the property is visible (the property has a label).
+        </description>
+
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                    The name of the property. Its value must be valid to be
+                used as a JavaScript identifier.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>sortKey</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                    The sort key associated with this property. If not
+                specified, the records cannot be sorted using 
+                the property. Ignored if the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>label</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    Property's label. It may be a literal value (if "resource"
+                is FALSE}, or a bundle key (if "resource" is TRUE). If 
+                missing the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>bundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The servlet context attribute key for the "MessageResources"
+                instance to use for property's label. If not specified,
+                defaults to the application resources configured for current 
+                action servlet. Ignored if "resource" is FALSE or if the 
+                property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>locale</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The session attribute key for the "Locale" used to select
+                property's label. If not specified, defaults to the Struts 
+                standard value. Ignored if "resource" is FALSE or if 
+                the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>resource</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    Indicates whether the label is taken to be as a    bundle
+                key (if TRUE) or literal value (if FALSE). Defaults 
+                to FALSE. Ignored if the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The WIDTH attribute of the cells used to display property's
+                header. If not specified, the cells won't have a WIDTH
+                attribute. Ignored if the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment of the cells used to display
+                property's header and property's values. Defaults to "center". 
+                Ignored if the property    is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>alignTH</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment of the cells used to display
+                property's header. Defaults to "center". 
+                Ignored if the property    is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>alignTD</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment of the cells used to display
+                property's values. Defaults to "center". 
+                Ignored if the property    is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The vertical alignment attribute of the cells used to
+                display property's values. Defaults to "middle". Ignored if
+                the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>nowrap</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The NOWRAP attribute of the cells used to display
+                property's values. Ignored if the property is not visible.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>escape</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Specifies if property values should be HTML escaped
+                when they are rendered. Default value is TRUE.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>evalBody</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    If TRUE, specifies that property's values are obtained
+                evaluating tag's body. Otherwise BeanUtils library will
+                be used.
+
+                    Defaults to FALSE.
+            </description>
+        </attribute>
+        
+        <attribute>
+            <name>mandatory</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    If TRUE, specifies that property's label will be followed
+                    by (*).
+
+                    Defaults to FALSE.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>filterRow</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsFilterRowTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>FilterRow</display-name>
+        <description>
+                Tag's parent must be a "records:table" tag.
+
+                Allows definition of the row that contains the HTML elements
+            used for filtering the records. It must contain one or
+            more "filterCell" tags. If not specified, no HTML code for 
+            records filtering will be rendered.
+        </description>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>filterCell</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsFilterCellTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>FilterCell</display-name>
+        <description>
+                Tag's parent must be a "records:filterRow" tag.
+
+                Allows definition of a cell that contains HTML element(s)
+            used for filtering the records. Note that the total number of table
+            columns required by all "records:filterCell" tags must be 
+            equal with total number of visible properties.
+        </description>
+
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment attribute of the cell. Defaults
+                to "center".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The vertical alignment attribute of the cell. Defaults
+                to "middle"..
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>colspan</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The COLSPAN attribute of the cell.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>nowrap</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The NOWRAP attribute of the cell.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>formRow</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsFormRowTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>FormRow</display-name>
+        <description>
+                Tag's parent must be a "records:table" tag.
+
+                Allows definition of the row that contains the HTML
+            elements used for editing a record. It must contain one or
+            more "records:formCell" tags. If missing, the records
+            are rendered only for viewing.
+        </description>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!--                                                                  -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>formCell</name>
+        <tag-class>ro.uti.jpf.taglib.records.RecordsFormCellTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>FormCell</display-name>
+        <description>
+                Tag's parent must be a "records:formRow" tag.
+
+                Allows definition of a cell that contains HTML element(s)
+            used for editing a record. Note that the total number of table 
+            columns required by all "records:formCell" tags must be 
+            equal with total number of visible properties.
+        </description>
+
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The horizontal alignment attribute of the cell. Defaults
+                to "center".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The vertical alignment attribute of the cell. Defaults
+                to "middle".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>colspan</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The COLSPAN attribute of the cell.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>nowrap</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The NOWRAP attribute of the cell.
+            </description>
+        </attribute>
+    </tag>
+
+</taglib>

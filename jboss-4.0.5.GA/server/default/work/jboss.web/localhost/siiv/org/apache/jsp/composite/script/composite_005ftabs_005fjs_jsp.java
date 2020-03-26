@@ -1,0 +1,266 @@
+package org.apache.jsp.composite.script;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.jsp.*;
+
+public final class composite_005ftabs_005fjs_jsp extends org.apache.jasper.runtime.HttpJspBase
+    implements org.apache.jasper.runtime.JspSourceDependent {
+
+  private static java.util.List _jspx_dependants;
+
+  public Object getDependants() {
+    return _jspx_dependants;
+  }
+
+  public void _jspService(HttpServletRequest request, HttpServletResponse response)
+        throws java.io.IOException, ServletException {
+
+    JspFactory _jspxFactory = null;
+    PageContext pageContext = null;
+    HttpSession session = null;
+    ServletContext application = null;
+    ServletConfig config = null;
+    JspWriter out = null;
+    Object page = this;
+    JspWriter _jspx_out = null;
+    PageContext _jspx_page_context = null;
+
+
+    try {
+      _jspxFactory = JspFactory.getDefaultFactory();
+      response.setContentType("text/javascript; charset=iso-8859-2");
+      pageContext = _jspxFactory.getPageContext(this, request, response,
+      			null, true, 8192, true);
+      _jspx_page_context = pageContext;
+      application = pageContext.getServletContext();
+      config = pageContext.getServletConfig();
+      session = pageContext.getSession();
+      out = pageContext.getOut();
+      _jspx_out = out;
+
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("  ");
+      out.write("\r\n");
+      out.write("function CompositeTabBean(tabID, tabLabel) {\r\n");
+      out.write("    this.id = tabID;\r\n");
+      out.write("    this.label = tabLabel;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("  ");
+      out.write("\r\n");
+      out.write("CompositeTabBean.prototype.getID = function() {\r\n");
+      out.write("    return this.id;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("  ");
+      out.write("\r\n");
+      out.write("CompositeTabBean.prototype.getLabel = function() {\r\n");
+      out.write("    return this.label;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function CompositeTabs(rowID, onclick) {\r\n");
+      out.write("    if (arguments.length != 2) {\r\n");
+      out.write("        alert(\"CompositeTabs: invalid number of arguments!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    this.tableRowId = rowID;\r\n");
+      out.write("    this.onclickHandler = onclick;\r\n");
+      out.write("\r\n");
+      out.write("    // the TD element for currently selected tab\r\n");
+      out.write("    this.selectedTabElement = null;\r\n");
+      out.write("\r\n");
+      out.write("    // the list with tabs TD elements\r\n");
+      out.write("    this.tabsList = new Array();\r\n");
+      out.write("\r\n");
+      out.write("    // TRUE if tabs were rendered, FALSE otherwise\r\n");
+      out.write("    this.tabsRendered = false;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.addTab = function(tabBean) {\r\n");
+      out.write("    if (this.tabsRendered) {\r\n");
+      out.write("        alert(\"CompositeTabs::addTab-Tabs cannot be added after \"\r\n");
+      out.write("                + \"calling 'renderTabs' method!\");\r\n");
+      out.write("\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    this.tabsList.push(this.createTabElement(tabBean));\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.createTabElement = function(tabBean) {\r\n");
+      out.write("    ");
+      out.write("\r\n");
+      out.write("    var elm = document.createElement(\"TD\");\r\n");
+      out.write("\r\n");
+      out.write("    elm.noWrap = true;\r\n");
+      out.write("    elm.appendChild(document.createTextNode(tabBean.getLabel()));\r\n");
+      out.write("\r\n");
+      out.write("    ");
+      out.write("\r\n");
+      out.write("    elm.className = \"composite-tab-normal\";\r\n");
+      out.write("\r\n");
+      out.write("    ");
+      out.write("\r\n");
+      out.write("    elm.onclick = onCompositeTabClicked;\r\n");
+      out.write("\r\n");
+      out.write("    elm.onmouseover = onCompositeTabMouseOver;\r\n");
+      out.write("    elm.onmouseout = onCompositeTabMouseOut;\r\n");
+      out.write("\r\n");
+      out.write("    ");
+      out.write("\r\n");
+      out.write("    elm.compositeTabsInstance = this;\r\n");
+      out.write("    elm.compositeTabBean = tabBean;\r\n");
+      out.write("    elm.compositeIsMouseOver = false;\r\n");
+      out.write("    elm.compositeErrorFlag = false;\r\n");
+      out.write("\r\n");
+      out.write("    return elm;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.renderTabs = function(selectTabID) {\r\n");
+      out.write("    if (this.tabsList.length == 0) {\r\n");
+      out.write("        alert(\"CompositeTabs::renderTabs-There're no tabs to render!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var rowelm = document.getElementById(this.tableRowId);\r\n");
+      out.write("\r\n");
+      out.write("    for (var i = 0; i < this.tabsList.length; i++) {\r\n");
+      out.write("        if (i > 0) {\r\n");
+      out.write("            rowelm.appendChild(this.createSeparatorCellElement());\r\n");
+      out.write("        }\r\n");
+      out.write("\r\n");
+      out.write("        rowelm.appendChild(this.tabsList[i]);\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    this.tabsRendered = true;\r\n");
+      out.write("\r\n");
+      out.write("    if (typeof(selectTabID) == \"string\") {\r\n");
+      out.write("        this.selectTab(selectTabID);\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.createSeparatorCellElement = function() {\r\n");
+      out.write("    var elm = document.createElement(\"TD\");\r\n");
+      out.write("\r\n");
+      out.write("    elm.className = \"composite-tab-separator\";\r\n");
+      out.write("    elm.innerHTML = \"<img src='composite/image/pixel.gif'/>\";\r\n");
+      out.write("\r\n");
+      out.write("    return elm;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.getSelectedTabId = function() {\r\n");
+      out.write("    return this.selectedTabElement == null\r\n");
+      out.write("            ? null : this.selectedTabElement.compositeTabBean.getID();\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.selectTab = function(tabID) {\r\n");
+      out.write("    if (!this.tabsRendered) {\r\n");
+      out.write("        alert(\"CompositeTabs::selectTab - tabs aren't rendered\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (this.getSelectedTabId() == tabID) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var prevSelTabElm = this.selectedTabElement;\r\n");
+      out.write("\r\n");
+      out.write("    for (i = 0, this.selectedTabElement = null; i < this.tabsList.length; i++) {\r\n");
+      out.write("        if (this.tabsList[i].compositeTabBean.getID() == tabID) {\r\n");
+      out.write("            this.selectedTabElement = this.tabsList[i];\r\n");
+      out.write("            break;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (prevSelTabElm) {\r\n");
+      out.write("        compositeUpdateTabElementStyleClass(prevSelTabElm);\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (this.selectedTabElement) {\r\n");
+      out.write("        compositeUpdateTabElementStyleClass(this.selectedTabElement);\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeUpdateTabElementStyleClass(tabElement) {\r\n");
+      out.write("    var isSelected =\r\n");
+      out.write("        (tabElement.compositeTabsInstance.selectedTabElement == tabElement);\r\n");
+      out.write("\r\n");
+      out.write("    var className = \"composite-tab-\" + (isSelected ? \"selected\" : \"normal\");\r\n");
+      out.write("\r\n");
+      out.write("    if (tabElement.compositeIsMouseOver) {\r\n");
+      out.write("        className = className + \"-mouseover\";\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (tabElement.compositeErrorFlag) {\r\n");
+      out.write("        className = className + \" composite-tab-error\";\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (tabElement.className != className) {\r\n");
+      out.write("        tabElement.className = className;\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("CompositeTabs.prototype.setErrorFlag = function(tabID, errorFlag) {\r\n");
+      out.write("    for (var i = 0; i < this.tabsList.length; i++) {\r\n");
+      out.write("        if (this.tabsList[i].compositeTabBean.getID() == tabID) {\r\n");
+      out.write("            this.tabsList[i].compositeErrorFlag = errorFlag;\r\n");
+      out.write("            compositeUpdateTabElementStyleClass(this.tabsList[i]);\r\n");
+      out.write("\r\n");
+      out.write("            break;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function onCompositeTabMouseOver() {\r\n");
+      out.write("    this.compositeIsMouseOver = true;\r\n");
+      out.write("    compositeUpdateTabElementStyleClass(this);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function onCompositeTabMouseOut () {\r\n");
+      out.write("    this.compositeIsMouseOver = false;\r\n");
+      out.write("    compositeUpdateTabElementStyleClass(this);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function onCompositeTabClicked() {\r\n");
+      out.write("    var id = this.compositeTabBean.getID();\r\n");
+      out.write("    var isSelected = id == this.compositeTabsInstance.getSelectedTabId();\r\n");
+      out.write("\r\n");
+      out.write("    var changeTab = isSelected\r\n");
+      out.write("            ? false : this.compositeTabsInstance.onclickHandler(id);\r\n");
+      out.write("\r\n");
+      out.write("    if (changeTab) {\r\n");
+      out.write("        this.compositeTabsInstance.selectTab(id);\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+    } catch (Throwable t) {
+      if (!(t instanceof SkipPageException)){
+        out = _jspx_out;
+        if (out != null && out.getBufferSize() != 0)
+          out.clearBuffer();
+        if (_jspx_page_context != null) _jspx_page_context.handlePageException(t);
+      }
+    } finally {
+      if (_jspxFactory != null) _jspxFactory.releasePageContext(_jspx_page_context);
+    }
+  }
+}

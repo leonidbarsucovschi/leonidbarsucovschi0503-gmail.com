@@ -1,0 +1,1121 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="ACT Raport pe termeni prelungiti"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="814"
+		 columnSpacing="0"
+		 leftMargin="14"
+		 rightMargin="14"
+		 topMargin="14"
+		 bottomMargin="14"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="ACT_GENERAL_SEGMENT.NR_AUT" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Nr. Autorizatie :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACT_GENERAL_SEGMENT.SOL_COD" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[IDNO Titular Autorizatie :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACT_GENERAL_SEGMENT.SOL_DEN" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Denumire Titular Autorizatie :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACT_GENERAL_SEGMENT.DEA" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="operators" value="0;5;" />
+		<parameterDescription><![CDATA[Data eliberare autorizatie :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND ACT_GENERAL_SEGMENT.DEA BETWEEN TO_DATE('2007/04/10', 'yyyy/mm/dd') AND TO_DATE('2008/04/18', 'yyyy/mm/dd') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACT_BRV_BAR.BAR_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<property name="nomenclator_code" value="CUO_COD" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<property name="multiple" value="1" />
+		<property name="value_only" value="true" />
+		<parameterDescription><![CDATA[Organul vamal de acordare a regimului :]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select 
+ACT_GENERAL_SEGMENT.NR_AUT nr_autorizatie, 
+SAD_GENERAL_SEGMENT.INSTANCEID INSTANCEID,
+SAD_GENERAL_SEGMENT.IDE_TYP_SAD||'-'||SAD_GENERAL_SEGMENT.IDE_TYP_PRC sad_tip, 
+SAD_GENERAL_SEGMENT.IDE_CUO_COD sad_cuo_cod, 
+SAD_GENERAL_SEGMENT.IDE_CUO_NAM sad_cuo_nam, 
+SAD_GENERAL_SEGMENT.IDE_REG_NBR sad_nbr, 
+to_char(SAD_GENERAL_SEGMENT.IDE_REG_DAT,'DD/MM/YYYY') sad_dat, 
+SAD_GENERAL_SEGMENT.CMP_EXP_COD sad_ex_cod, 
+SAD_GENERAL_SEGMENT.CMP_EXP_NAM sad_ex_nam,  
+SAD_GENERAL_SEGMENT.GEN_CTY_EPT_COD sad_cty_ex_cod,
+SAD_GENERAL_SEGMENT.GEN_CTY_EPT_NAM sad_cty_ex_nam,
+SAD_GENERAL_SEGMENT.CMP_CON_COD sad_im_cod, 
+SAD_GENERAL_SEGMENT.CMP_CON_NAM sad_im_nam, 
+SAD_GENERAL_SEGMENT.GEN_CTY_DES_COD sad_cty_dest_cod,
+SAD_GENERAL_SEGMENT.GEN_CTY_DES_NAM sad_cty_dest_nam,
+SAD_GENERAL_SEGMENT.GEN_CTY_ORG sad_cty_origin_cod,
+SAD_ATTACHED_DOCUMENTS.TAR_PRC_EXT||'/'||SAD_ATTACHED_DOCUMENTS.TAR_PRC_NAT sad_regim_vamal,
+SAD_GENERAL_SEGMENT.WHS_TIM sad_termen_limita_zile, 
+ACT_GENERAL_SEGMENT.TDV_NRZ_REEX termen_re_ex_im_zile, 
+ACT_GENERAL_SEGMENT.TDV_NRZ_REEX_PRE termen_re_ex_im_zile_prelungit 
+from SAD_ATTACHED_DOCUMENTS
+  inner join SAD_GENERAL_SEGMENT
+    on (SAD_ATTACHED_DOCUMENTS.INSTANCEID = SAD_GENERAL_SEGMENT.INSTANCEID)
+  left outer join 
+  (select ACT_GENERAL_SEGMENT.NR_AUT NR_AUT, 
+          ACT_GENERAL_SEGMENT.SOL_COD SOL_COD,
+          ACT_GENERAL_SEGMENT.SOL_DEN SOL_DEN,
+          ACT_GENERAL_SEGMENT.DEA DEA, 
+          ACT_GENERAL_SEGMENT.TDV_NRZ_REEX TDV_NRZ_REEX, 
+          ACT_GENERAL_SEGMENT.TDV_NRZ_REEX_PRE TDV_NRZ_REEX_PRE, 
+          ACT_BRV_BAR.BAR_COD BAR_COD
+    from ACT_GENERAL_SEGMENT
+    left outer join (select distinct INSTANCEID, rpe_get_cuos.act_bar_cod(INSTANCEID) BAR_COD from ACT_BRV_BAR ) ACT_BRV_BAR
+      on (ACT_GENERAL_SEGMENT.INSTANCEID = ACT_BRV_BAR.INSTANCEID)
+   ) ACT_GENERAL_SEGMENT
+    on (SAD_ATTACHED_DOCUMENTS.REF = ACT_GENERAL_SEGMENT.NR_AUT)
+where SAD_GENERAL_SEGMENT.IDE_TYP_SAD = 'EX'
+AND ACT_GENERAL_SEGMENT.TDV_NRZ_REEX_PRE is not null
+AND SAD_ATTACHED_DOCUMENTS.COD = '063' 
+AND ACT_GENERAL_SEGMENT.BAR_COD like '%'||$P{ACT_BRV_BAR.BAR_COD}||'%'
+$P!{ACT_GENERAL_SEGMENT.DEA}
+$P!{ACT_GENERAL_SEGMENT.NR_AUT}
+$P!{ACT_GENERAL_SEGMENT.SOL_COD} 
+$P!{ACT_GENERAL_SEGMENT.SOL_DEN}
+order by 
+nr_autorizatie]]></queryString>
+
+	<field name="NR_AUTORIZATIE" class="java.lang.String"/>
+	<field name="INSTANCEID" class="java.math.BigDecimal"/>
+	<field name="SAD_TIP" class="java.lang.String"/>
+	<field name="SAD_CUO_COD" class="java.lang.String"/>
+	<field name="SAD_CUO_NAM" class="java.lang.String"/>
+	<field name="SAD_NBR" class="java.lang.String"/>
+	<field name="SAD_DAT" class="java.lang.String"/>
+	<field name="SAD_EX_COD" class="java.lang.String"/>
+	<field name="SAD_EX_NAM" class="java.lang.String"/>
+	<field name="SAD_CTY_EX_COD" class="java.lang.String"/>
+	<field name="SAD_CTY_EX_NAM" class="java.lang.String"/>
+	<field name="SAD_IM_COD" class="java.lang.String"/>
+	<field name="SAD_IM_NAM" class="java.lang.String"/>
+	<field name="SAD_CTY_DEST_COD" class="java.lang.String"/>
+	<field name="SAD_CTY_DEST_NAM" class="java.lang.String"/>
+	<field name="SAD_CTY_ORIGIN_COD" class="java.lang.String"/>
+	<field name="SAD_REGIM_VAMAL" class="java.lang.String"/>
+	<field name="SAD_TERMEN_LIMITA_ZILE" class="java.math.BigDecimal"/>
+	<field name="TERMEN_RE_EX_IM_ZILE" class="java.math.BigDecimal"/>
+	<field name="TERMEN_RE_EX_IM_ZILE_PRELUNGIT" class="java.math.BigDecimal"/>
+
+	<variable name="ACT_GENERAL_SEGMENT.NR_AUT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{ACT_GENERAL_SEGMENT.NR_AUT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("'") >= 0 ?
+            $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("'")+1,$P{ACT_GENERAL_SEGMENT.NR_AUT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">=") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<=") > 0 ?
+              $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">=")+2, $P{ACT_GENERAL_SEGMENT.NR_AUT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.lastIndexOf("<=")+2, $P{ACT_GENERAL_SEGMENT.NR_AUT}.length() )
+              : ( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<") < 0 ?
+                $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">="),$P{ACT_GENERAL_SEGMENT.NR_AUT}.length() )
+                : ( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">") < 0 ?
+                  $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<="),$P{ACT_GENERAL_SEGMENT.NR_AUT}.length() ) 
+                  : ( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=") < 0 ?
+                    $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf(">"),$P{ACT_GENERAL_SEGMENT.NR_AUT}.length() )
+                    : ($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=") < 0 ?
+                      $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("<"), $P{ACT_GENERAL_SEGMENT.NR_AUT}.length() )
+                      : ( $P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=") > 0 ?
+                        $P{ACT_GENERAL_SEGMENT.NR_AUT}.substring($P{ACT_GENERAL_SEGMENT.NR_AUT}.indexOf("=")+1, $P{ACT_GENERAL_SEGMENT.NR_AUT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="ACT_GENERAL_SEGMENT.SOL_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{ACT_GENERAL_SEGMENT.SOL_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("'") >= 0 ?
+            $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("'")+1,$P{ACT_GENERAL_SEGMENT.SOL_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<=") > 0 ?
+              $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">=")+2, $P{ACT_GENERAL_SEGMENT.SOL_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.lastIndexOf("<=")+2, $P{ACT_GENERAL_SEGMENT.SOL_COD}.length() )
+              : ( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<") < 0 ?
+                $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">="),$P{ACT_GENERAL_SEGMENT.SOL_COD}.length() )
+                : ( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">") < 0 ?
+                  $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<="),$P{ACT_GENERAL_SEGMENT.SOL_COD}.length() ) 
+                  : ( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=") < 0 ?
+                    $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf(">"),$P{ACT_GENERAL_SEGMENT.SOL_COD}.length() )
+                    : ($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=") < 0 ?
+                      $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("<"), $P{ACT_GENERAL_SEGMENT.SOL_COD}.length() )
+                      : ( $P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=") > 0 ?
+                        $P{ACT_GENERAL_SEGMENT.SOL_COD}.substring($P{ACT_GENERAL_SEGMENT.SOL_COD}.indexOf("=")+1, $P{ACT_GENERAL_SEGMENT.SOL_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="ACT_GENERAL_SEGMENT.SOL_DEN" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("'") >= 0 ?
+            $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("'")+1,$P{ACT_GENERAL_SEGMENT.SOL_DEN}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<=") > 0 ?
+              $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">=")+2, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.lastIndexOf("<=")+2, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() )
+              : ( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<") < 0 ?
+                $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">="),$P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() )
+                : ( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">") < 0 ?
+                  $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<="),$P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() ) 
+                  : ( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=") < 0 ?
+                    $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf(">"),$P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() )
+                    : ($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=") < 0 ?
+                      $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("<"), $P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() )
+                      : ( $P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=") > 0 ?
+                        $P{ACT_GENERAL_SEGMENT.SOL_DEN}.substring($P{ACT_GENERAL_SEGMENT.SOL_DEN}.indexOf("=")+1, $P{ACT_GENERAL_SEGMENT.SOL_DEN}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="total_declaratii_pe_autorizatie" class="java.lang.Integer" resetType="Group" resetGroup="autorizatie_total" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{INSTANCEID}]]></variableExpression>
+	</variable>
+	<variable name="total_declaratii" class="java.lang.Integer" resetType="Report" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{INSTANCEID}]]></variableExpression>
+	</variable>
+	<variable name="ACT_GENERAL_SEGMENT.DEA" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{ACT_GENERAL_SEGMENT.DEA}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("TO_DATE")+9, $P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{ACT_GENERAL_SEGMENT.DEA}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("'") >= 0 ?
+            $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("'")+1,$P{ACT_GENERAL_SEGMENT.DEA}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">=") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<=") > 0 ?
+              $P{ACT_GENERAL_SEGMENT.DEA}.substring( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">=")+2, $P{ACT_GENERAL_SEGMENT.DEA}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.lastIndexOf("<=")+2, $P{ACT_GENERAL_SEGMENT.DEA}.length() )
+              : ( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<") < 0 ?
+                $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">="),$P{ACT_GENERAL_SEGMENT.DEA}.length() )
+                : ( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">") < 0 ?
+                  $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<="),$P{ACT_GENERAL_SEGMENT.DEA}.length() ) 
+                  : ( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=") < 0 ?
+                    $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf(">"),$P{ACT_GENERAL_SEGMENT.DEA}.length() )
+                    : ($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<") > 0 && $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=") < 0 ?
+                      $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("<"), $P{ACT_GENERAL_SEGMENT.DEA}.length() )
+                      : ( $P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=") > 0 ?
+                        $P{ACT_GENERAL_SEGMENT.DEA}.substring($P{ACT_GENERAL_SEGMENT.DEA}.indexOf("=")+1, $P{ACT_GENERAL_SEGMENT.DEA}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+
+		<group  name="autorizatie_total_general" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="10"
+						width="814"
+						height="10"
+						forecolor="#000000"
+						key="textField-54"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"
+						printWhenGroupChanges="autorizatie_total_general"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Total declaratii :  " + $V{total_declaratii}.toString()]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="autorizatie_total" >
+			<groupExpression><![CDATA[$F{NR_AUTORIZATIE}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="10"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="autorizatie_total"  hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="814"
+						height="10"
+						forecolor="#000000"
+						key="textField-53"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="1Point" topBorderColor="#000000" topPadding="1" leftBorder="1Point" leftBorderColor="#000000" leftPadding="1" rightBorder="1Point" rightBorderColor="#000000" rightPadding="1" bottomBorder="1Point" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["total declaratii pe autorizatia (" + $F{NR_AUTORIZATIE} + "):  " + $V{total_declaratii_pe_autorizatie}.toString()]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="128"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="814"
+						height="26"
+						key="staticText"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Raport pe termeni prelungiti (Perfectionare Activa)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="42"
+						width="568"
+						height="13"
+						forecolor="#000000"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="42"
+						width="241"
+						height="13"
+						key="staticText-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data formare raport :]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="124"
+						width="814"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="55"
+						width="568"
+						height="13"
+						key="textField-32"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{ACT_GENERAL_SEGMENT.NR_AUT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="55"
+						width="241"
+						height="13"
+						key="staticText-41"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Nr. Autorizatie :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="68"
+						width="568"
+						height="13"
+						key="textField-38"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{ACT_GENERAL_SEGMENT.SOL_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="68"
+						width="241"
+						height="13"
+						key="staticText-42"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[IDNO Titular Autorizatie :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="81"
+						width="568"
+						height="13"
+						key="textField-39"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{ACT_GENERAL_SEGMENT.SOL_DEN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="81"
+						width="241"
+						height="13"
+						key="staticText-43"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Denumire Titular Autorizatie :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="107"
+						width="568"
+						height="13"
+						key="textField-56"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{ACT_BRV_BAR.BAR_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="107"
+						width="241"
+						height="13"
+						key="staticText-58"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Organul vamal de acordare a regimului :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="94"
+						width="568"
+						height="13"
+						key="textField-57"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{ACT_GENERAL_SEGMENT.DEA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="94"
+						width="241"
+						height="13"
+						key="staticText-59"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data eliberare Autorizatie :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="29"
+						width="568"
+						height="13"
+						forecolor="#000000"
+						key="textField-58"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["EX"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="29"
+						width="241"
+						height="13"
+						key="staticText-60"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Tip Declaratie Vamala :]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="25"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="434"
+						y="0"
+						width="150"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-48"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Destinatar
+(r8 - DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="214"
+						y="0"
+						width="150"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-47"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Expeditor 
+(r2 - DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="96"
+						y="0"
+						width="50"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-49"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Birou/Post vamal
+inregistrare
+(DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="174"
+						y="0"
+						width="40"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-46"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Data 
+inregistrare
+(DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="146"
+						y="0"
+						width="28"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-13"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Nr. 
+inreg.
+(DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="736"
+						y="0"
+						width="34"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-52"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Term. 
+reex.
+(Aut.)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="70"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-54"/>
+					<box topBorder="Thin" topBorderColor="#000000" topPadding="1" leftBorder="Thin" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Numar
+(Autorizatie)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="674"
+						y="0"
+						width="30"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-57"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Regim vamal 
+(DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="70"
+						y="0"
+						width="26"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-61"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tip 
+DV]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="364"
+						y="0"
+						width="70"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-62"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tara de
+expediere]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="584"
+						y="0"
+						width="70"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-63"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tara de
+destinatie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="654"
+						y="0"
+						width="20"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-64"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tara
+orig.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="704"
+						y="0"
+						width="32"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-65"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Termen
+limita
+(DVD)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="770"
+						y="0"
+						width="44"
+						height="25"
+						forecolor="#FFFFFF"
+						backcolor="#666666"
+						key="staticText-66"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Termen reex.
+prelungit
+(Aut.)]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="434"
+						y="0"
+						width="150"
+						height="10"
+						forecolor="#000000"
+						key="textField-44"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_IM_COD} + " - " + $F{SAD_IM_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="214"
+						y="0"
+						width="150"
+						height="10"
+						forecolor="#000000"
+						key="textField-43"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_EX_COD} + " - " + $F{SAD_EX_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="96"
+						y="0"
+						width="50"
+						height="10"
+						forecolor="#000000"
+						key="textField-45"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="174"
+						y="0"
+						width="40"
+						height="10"
+						forecolor="#000000"
+						key="textField-42"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_DAT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="146"
+						y="0"
+						width="28"
+						height="10"
+						forecolor="#000000"
+						key="textField-3"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="736"
+						y="0"
+						width="34"
+						height="10"
+						forecolor="#000000"
+						key="textField-48"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TERMEN_RE_EX_IM_ZILE}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="70"
+						height="10"
+						forecolor="#000000"
+						key="textField-50"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="Thin" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NR_AUTORIZATIE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="674"
+						y="0"
+						width="30"
+						height="10"
+						forecolor="#000000"
+						key="textField-55"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_REGIM_VAMAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="0"
+						width="26"
+						height="10"
+						forecolor="#000000"
+						key="textField-59"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_TIP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="364"
+						y="0"
+						width="70"
+						height="10"
+						forecolor="#000000"
+						key="textField-60"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_CTY_EX_COD} + "-" + $F{SAD_CTY_EX_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="584"
+						y="0"
+						width="70"
+						height="10"
+						forecolor="#000000"
+						key="textField-61"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_CTY_DEST_COD} + "-" + $F{SAD_CTY_DEST_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="654"
+						y="0"
+						width="20"
+						height="10"
+						forecolor="#000000"
+						key="textField-62"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_CTY_ORIGIN_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="704"
+						y="0"
+						width="32"
+						height="10"
+						forecolor="#000000"
+						key="textField-63"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SAD_TERMEN_LIMITA_ZILE}.toString()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="770"
+						y="0"
+						width="44"
+						height="10"
+						forecolor="#000000"
+						key="textField-64"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TERMEN_RE_EX_IM_ZILE_PRELUNGIT}.toString()]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="21"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="587"
+						y="7"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="778"
+						y="7"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="814"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="1"
+						y="7"
+						width="381"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="20"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

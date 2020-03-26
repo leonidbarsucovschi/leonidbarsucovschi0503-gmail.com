@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE taglib
+     PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+    "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<!--
+    composite.tld
+
+    Copyright (c) 2005 UTI Systems. All Rights Reserved.
+
+    This source file may not be copied, modified or redistributed,
+    in whole or in part, in any form or for any reason, without the express
+    written consent of UTI Systems.
+
+    v1.0.1 - Thursday, March 30, 2006
+    ====================================
+            + Added "form" tag.
+            + Deprecated "defineVars" tag.
+            + Added "changeRenderModeEnabled" attribute for "renderDetailsTabs"
+            and "renderDetailsList" tags.
+-->
+
+<taglib>
+    <tlib-version>1.0.1</tlib-version>
+    <jsp-version>1.2</jsp-version>
+
+    <short-name>Composite Entities Tags Library</short-name>
+
+    <!-- ================================================================ -->
+    <!-- IncludeBodyTag                                                   -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>includeBody</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeIncludeBodyTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>IncludeBodyTag</display-name>
+
+        <description>
+            Evaluates and includes its body only if a list of conditions,
+             specified using attributes, are all TRUE. Each condition
+             is specified using a tag attribute. If an attribute is missing, the
+            condition is TRUE.
+        </description>
+
+        <attribute>
+            <name>viewEditModes</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                 Comma or space separated list of view/edit modes for which
+                 tag's body is evaluated and included. Valid modes
+                 are "view", "delete", "edit" or "add".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>detailsRenderMode</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                Details rendering mode for which tag's content is evaluated
+                and included. Valid values are "tabs" or "list".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>minDetailsCount</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Integer</type>
+            <description>
+                Minimum number of details for which tag's content is evaluated
+                and included.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>succeeded</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                 Success flag for which the tag evaluates and includes its
+             body.
+            </description>
+        </attribute>
+
+        <example>
+            ?
+        </example>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeDefineVariablesTag                                      -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>defineVars</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeDefineVariablesTag</tag-class>
+        <tei-class>ro.uti.jpf.base.composite.taglib.CompositeDefineVariablesTei</tei-class>
+        <body-content>empty</body-content>
+        <display-name>DefineVariablesTag</display-name>
+
+        <description>
+                Defines a list of scripting variables useful to Composite
+             Entities presentation layer. A scripting variable will be defined
+             only if the its name is specified using one of the tag's
+             attributes.
+
+                DEPRECATED since v2.0.2 of Composite Entities Framework.
+        </description>
+
+        <attribute>
+            <name>idVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the ID of
+             current composite entity.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>resourcesRootVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                The name of scripting variable that will store the
+             path, relative to application's context, where presentation layer
+             files for current composite entity are located.
+                The path starts and doesn't end with "/" character.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>messageBundleVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the name of
+             the message bundle for current composite entity.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>formNameVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the name of
+             the Struts form for current composite entity.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>actionPathVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the
+             path (as it is specified in Struts configuration file) of the action
+            associated with current composite entity.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>actionURLVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the context
+             relative URL to current composite entity's Struts action.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>currentDetailIDVarName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable that will store the ID of
+            current detail for current composite entity.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeHTMLBaseTag                                             -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>base</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeHTMLBaseTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>HTMLBaseTag</display-name>
+
+        <description>
+            Renders an HTML BASE element with a custom path appended after
+         URL's schema, server name and port.
+        </description>
+
+        <attribute>
+            <name>serverName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the server to be used for HREF attribute. If it
+             isn't specified, "request.getServerName()" will be used
+             instead.
+            </description>
+        </attribute>
+
+        <attribute>
+             <name>hrefPath</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The custom path to be used for HREF attribute.
+            </description>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>form</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeFormTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>Form</display-name>
+
+        <description>
+                Each HTML form used by a composite entity must be a child of
+            this tag, which provides functionality required by Composite
+            Entities framework.
+
+                Currently this tag implements support for transaction tokens,
+            especially for cases when current composite entity shares the HTTP
+            session with another composite entity.
+
+                Since v2.0.2.
+        </description>
+
+        <attribute>
+            <name>formId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The ID of the HTML form.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeMessagesTag                                             -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>messages</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeMessagesTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>MessagesTag</display-name>
+
+        <description>
+            Renders a list of messages.
+
+            The tag supports optional decorating messages, which will be
+         writted out before, between and after messages. A standard
+         set of decorating messages will be used if the tag doesn't receive any
+         decorating attribute, otherwise only specified decorating messages
+         will be    rendered.
+        </description>
+
+        <attribute>
+            <name>componentID</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The ID of the component for which to render the messages. If not
+             specified, tag renders global messages or errors.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>renderErrors</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                Specifies if the tag must render component's messages or
+             component's    error messages.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>escapeJavaScript</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+
+            <description>
+                Specifies if the messages should be escaped for JavaScript.
+             Default value is "false".
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>header</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The key of the decorating message rendered before messages.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>footer</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The key of the decorating message rendered after messages.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>prefix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The key of the decorating message writed out before each
+             message.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>suffix</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The key of the decorating message writed out after each
+             message.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>separator</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                The key of the decorating message writed out between messages.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>messagesBundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The bundle to be used for decorating messages. If not specified,
+            default bundle will be used instead.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>messagesBundle</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The bundle to be used for messages. If not specified, default
+             bundle will be used instead.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>locale</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                Specifies the locale to be used for messages. If not specified,
+            default locale will be used instead.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeComponentPageTag                                        -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>componentPage</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeComponentPageTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>ComponentPageTag</display-name>
+
+        <description>
+            Renders out or defines a scripting variable with the path of the
+         JSP page for a component.
+        </description>
+
+        <variable>
+            <name-from-attribute>varName</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <name>componentID</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The ID of the component.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>varName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of the scripting variable to define. If not specified,
+            component's page will be rendered out.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeJavaScriptFilterTag                                     -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>jsFilter</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeJavaScriptFilterTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>JavaScriptFilter</display-name>
+
+        <description>
+            Filters all SCRIPT elements from its body.
+
+            A filtered SCRIPT element has invalid values for some of its
+         attributes, being invalid from browser's point of view. In this way,
+         when the browser will process the response, the JavaScript code
+         from SCRIPT element won't be executed, which is useful if the response
+         is being loaded by client into a window and moved later to another
+         window.
+        </description>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeComponentFlagsTag                                     -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>flags</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeComponentFlagsTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>ComponentFlags</display-name>
+
+        <description>
+            Defines a java.util.List scripting variable with the IDs of
+         components with a specified list of flags.
+        </description>
+
+        <variable>
+            <name-from-attribute>varName</name-from-attribute>
+            <variable-class>java.util.List</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <name>varName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+
+            <description>
+                The name of scripting variable that will be defined.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>flags</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Long</type>
+
+            <description>
+                The flags used to filter component IDs.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>details</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                If TRUE defined list will contain only components that are
+             details. If FALSE, the defined list will contain only
+             components that are not details. If not specified, the defined list
+             will contain all types of components.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>visible</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                If TRUE only the IDs of visible components will be included
+            in defined list. Default value is FALSE.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeComponentHasFlagsTag                                       -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>hasFlags</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeComponentHasFlagsTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>ComponentHasFlags</display-name>
+
+        <description>
+            Includes its body only if a component has a set of flags.
+        </description>
+
+        <attribute>
+            <name>componentID</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                The ID of the component.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>flags</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Long</type>
+
+            <description>
+                The flags for which tag's body will be included.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>negate</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+
+            <description>
+                Specifiy if its body must be included only if the component
+             doesn't have the set of flags specified by "flags"
+             attribute.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeComponentIsDetailTag                                    -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>isDetail</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeComponentIsDetailTag</tag-class>
+        <body-content>JSP</body-content>
+        <display-name>ComponentIsDetail</display-name>
+
+        <description>
+            Includes its body only if a component is a detail.
+        </description>
+
+        <attribute>
+            <name>componentID</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                The ID of the component.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>negate</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+
+            <description>
+                Specifies that tag's body must be included only if the
+             component is not a detail.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeRenderDetailsTabsTag                                    -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>renderDetailsTabs</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeRenderDetailsTabsTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>RenderDetailsTabs</display-name>
+
+        <description>
+            Renders the details for a composite entity using tabs.
+        </description>
+
+        <attribute>
+            <name>jsClassName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The name of the Javascript class that implements all
+                scripting functionality. The class must extend
+                the "CompositeDetailsTabs" JavaScript class defined
+                in "composite_details_render_js.jsp" file. An
+                instance of the class will be created by
+                rendered JavaScript code.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>changeRenderModeEnabled</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Specifies if the tag should render the HTML/JavaScript code
+                for allowing the user to change details render mode. Defaults
+                to "TRUE".
+
+                    Since v2.0.2 of Composite Entities Framework.
+            </description>
+        </attribute>
+    </tag>
+
+    <!-- ================================================================ -->
+    <!-- CompositeRenderDetailsListTag                                    -->
+    <!-- ================================================================ -->
+
+    <tag>
+        <name>renderDetailsList</name>
+        <tag-class>ro.uti.jpf.base.composite.taglib.CompositeRenderDetailsListTag</tag-class>
+        <body-content>empty</body-content>
+        <display-name>RenderDetailsList</display-name>
+
+        <description>
+            Renders the details for a composite entity as a list.
+        </description>
+
+        <attribute>
+            <name>jsClassName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+            <description>
+                    The name of the Javascript class that implements all
+                scripting functionality. The class must extend
+                the "CompositeDetailsList" JavaScript class defined
+                in "composite_details_render_js.jsp" file. An
+                instance of the class will be created by
+                rendered JavaScript code.
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>changeRenderModeEnabled</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+            <description>
+                    Specifies if the tag should render the HTML/JavaScript code
+                for allowing the user to change details render mode. Defaults
+                to "TRUE".
+
+                    Since v2.0.2 of Composite Entities Framework.
+            </description>
+        </attribute>
+    </tag>
+</taglib>

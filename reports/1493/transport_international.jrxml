@@ -1,0 +1,1364 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="transport_international"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="802"
+		 columnSpacing="0"
+		 leftMargin="20"
+		 rightMargin="20"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.4641000000000062" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="REG_DTE" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="type" value="91" />
+		<property name="operators" value="5;" />
+		<property name="table_column" value="reg_dte" />
+		<property name="tooltip" value="scriti perioada, varog" />
+		<parameterDescription><![CDATA[Scriti perioada:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND (REG_DTE = '15.04.2011') "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CUO_COD" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="table_column" value="cuo_cod" />
+		<property name="nomenclator_table" value="REF_CUO@gunic_siiv" />
+		<property name="nomenclator_id" value="cuo_cod" />
+		<property name="nomenclator_descr" value="cuo_nam" />
+		<parameterDescription><![CDATA[Postul / biroul vamal:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TPE_DOC" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="table_column" value="chk" />
+		<property name="nomenclator_table" value="NML_TPE_DOC@gunic_siiv" />
+		<property name="nomenclator_id" value="chk" />
+		<property name="nomenclator_descr" value="nme" />
+		<property name="multiple" value="9" />
+		<parameterDescription><![CDATA[Tipul docuemntului:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="VCH_NBR" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="type" value="12" />
+		<property name="operators" value="0;6;7;8;" />
+		<property name="table_column" value="vch_nbr" />
+		<parameterDescription><![CDATA[Numarul autovehicolului:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PRS_JUR_COD" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="type" value="12" />
+		<property name="operators" value="0;6;7;8;" />
+		<property name="table_column" value="prs_jur_cod" />
+		<parameterDescription><![CDATA[IDNO:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="VCH_REG_CTY" isForPrompting="true" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="table_column" value="vch_reg_cty" />
+		<property name="nomenclator_table" value="NML_CTY@gunic_siiv" />
+		<property name="nomenclator_id" value="COD2" />
+		<property name="nomenclator_descr" value="NME_EN" />
+		<parameterDescription><![CDATA[Tara de inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+		 TO_CHAR(a.reg_dte, 'dd.MM.yyyy HH24:mm:ss') reg_dte
+         , a.usr_nme_reg_fin, a.cuo_cod
+        , a.prs_jur_cod, a.prs_jur_nme
+
+        , DECODE(a.tpe_exe, 0, ' ', 1, 'DIPLOMAT', 2, 'AJUTOR UMANITAR', 3, 'ALTELE') tpe_exe
+        , NVL(a.tpe_exe_dsc, ' ') tpe_exe_dsc
+		, a.vch_tpe, a.vch_nbr,  a.vch_reg_cty
+        , a.prs_nbr
+        , DECODE(a.prs_jur_tpe, 'resident', 'R', 'neresident', 'N') prs_jur_tpe
+        , b.nme
+	, b.chk chk
+	, a.dir
+        , a.tpe_doc
+        , n.nbr_doc nbr_doc
+	, n.d_prs_nbr
+	, n.d_prs_vch_nbr d_prs_vch_nbr
+FROM
+	gunic_user.fr_act_vhc@gunic_siiv a
+         JOIN fr_act_vhc_ext@gunic_siiv n ON n.sys_ope = a.sys_ope
+	LEFT JOIN nml_tpe_doc@gunic_siiv b ON n.tpe_doc = b.cod   || '@' || b.chk
+WHERE
+
+	a.fin_dte IS NOT NULL
+	$P!{PRS_JUR_COD}
+	$P!{VCH_NBR}
+	$P!{CUO_COD}
+	$P!{REG_DTE}
+	$P!{VCH_REG_CTY}
+	$P!{TPE_DOC}
+ORDER BY
+	reg_dte, cuo_cod, usr_nme_reg_fin]]></queryString>
+
+	<field name="REG_DTE" class="java.lang.String"/>
+	<field name="USR_NME_REG_FIN" class="java.lang.String"/>
+	<field name="CUO_COD" class="java.lang.String"/>
+	<field name="PRS_JUR_COD" class="java.lang.String"/>
+	<field name="PRS_JUR_NME" class="java.lang.String"/>
+	<field name="TPE_EXE" class="java.lang.String"/>
+	<field name="TPE_EXE_DSC" class="java.lang.String"/>
+	<field name="VCH_TPE" class="java.lang.String"/>
+	<field name="VCH_NBR" class="java.lang.String"/>
+	<field name="VCH_REG_CTY" class="java.lang.String"/>
+	<field name="PRS_NBR" class="java.math.BigDecimal"/>
+	<field name="PRS_JUR_TPE" class="java.lang.String"/>
+	<field name="NME" class="java.lang.String"/>
+	<field name="CHK" class="java.math.BigDecimal"/>
+	<field name="DIR" class="java.lang.String"/>
+	<field name="TPE_DOC" class="java.math.BigDecimal"/>
+	<field name="NBR_DOC" class="java.lang.String"/>
+	<field name="D_PRS_NBR" class="java.math.BigDecimal"/>
+	<field name="D_PRS_VCH_NBR" class="java.math.BigDecimal"/>
+
+	<variable name="CUO_COD" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{CUO_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{CUO_COD}.substring($P{CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{CUO_COD}.substring($P{CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{CUO_COD}.substring($P{CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{CUO_COD}.indexOf("'") >= 0 ?
+            $P{CUO_COD}.substring($P{CUO_COD}.indexOf("'")+1,$P{CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{CUO_COD}.indexOf(">=") > 0 && $P{CUO_COD}.indexOf("<=") > 0 ?
+              $P{CUO_COD}.substring( $P{CUO_COD}.indexOf(">=")+2, $P{CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{CUO_COD}.substring($P{CUO_COD}.lastIndexOf("<=")+2, $P{CUO_COD}.length() )
+              : ( $P{CUO_COD}.indexOf(">") > 0 && $P{CUO_COD}.indexOf("=") > 0 && $P{CUO_COD}.indexOf("<") < 0 ?
+                $P{CUO_COD}.substring($P{CUO_COD}.indexOf(">="),$P{CUO_COD}.length() )
+                : ( $P{CUO_COD}.indexOf("<") > 0 && $P{CUO_COD}.indexOf("=") > 0 && $P{CUO_COD}.indexOf(">") < 0 ?
+                  $P{CUO_COD}.substring($P{CUO_COD}.indexOf("<="),$P{CUO_COD}.length() )
+                  : ( $P{CUO_COD}.indexOf(">") > 0 && $P{CUO_COD}.indexOf("=") < 0 ?
+                    $P{CUO_COD}.substring($P{CUO_COD}.indexOf(">"),$P{CUO_COD}.length() )
+                    : ($P{CUO_COD}.indexOf("<") > 0 && $P{CUO_COD}.indexOf("=") < 0 ?
+                      $P{CUO_COD}.substring($P{CUO_COD}.indexOf("<"), $P{CUO_COD}.length() )
+                      : ( $P{CUO_COD}.indexOf("=") > 0 ?
+                        $P{CUO_COD}.substring($P{CUO_COD}.indexOf("=")+1, $P{CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="VCH_NBR" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{VCH_NBR}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{VCH_NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{VCH_NBR}.substring($P{VCH_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{VCH_NBR}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{VCH_NBR}.substring($P{VCH_NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{VCH_NBR}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{VCH_NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{VCH_NBR}.substring($P{VCH_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{VCH_NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{VCH_NBR}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{VCH_NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{VCH_NBR}.indexOf("'") >= 0 ?
+            $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf("'")+1,$P{VCH_NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{VCH_NBR}.indexOf(">=") > 0 && $P{VCH_NBR}.indexOf("<=") > 0 ?
+              $P{VCH_NBR}.substring( $P{VCH_NBR}.indexOf(">=")+2, $P{VCH_NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{VCH_NBR}.substring($P{VCH_NBR}.lastIndexOf("<=")+2, $P{VCH_NBR}.length() )
+              : ( $P{VCH_NBR}.indexOf(">") > 0 && $P{VCH_NBR}.indexOf("=") > 0 && $P{VCH_NBR}.indexOf("<") < 0 ?
+                $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf(">="),$P{VCH_NBR}.length() )
+                : ( $P{VCH_NBR}.indexOf("<") > 0 && $P{VCH_NBR}.indexOf("=") > 0 && $P{VCH_NBR}.indexOf(">") < 0 ?
+                  $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf("<="),$P{VCH_NBR}.length() )
+                  : ( $P{VCH_NBR}.indexOf(">") > 0 && $P{VCH_NBR}.indexOf("=") < 0 ?
+                    $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf(">"),$P{VCH_NBR}.length() )
+                    : ($P{VCH_NBR}.indexOf("<") > 0 && $P{VCH_NBR}.indexOf("=") < 0 ?
+                      $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf("<"), $P{VCH_NBR}.length() )
+                      : ( $P{VCH_NBR}.indexOf("=") > 0 ?
+                        $P{VCH_NBR}.substring($P{VCH_NBR}.indexOf("=")+1, $P{VCH_NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="PRS_JUR_COD" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{PRS_JUR_COD}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{PRS_JUR_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{PRS_JUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{PRS_JUR_COD}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{PRS_JUR_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{PRS_JUR_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{PRS_JUR_COD}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{PRS_JUR_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{PRS_JUR_COD}.indexOf("'") >= 0 ?
+            $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf("'")+1,$P{PRS_JUR_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{PRS_JUR_COD}.indexOf(">=") > 0 && $P{PRS_JUR_COD}.indexOf("<=") > 0 ?
+              $P{PRS_JUR_COD}.substring( $P{PRS_JUR_COD}.indexOf(">=")+2, $P{PRS_JUR_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.lastIndexOf("<=")+2, $P{PRS_JUR_COD}.length() )
+              : ( $P{PRS_JUR_COD}.indexOf(">") > 0 && $P{PRS_JUR_COD}.indexOf("=") > 0 && $P{PRS_JUR_COD}.indexOf("<") < 0 ?
+                $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf(">="),$P{PRS_JUR_COD}.length() )
+                : ( $P{PRS_JUR_COD}.indexOf("<") > 0 && $P{PRS_JUR_COD}.indexOf("=") > 0 && $P{PRS_JUR_COD}.indexOf(">") < 0 ?
+                  $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf("<="),$P{PRS_JUR_COD}.length() )
+                  : ( $P{PRS_JUR_COD}.indexOf(">") > 0 && $P{PRS_JUR_COD}.indexOf("=") < 0 ?
+                    $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf(">"),$P{PRS_JUR_COD}.length() )
+                    : ($P{PRS_JUR_COD}.indexOf("<") > 0 && $P{PRS_JUR_COD}.indexOf("=") < 0 ?
+                      $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf("<"), $P{PRS_JUR_COD}.length() )
+                      : ( $P{PRS_JUR_COD}.indexOf("=") > 0 ?
+                        $P{PRS_JUR_COD}.substring($P{PRS_JUR_COD}.indexOf("=")+1, $P{PRS_JUR_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="REG_DTE" class="java.lang.String" resetType="Page" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{REG_DTE}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{REG_DTE}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{REG_DTE}.substring($P{REG_DTE}.toUpperCase().indexOf("TO_DATE")+9, $P{REG_DTE}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{REG_DTE}.substring($P{REG_DTE}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{REG_DTE}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{REG_DTE}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{REG_DTE}.substring($P{REG_DTE}.toUpperCase().indexOf("TO_DATE")+9, $P{REG_DTE}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{REG_DTE}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{REG_DTE}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{REG_DTE}.indexOf("'") >= 0 ?
+            $P{REG_DTE}.substring($P{REG_DTE}.indexOf("'")+1,$P{REG_DTE}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{REG_DTE}.indexOf(">=") > 0 && $P{REG_DTE}.indexOf("<=") > 0 ?
+              $P{REG_DTE}.substring( $P{REG_DTE}.indexOf(">=")+2, $P{REG_DTE}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{REG_DTE}.substring($P{REG_DTE}.lastIndexOf("<=")+2, $P{REG_DTE}.length() )
+              : ( $P{REG_DTE}.indexOf(">") > 0 && $P{REG_DTE}.indexOf("=") > 0 && $P{REG_DTE}.indexOf("<") < 0 ?
+                $P{REG_DTE}.substring($P{REG_DTE}.indexOf(">="),$P{REG_DTE}.length() )
+                : ( $P{REG_DTE}.indexOf("<") > 0 && $P{REG_DTE}.indexOf("=") > 0 && $P{REG_DTE}.indexOf(">") < 0 ?
+                  $P{REG_DTE}.substring($P{REG_DTE}.indexOf("<="),$P{REG_DTE}.length() )
+                  : ( $P{REG_DTE}.indexOf(">") > 0 && $P{REG_DTE}.indexOf("=") < 0 ?
+                    $P{REG_DTE}.substring($P{REG_DTE}.indexOf(">"),$P{REG_DTE}.length() )
+                    : ($P{REG_DTE}.indexOf("<") > 0 && $P{REG_DTE}.indexOf("=") < 0 ?
+                      $P{REG_DTE}.substring($P{REG_DTE}.indexOf("<"), $P{REG_DTE}.length() )
+                      : ( $P{REG_DTE}.indexOf("=") > 0 ?
+                        $P{REG_DTE}.substring($P{REG_DTE}.indexOf("=")+1, $P{REG_DTE}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="VCH_REG_CTY" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{VCH_REG_CTY}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{VCH_REG_CTY}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.toUpperCase().indexOf("TO_DATE")+9, $P{VCH_REG_CTY}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{VCH_REG_CTY}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{VCH_REG_CTY}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.toUpperCase().indexOf("TO_DATE")+9, $P{VCH_REG_CTY}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{VCH_REG_CTY}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{VCH_REG_CTY}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{VCH_REG_CTY}.indexOf("'") >= 0 ?
+            $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf("'")+1,$P{VCH_REG_CTY}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{VCH_REG_CTY}.indexOf(">=") > 0 && $P{VCH_REG_CTY}.indexOf("<=") > 0 ?
+              $P{VCH_REG_CTY}.substring( $P{VCH_REG_CTY}.indexOf(">=")+2, $P{VCH_REG_CTY}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.lastIndexOf("<=")+2, $P{VCH_REG_CTY}.length() )
+              : ( $P{VCH_REG_CTY}.indexOf(">") > 0 && $P{VCH_REG_CTY}.indexOf("=") > 0 && $P{VCH_REG_CTY}.indexOf("<") < 0 ?
+                $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf(">="),$P{VCH_REG_CTY}.length() )
+                : ( $P{VCH_REG_CTY}.indexOf("<") > 0 && $P{VCH_REG_CTY}.indexOf("=") > 0 && $P{VCH_REG_CTY}.indexOf(">") < 0 ?
+                  $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf("<="),$P{VCH_REG_CTY}.length() )
+                  : ( $P{VCH_REG_CTY}.indexOf(">") > 0 && $P{VCH_REG_CTY}.indexOf("=") < 0 ?
+                    $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf(">"),$P{VCH_REG_CTY}.length() )
+                    : ($P{VCH_REG_CTY}.indexOf("<") > 0 && $P{VCH_REG_CTY}.indexOf("=") < 0 ?
+                      $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf("<"), $P{VCH_REG_CTY}.length() )
+                      : ( $P{VCH_REG_CTY}.indexOf("=") > 0 ?
+                        $P{VCH_REG_CTY}.substring($P{VCH_REG_CTY}.indexOf("=")+1, $P{VCH_REG_CTY}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+	<variable name="TPE_DOC" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TPE_DOC}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{TPE_DOC}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{TPE_DOC}.substring($P{TPE_DOC}.toUpperCase().indexOf("TO_DATE")+9, $P{TPE_DOC}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{TPE_DOC}.substring($P{TPE_DOC}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TPE_DOC}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{TPE_DOC}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TPE_DOC}.substring($P{TPE_DOC}.toUpperCase().indexOf("TO_DATE")+9, $P{TPE_DOC}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TPE_DOC}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{TPE_DOC}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{TPE_DOC}.indexOf("'") >= 0 ?
+            $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf("'")+1,$P{TPE_DOC}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TPE_DOC}.indexOf(">=") > 0 && $P{TPE_DOC}.indexOf("<=") > 0 ?
+              $P{TPE_DOC}.substring( $P{TPE_DOC}.indexOf(">=")+2, $P{TPE_DOC}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TPE_DOC}.substring($P{TPE_DOC}.lastIndexOf("<=")+2, $P{TPE_DOC}.length() )
+              : ( $P{TPE_DOC}.indexOf(">") > 0 && $P{TPE_DOC}.indexOf("=") > 0 && $P{TPE_DOC}.indexOf("<") < 0 ?
+                $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf(">="),$P{TPE_DOC}.length() )
+                : ( $P{TPE_DOC}.indexOf("<") > 0 && $P{TPE_DOC}.indexOf("=") > 0 && $P{TPE_DOC}.indexOf(">") < 0 ?
+                  $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf("<="),$P{TPE_DOC}.length() )
+                  : ( $P{TPE_DOC}.indexOf(">") > 0 && $P{TPE_DOC}.indexOf("=") < 0 ?
+                    $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf(">"),$P{TPE_DOC}.length() )
+                    : ($P{TPE_DOC}.indexOf("<") > 0 && $P{TPE_DOC}.indexOf("=") < 0 ?
+                      $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf("<"), $P{TPE_DOC}.length() )
+                      : ( $P{TPE_DOC}.indexOf("=") > 0 ?
+                        $P{TPE_DOC}.substring($P{TPE_DOC}.indexOf("=")+1, $P{TPE_DOC}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="135"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="629"
+						y="47"
+						width="173"
+						height="10"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[NP - Numar de persoane]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="607"
+						y="27"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Abrevieri:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="629"
+						y="38"
+						width="173"
+						height="10"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[PV - Post vamal, birou vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="629"
+						y="57"
+						width="173"
+						height="10"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[TR - Tara de inregistrare a autovehicolului]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="48"
+						y="62"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Numarul autovehicolului:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="802"
+						height="18"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="14" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[RAPORT - Rute internationale]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="48"
+						y="74"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[IDNO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="48"
+						y="50"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Postul / biroul vamal:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="26"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Datele selectate:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="48"
+						y="38"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Perioada:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="50"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="62"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{VCH_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="74"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{PRS_JUR_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="38"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{REG_DTE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="86"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{VCH_REG_CTY}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="48"
+						y="86"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Tara de inregistrare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="228"
+						y="98"
+						width="133"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TPE_DOC}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="48"
+						y="98"
+						width="173"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isBold="false" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Tipul docuemntului:]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="24"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="705"
+						y="0"
+						width="97"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Inspector]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="177"
+						y="12"
+						width="24"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[TR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="98"
+						y="12"
+						width="52"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Numar]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="201"
+						y="0"
+						width="19"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="8" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Locuri SG]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="150"
+						y="12"
+						width="27"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Tip]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="98"
+						y="0"
+						width="103"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Automobil]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="260"
+						y="12"
+						width="70"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Cod]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="68"
+						y="0"
+						width="30"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[PV]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="260"
+						y="0"
+						width="193"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Transportator]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="22"
+						y="0"
+						width="46"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="330"
+						y="12"
+						width="123"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Nume]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="22"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Nr.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="638"
+						y="0"
+						width="67"
+						height="24"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Directia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="453"
+						y="0"
+						width="185"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Document]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="453"
+						y="12"
+						width="57"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Numar]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="510"
+						y="12"
+						width="128"
+						height="12"
+						key="staticText"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Tipul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="220"
+						y="0"
+						width="20"
+						height="24"
+						key="staticText-1"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="8" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Locuri SV]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="240"
+						y="0"
+						width="20"
+						height="24"
+						key="staticText-2"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="8" isBold="true" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<text><![CDATA[Locuri auto]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="12"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="150"
+						y="0"
+						width="27"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VCH_TPE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="177"
+						y="0"
+						width="24"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VCH_REG_CTY}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="0"
+						width="46"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{REG_DTE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="510"
+						y="0"
+						width="128"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="22"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="98"
+						y="0"
+						width="52"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{VCH_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="330"
+						y="0"
+						width="123"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PRS_JUR_NME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="705"
+						y="0"
+						width="97"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{USR_NME_REG_FIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="201"
+						y="0"
+						width="19"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{PRS_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="260"
+						y="0"
+						width="70"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PRS_JUR_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="68"
+						y="0"
+						width="30"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="638"
+						y="0"
+						width="67"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DIR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="453"
+						y="0"
+						width="57"
+						height="12"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NBR_DOC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="220"
+						y="0"
+						width="20"
+						height="12"
+						key="textField-1"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{D_PRS_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="240"
+						y="0"
+						width="20"
+						height="12"
+						key="textField-2"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" pdfEncoding ="Cp1252"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{D_PRS_VCH_NBR}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+		"http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<!--
+ # Module   : nom
+ # File     : WEB-INF/nom/struts-config.xml
+ # Creation : 07.07.2005
+ # Copyright: DWA, DTIC, UTI Systems SA
+ #                   Power by UTI JPortal
+ -->
+<struts-config>
+	<form-beans>
+		<form-bean name="form_NomLimbaForm"
+			type="ro.uti.apmc.nom.command.NomLimbaForm"/>
+	</form-beans>
+
+	<action-mappings>
+		<action path="/nomlimba" type="ro.uti.apmc.nom.command.NomLimbaAction"
+			name="form_NomLimbaForm"
+			attribute="form_NomLimbaForm"
+			className="ro.uti.waf.web.security.StrutsPermissionMapping"
+			scope="request"
+			parameter="method"
+			validate="false">
+
+			<set-property property="accessRoles" value="default|601, 600"/>
+
+			<forward name="showAdd" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/add_nomlimba"/>
+			<forward name="showPrint" contextRelative="true" path="/template_print.jsp?page=web/nom/nomlimba/print_nomlimba"/>
+			<forward name="showDelete" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/del_nomlimba"/>
+			<forward name="showEdit" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/add_nomlimba"/>
+			<forward name="failure" contextRelative="true" path="/template.jsp?page=error"/>
+			<forward name="default" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/list_nomlimba"/>
+			<forward name="showList" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/list_nomlimba"/>
+			<forward name="showRecord" contextRelative="true" path="/template.jsp?page=web/nom/nomlimba/view_nomlimba"/>
+			<forward name="accessDenied" contextRelative="true" path="/template.jsp?page=denied"/>
+		</action>
+	</action-mappings>
+
+	<controller processorClass="ro.uti.waf.web.JPortalRequestProcessor"/>
+	<message-resources parameter="uti.resources.ErrorMessages" null="false"/>
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property value="/WEB-INF/config/validator-rules.xml,/WEB-INF/config/nom/validation.xml" property="pathnames"/>
+	</plug-in>
+</struts-config>

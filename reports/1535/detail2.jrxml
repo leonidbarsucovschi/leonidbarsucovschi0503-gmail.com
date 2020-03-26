@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="RG5"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="555"
+		 pageHeight="802"
+		 columnWidth="555"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.6105100000000012" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="869" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="REPORT_ID" isForPrompting="false" class="java.math.BigDecimal">
+		<defaultValueExpression ><![CDATA[new BigDecimal("0")]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+	cc.id
+    	, MAX(sofer.sofer_tip_act)
+	, MAX(cc.bv)
+    , MAX(cc.crossingpoints) AS PV
+    , MAX(crs.brd)
+    , MAX(DECODE(crs.brd, 1, 'X', ' ')) AS brd1
+    , MAX(DECODE(NVL(crs.brd, 2), 2, 'X', ' ')) AS brd2
+    , MAX(crs.nme)
+    , MAX(birou.bvcod) AS bvcod
+    , MAX(birou.nme) AS nume_birou
+    , MAX(cc.nr) AS nr_proc
+    , MAX('Nr. ' || birou.bvcod || ', ' || cc.nr) AS NR_PROC_NR
+    , MAX(TO_CHAR(cc.realizationdate, 'dd.MM.yyyy')) realizationdate
+    , MAX(cc.hd2)
+    , MAX(cc.tpe_chk) AS tpe_chk
+    , MAX(DECODE(sofer.sofer_sex, 1, 'Feminin', 0, 'Masculin')) AS GEN
+    , MAX(DECODE(sofer.sofer_tip_act, 2, 'X', ' ')) AS sofer_tip_act2
+    , MAX(DECODE(sofer.sofer_tip_act, 3, 'X', ' ')) AS sofer_tip_act3
+    , MAX(DECODE(sofer.sofer_tip_act, 4, 'X', ' ')) AS sofer_tip_act4
+    , MAX(DECODE(sofer.sofer_tip_act, 1, 'X', 5, 'X', 6, 'X', ' ')) AS sofer_tip_actn1
+    , MAX(DECODE(sofer.sofer_tip_act, 1, 'Tip document: ' || sofer.sofer_nume_document
+    								, 5, 'Tip document: ' || sofer.sofer_nume_document
+                                    , 6, 'Tip document: ' || sofer.sofer_nume_document, ' ')) AS sofer_tip_actn2
+    , MAX(DECODE(sofer.sofer_sofer + sofer.sofer_contravenient, 2, 'X', ' ')) AS sofer_contravenint_t1
+    , MAX(DECODE(sofer.sofer_sofer + sofer.sofer_contravenient, 2, ' ', 'X')) AS sofer_contravenint_t2
+    , MAX(DECODE(cc.tpe_chk, 1, 'X', ' ')) AS tpe_chk1
+    , MAX(DECODE(cc.tpe_chk, 2, 'X', ' ')) AS tpe_chk2
+    , MAX(DECODE(cc.tpe_chk, 3, 'X', ' ')) AS tpe_chk3
+    , MAX(DECODE(cc.tpe_chk, 0, 'X', ' ')) AS tpe_chk0
+	, MAX(DECODE(cc.tpe_chk, 0, tpe_c.nme, ' ')) AS tpe_chk00
+    , MAX(cc.teamdog) AS teamdog
+    , MAX(DECODE(cc.teamdog, 1, 'X', ' ')) AS teamdog1
+    , MAX(DECODE(cc.teamdog, 0, 'X', ' ')) AS teamdog2
+    , MAX(DECODE(cc.usescan, 1, 'X', ' ')) AS usescan1
+    , MAX(DECODE(cc.usescan, 0, 'X', ' ')) AS usescan2
+    , MAX(DECODE(cc.usescan, 1, cc.usescandsc, ' ')) AS sescan11
+
+    , MAX(cc.usescan) AS usescan
+    , MAX(cc.usescandsc) As usescandsc
+    , MAX(cc.dsc) AS dsc
+    , MAX(NVL(hhd1.nme, ' ') || ', ' || NVL(hhd2.nme, ' ') || ', ' || NVL(cc.hidendsc, ' ')) AS nme_hd2
+    , MAX(tpe_c.nme) AS nme_tpe
+    --captura
+    , MAX(captura.tigari_marca) AS merca_tigari
+    , MAX(captura.tip_captura)
+    --milloc de transport
+    , MAX(NVL(mijloc.tara_camion, ' ')) AS tara_camion
+    , MAX(NVL(mijloc.anul_camion, ' ')) AS anul_camion
+    , MAX(mijloc.numar_camion) AS numar_camion
+    , MAX(mijloc.marca_camion) AS marca_camion
+    , MAX(NVL(mijloc.tara_remorca, ' ')) AS tara_remorca
+    , MAX(NVL(mijloc.anul_remorca, ' ')) AS anul_recorma
+    , MAX(mijloc.numar_remorca) AS numar_remorca
+    , MAX(mijloc.marca_remorca) AS marca_remorca
+    --soferul
+    , MAX(sofer.sofer_nume) AS sofer_nume
+    , MAX(sofer.sofer_prenume) AS sofer_prenume
+    , MAX(sofer.sofer_sex) AS sofer_sex
+    , MAX(sofer.sofer_contravenient) sofer_contravenient
+    , MAX(sofer.sofer_sofer) AS sofer_sofer
+    , MAX(sofer.sofer_adr_nastere) AS sofer_adr_nastere
+    , MAX(sofer.sofer_adr_domiciliu) AS sofer_adr_domiciliu
+    , MAX(sofer.sofer_numar_act) AS sofer_numar_act
+    , MAX(sofer.sofer_autoritate) AS sofer_autoritate
+    , MAX(sofer.sofer_nume_document) AS sofer_nume_document
+    , MAX(sofer.sofer_tip_act) AS sofer_tip_act
+    , MAX(sofer.sofer_nationalitate) AS sofer_nationalitate
+    --tabela gds_cov
+    , MAX(gdscov.nme) AS gdscov_nme
+    , MAX(gdscov.um) AS um
+    , MAX(gdscov.cnt) AS cnt
+    , MAX(gdscov.tpe_wrp) AS tpe_wrp
+    , MAX(gdscov.nr) AS gdscov_nr
+    , MAX(gdscov.crr) AS crr
+    , MAX(gdscov.sum) AS gdscov_sum
+    , MAX(gdscov.cty) AS gdscov_cty
+    , MAX(gdscov.rgn) AS rgn
+    , MAX(gdscov.vlg) AS vlg
+    , MAX(NVL(gdscov.plc_dsc, ' ')) AS plc_dsc
+    , NVL(MAX(TO_CHAR(gdscov.dte, 'dd.MM.yyyy')), ' ') AS gdscov_dte
+    , MAX(gdscov.con) AS con
+    , MAX(gdscov.con_nme) AS con_nme
+    , MAX(gdscov.con_adr) AS con_adr
+    , MAX(gdscov.con_cty) AS con_cty
+    , MAX(gdscov.cne) AS cne
+    , MAX(gdscov.cne_nme) AS cne_nme
+    , MAX(gdscov.cne_cod) AS cne_cod
+    , MAX(gdscov.cne_adr) AS cne_adr
+    , MAX(gdscov.rut_cty) AS rut_cty
+    , MAX(gdscov.rut_cit) AS rut_cit
+    , MAX(gdscov.crs_pnt) AS crs_pnt
+    -- TRANSPORTATTOR
+    , MAX(transport.nme) AS transport_nme
+    , MAX(transport.adr) AS transport_adr
+
+FROM
+	afv.contravention_cause cc
+    	LEFT JOIN afv.tpe_chk tpe_c ON cc.tpe_chk = tpe_c.id
+        LEFT JOIN afv.gds_cov gdscov ON cc.gds_cov = gdscov.id
+        LEFT JOIN afv.hdn_ob2 hhd2 ON cc.hd2 = hhd2.id
+        LEFT JOIN afv.hdn_ob1 hhd1 ON hhd2.pr = hhd1.id
+        LEFT JOIN afv.bv birou ON cc.bv = birou.id
+        LEFT JOIN afv.crs_pnt crs ON cc.crossingpoints = crs.id
+-- ///////////////////////////  CAPTURA
+    LEFT JOIN(
+        SELECT
+            infheadt.infhead AS captura_id
+            , WM_CONCAT(' ' || ccm.cmbrand || ' - '|| ccm.cmquantity  || ' ' || ccm.cmmu) AS tigari_marca
+            , ccm.cmtype AS tip_captura
+        FROM
+            afv.infhead_subj infheadt
+            LEFT JOIN afv.subiect sub ON sub.id = infheadt.subiect
+            LEFT JOIN afv.cm ccm ON (ccm.id = sub.id)
+        WHERE
+        	ccm.cmtype = 5
+        GROUP BY
+        	infheadt.infhead, ccm.cmtype
+    ) captura
+    ON captura.captura_id = cc.id
+
+-- ///////////////////////////  MIJLOC DE TRANSPORT
+
+    LEFT JOIN(
+        SELECT
+            infheadt.infhead AS mijloc_id
+            , ut_c.nr_inmatriculare AS numar_camion
+            , country_t_c.nme AS tara_camion
+            , ut_c.anul_fab AS anul_camion
+            , tip_trans.nme || ', ' || ut_c.marca AS marca_camion
+            , ut_r.nr_inmatriculare AS numar_remorca
+            , country_t_r.nme AS tara_remorca
+            , ut_r.anul_fab AS anul_remorca
+            , ut_r.marca AS marca_remorca
+        FROM
+            afv.infhead_subj infheadt
+            LEFT JOIN afv.subiect sub ON sub.id = infheadt.subiect
+            LEFT JOIN afv.ut ut_c ON (sub.id = ut_c.id) AND (ut_c.tip_ut != 113)
+                LEFT JOIN afv.country country_t_c ON country_t_c.id = ut_c.registration_country
+            LEFT JOIN afv.ut ut_r ON (sub.id = ut_r.id) AND (ut_r.tip_ut = 113)
+                LEFT JOIN afv.country country_t_r ON country_t_r.id = ut_r.registration_country
+	LEFT JOIN afv.nml_tip_transport tip_trans ON tip_trans.id = ut_c.tip_ut
+    ) mijloc
+    ON mijloc.mijloc_id = cc.id
+-- ///////////////////////////  SOFER
+	LEFT JOIN(
+	     SELECT
+              infheadt.infhead AS sofer_id
+              , ppf.nume AS sofer_nume
+              , ppf.prenume AS sofer_prenume
+              , ppf.sex AS sofer_sex
+              , ppf.contravenient AS sofer_contravenient
+              , ppf.sofer AS sofer_sofer
+              , (TO_CHAR(ppf.birthdate, 'dd.MM.yyyy') || ' ' || cn.nme || ', ' || an.region || ' ' || an.city || ' ' || an.street || ' ' || an.nr || ' ' || an.block || ' ' || an.entrance) AS sofer_adr_nastere
+              , (cd.nme || ' ' || ad.region || ' ' || ad.city || ' ' || ad.street || ' ' || ad.nr || ' ' || ad.block || ' ' || ad.entrance) AS sofer_adr_domiciliu
+              , ppf.idnp AS sofer_numar_act
+              , doc_act.issued || ' ' ||  TO_CHAR(doc_act.issue, 'dd.MM.yyyy') AS sofer_autoritate
+              , doc_t.nme AS sofer_nume_document
+              , ppf.doc_type AS sofer_tip_act
+              , cn.nme AS sofer_nationalitate
+          FROM
+              afv.infhead_subj infheadt
+              LEFT JOIN afv.subiect sub ON sub.id = infheadt.subiect
+              LEFT JOIN afv.pf ppf ON ppf.id = sub.id
+              LEFT JOIN afv.address an ON (ppf.id = an.subject_id) AND (an.addr_type = 3)
+              LEFT JOIN afv.country cn ON an.country_id = cn.id
+              LEFT JOIN afv.address ad ON (ppf.id = ad.subject_id) AND (ad.addr_type = 5)
+              LEFT JOIN afv.country cd ON ad.country_id = cd.id
+              LEFT JOIN afv.doc doc_act ON (doc_act.subject_id = ppf.id)
+              LEFT JOIN afv.doc_type doc_t ON (doc_t.id = ppf.doc_type)
+    ) sofer
+    ON sofer.sofer_id = cc.id
+--    ////////////////////////// TRANSPORTATTOR
+	LEFT JOIN(
+          SELECT
+	infheadt.infhead AS transport_id
+	, nume || ' ' || prenume || ' ' || patronimic  AS nme, idnp AS idn, ppf.id as tra_id  , 'pf' AS tpe,
+                  c.cod || ', ' || a.region  || ', ' || a.city   || ', str.' || a.street  || ' ' || a.nr as adr
+          FROM afv.infhead_subj infheadt
+              LEFT JOIN afv.subiect sub ON sub.id = infheadt.subiect
+          	  LEFT JOIN afv.pf ppf ON ppf.id = sub.id
+              left join afv.address a on ppf.id = a.subject_id
+              left join afv.country c on a.country_id=c.id
+              WHERE transportator = 1
+      UNION ALL
+          SELECT
+          	infheadt.infhead AS transport_id
+          		,denumire || ' ' || forma_j  AS nme, idno AS idn, ppj.id  as tra_id, 'pj' AS tpe,
+              c.cod || ', ' || a.region  || ', ' || a.city   || ', str.' || a.street  || ' ' || a.nr as adr
+          FROM
+              afv.infhead_subj infheadt
+              LEFT JOIN afv.subiect sub ON sub.id = infheadt.subiect
+          	  LEFT JOIN afv.pj ppj ON ppj.id = sub.id
+              left join afv.address a on ppj.id = a.subject_id
+              left join afv.country c on a.country_id=c.id
+          WHERE transportator = 1
+    ) transport
+    ON transport.transport_id = cc.id
+
+WHERE
+	captura.tip_captura = 5
+	AND cc.id = $P{REPORT_ID}
+GROUP BY
+	cc.id
+ORDER BY
+	cc.id DESC]]></queryString>
+
+	<field name="ID" class="java.math.BigDecimal"/>
+	<field name="MAX(SOFER.SOFER_TIP_ACT)" class="java.math.BigDecimal"/>
+	<field name="MAX(CC.BV)" class="java.math.BigDecimal"/>
+	<field name="PV" class="java.math.BigDecimal"/>
+	<field name="MAX(CRS.BRD)" class="java.math.BigDecimal"/>
+	<field name="BRD1" class="java.lang.String"/>
+	<field name="BRD2" class="java.lang.String"/>
+	<field name="MAX(CRS.NME)" class="java.lang.String"/>
+	<field name="BVCOD" class="java.lang.String"/>
+	<field name="NUME_BIROU" class="java.lang.String"/>
+	<field name="NR_PROC" class="java.lang.String"/>
+	<field name="NR_PROC_NR" class="java.lang.String"/>
+	<field name="REALIZATIONDATE" class="java.lang.String"/>
+	<field name="MAX(CC.HD2)" class="java.math.BigDecimal"/>
+	<field name="TPE_CHK" class="java.math.BigDecimal"/>
+	<field name="GEN" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACT2" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACT3" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACT4" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACTN1" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACTN2" class="java.lang.String"/>
+	<field name="SOFER_CONTRAVENINT_T1" class="java.lang.String"/>
+	<field name="SOFER_CONTRAVENINT_T2" class="java.lang.String"/>
+	<field name="TPE_CHK1" class="java.lang.String"/>
+	<field name="TPE_CHK2" class="java.lang.String"/>
+	<field name="TPE_CHK3" class="java.lang.String"/>
+	<field name="TPE_CHK0" class="java.lang.String"/>
+	<field name="TPE_CHK00" class="java.lang.String"/>
+	<field name="TEAMDOG" class="java.math.BigDecimal"/>
+	<field name="TEAMDOG1" class="java.lang.String"/>
+	<field name="TEAMDOG2" class="java.lang.String"/>
+	<field name="USESCAN1" class="java.lang.String"/>
+	<field name="USESCAN2" class="java.lang.String"/>
+	<field name="SESCAN11" class="java.lang.String"/>
+	<field name="USESCAN" class="java.math.BigDecimal"/>
+	<field name="USESCANDSC" class="java.lang.String"/>
+	<field name="DSC" class="java.lang.String"/>
+	<field name="NME_HD2" class="java.lang.String"/>
+	<field name="NME_TPE" class="java.lang.String"/>
+	<field name="MERCA_TIGARI" class="java.lang.String"/>
+	<field name="MAX(CAPTURA.TIP_CAPTURA)--MILLOCDETRANSPORT" class="java.math.BigDecimal"/>
+	<field name="TARA_CAMION" class="java.lang.String"/>
+	<field name="ANUL_CAMION" class="java.lang.String"/>
+	<field name="NUMAR_CAMION" class="java.lang.String"/>
+	<field name="MARCA_CAMION" class="java.lang.String"/>
+	<field name="TARA_REMORCA" class="java.lang.String"/>
+	<field name="ANUL_RECORMA" class="java.lang.String"/>
+	<field name="NUMAR_REMORCA" class="java.lang.String"/>
+	<field name="MARCA_REMORCA" class="java.lang.String"/>
+	<field name="SOFER_NUME" class="java.lang.String"/>
+	<field name="SOFER_PRENUME" class="java.lang.String"/>
+	<field name="SOFER_SEX" class="java.math.BigDecimal"/>
+	<field name="SOFER_CONTRAVENIENT" class="java.math.BigDecimal"/>
+	<field name="SOFER_SOFER" class="java.math.BigDecimal"/>
+	<field name="SOFER_ADR_NASTERE" class="java.lang.String"/>
+	<field name="SOFER_ADR_DOMICILIU" class="java.lang.String"/>
+	<field name="SOFER_NUMAR_ACT" class="java.lang.String"/>
+	<field name="SOFER_AUTORITATE" class="java.lang.String"/>
+	<field name="SOFER_NUME_DOCUMENT" class="java.lang.String"/>
+	<field name="SOFER_TIP_ACT" class="java.math.BigDecimal"/>
+	<field name="SOFER_NATIONALITATE" class="java.lang.String"/>
+	<field name="GDSCOV_NME" class="java.lang.String"/>
+	<field name="UM" class="java.lang.String"/>
+	<field name="CNT" class="java.math.BigDecimal"/>
+	<field name="TPE_WRP" class="java.lang.String"/>
+	<field name="GDSCOV_NR" class="java.math.BigDecimal"/>
+	<field name="CRR" class="java.lang.String"/>
+	<field name="GDSCOV_SUM" class="java.math.BigDecimal"/>
+	<field name="GDSCOV_CTY" class="java.math.BigDecimal"/>
+	<field name="RGN" class="java.lang.String"/>
+	<field name="VLG" class="java.lang.String"/>
+	<field name="PLC_DSC" class="java.lang.String"/>
+	<field name="GDSCOV_DTE" class="java.lang.String"/>
+	<field name="CON" class="java.lang.String"/>
+	<field name="CON_NME" class="java.lang.String"/>
+	<field name="CON_ADR" class="java.lang.String"/>
+	<field name="CON_CTY" class="java.math.BigDecimal"/>
+	<field name="CNE" class="java.lang.String"/>
+	<field name="CNE_NME" class="java.lang.String"/>
+	<field name="CNE_COD" class="java.lang.String"/>
+	<field name="CNE_ADR" class="java.lang.String"/>
+	<field name="RUT_CTY" class="java.math.BigDecimal"/>
+	<field name="RUT_CIT" class="java.lang.String"/>
+	<field name="CRS_PNT" class="java.math.BigDecimal"/>
+	<field name="TRANSPORT_NME" class="java.lang.String"/>
+	<field name="TRANSPORT_ADR" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="802"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="30"
+						y="112"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Numele/denumirea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="30"
+						y="154"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Ruta - statele]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[7.6]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="30"
+						y="168"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Ruta - orasele]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="30"
+						y="126"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Adresa (inclusiv tara)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="56"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[9. Destinatarul (conform casetei 2 din CMR)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="168"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[11.2]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="42"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CON_ADR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="252"
+						width="555"
+						height="337"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Justified">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DSC}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="30"
+						y="42"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Adresa (inclusiv tara)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="30"
+						y="28"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Numele/denumirea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="30"
+						y="84"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Adresa (inclusiv tara)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="70"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CNE_NME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="14"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[8. Expeditorul (conform casetei 1 din CMR)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="98"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[10. Transportatorul (conform casetelor 16 si 23 din CMR)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="210"
+						width="131"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Fotografii disponibile?]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="0"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CRR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="154"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[11.1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="131"
+						y="210"
+						width="131"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Contravenientul]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="212"
+						width="10"
+						height="10"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="168"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{RUT_CIT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="28"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CON_NME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="42"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[8.2]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="112"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRANSPORT_NME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="30"
+						y="0"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Valuta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="126"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[10.2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="140"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[11. Ruta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="238"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[13. Informatii suplimentare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="112"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[10.1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="210"
+						width="555"
+						height="28"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="226"
+						width="10"
+						height="10"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="30"
+						y="70"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Numele/denumirea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="311"
+						y="210"
+						width="63"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Vehicolul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="182"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[11.3]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="70"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[9.1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="28"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[8.1]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="84"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CNE_ADR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="196"
+						width="555"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[12. Fotografii]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="126"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRANSPORT_ADR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="131"
+						y="224"
+						width="131"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Ascunzisul]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="378"
+						y="212"
+						width="10"
+						height="10"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="30"
+						y="182"
+						width="201"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[Ruta - puctele de trecere a frontierei]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="182"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{CRS_PNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="84"
+						width="30"
+						height="14"
+						key="staticText"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12" pdfEncoding ="Cp1250"/>
+					</textElement>
+				<text><![CDATA[9.2]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="231"
+						y="154"
+						width="324"
+						height="14"
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+</box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{RUT_CTY}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

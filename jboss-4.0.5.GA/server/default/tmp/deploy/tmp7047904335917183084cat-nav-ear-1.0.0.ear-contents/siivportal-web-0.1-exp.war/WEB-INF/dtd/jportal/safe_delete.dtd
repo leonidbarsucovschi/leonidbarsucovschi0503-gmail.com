@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DTD safe delete)-->
+<!ELEMENT foreign-key EMPTY>
+<!ATTLIST foreign-key
+	column-name CDATA #REQUIRED
+	fk-table-name CDATA #REQUIRED
+	fk-column-name CDATA #REQUIRED
+	mesaj CDATA #REQUIRED
+>
+<!ELEMENT foreign-keys (foreign-key*)>
+<!ELEMENT safe-delete (table+)>
+<!ELEMENT table (foreign-keys)>
+<!ATTLIST table
+	table-name CDATA #REQUIRED
+>

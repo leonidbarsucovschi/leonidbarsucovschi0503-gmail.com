@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="PlataPoluantiVhcNeinmatriculat"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SYS_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="operators" value="5;" />
+		<property name="type" value="91" />
+		<property name="required" value="true" />
+		<parameterDescription><![CDATA[DATA-Timpul Intrare in PostVAMAL]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND SYS_DAT BETWEEN to_date('11/02/2010', 'dd/mm/yy') AND to_date('12/02/2010', 'dd/mm/yy') "]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select  ECO_CATEGOR, count(*), SUM(SUM_ECO)
+from( 
+select SYS_DAT,SUM_ECO, ECO_CATEGOR, POST_NUM, DEL_MARK, POST_NUM
+from (
+select t_autocam.SYS_DATE as SYS_DAT, t_autocam.SUM_ECO, t_autocam.ECO_CATEGOR, CUO_COD as POST_NUM, DEL_MARK
+from gunic_user.T_AUTOCAM@gunic_siiv t_autocam
+join gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs ON gs.SYS_OPR_ID = t_autocam.SYS_OPR_ID
+union
+select t_autocar.SYS_DAT as SYS_DAT, t_autocar.SUM_ECO, t_autocar.ECO_CATEGOR, POST_NUM, DEL_MARK
+from gunic_user.T_AUTOCAR_REG@gunic_siiv t_autocar
+join gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs ON gs.SYS_OPR_ID = t_autocar.SYS_OPR_ID
+union
+select T_NEREG.SYS_DAT as SYS_DAT, T_NEREG.SUM_ECO, T_NEREG.ECO_CATEGOR, POST_NUM, DEL_MARK
+from gunic_user.T_AUTOCAR_NEREG@gunic_siiv T_NEREG
+join gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs ON gs.SYS_OPR_ID = T_NEREG.SYS_OPR_ID
+union
+select T_MOTO.SYS_DAT as SYS_DAT, T_MOTO.SUM_ECO, 'L' as ECO_CATEGOR, POST_NUM, DEL_MARK
+from gunic_user.T_MOTO@gunic_siiv T_MOTO
+join gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs ON gs.SYS_OPR_ID = T_MOTO.SYS_OPR_ID
+union
+select T_AUTOTUR.SYS_DAT as SYS_DAT, T_AUTOTUR.SUM_ECO, 'M-1' as ECO_CATEGOR, POST_NUM, DEL_MARK
+from gunic_user.T_AUTOTUR@gunic_siiv T_AUTOTUR
+join gunic_user.FR_GENERAL_SEGMENT@gunic_siiv gs ON gs.SYS_OPR_ID = T_AUTOTUR.SYS_OPR_ID
+)
+where POST_NUM <> '0000' and DEL_MARK <> 1
+$P!{SYS_DAT}
+)
+group by eco_categor
+]]></queryString>
+
+	<field name="ECO_CATEGOR" class="java.lang.String"/>
+	<field name="COUNT(*)" class="java.math.BigDecimal"/>
+	<field name="SUM(SUM_ECO)" class="java.math.BigDecimal"/>
+
+	<variable name="SYS_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{SYS_DAT}.length() <= 0 ?
+  "n-a fost indicat"
+  : ($P{SYS_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ?
+    $P{SYS_DAT}.substring($P{SYS_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SYS_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+    + " - " + $P{SYS_DAT}.substring($P{SYS_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{SYS_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19)
+    : ($P{SYS_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{SYS_DAT}.substring($P{SYS_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{SYS_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{SYS_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ?
+        "este null"
+        : ($P{SYS_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ?
+          "nu este null"
+          : ($P{SYS_DAT}.indexOf("'") >= 0 ?
+            $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf("'")+1,$P{SYS_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{SYS_DAT}.indexOf(">=") > 0 && $P{SYS_DAT}.indexOf("<=") > 0 ?
+              $P{SYS_DAT}.substring( $P{SYS_DAT}.indexOf(">=")+2, $P{SYS_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{SYS_DAT}.substring($P{SYS_DAT}.lastIndexOf("<=")+2, $P{SYS_DAT}.length() )
+              : ( $P{SYS_DAT}.indexOf(">") > 0 && $P{SYS_DAT}.indexOf("=") > 0 && $P{SYS_DAT}.indexOf("<") < 0 ?
+                $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf(">="),$P{SYS_DAT}.length() )
+                : ( $P{SYS_DAT}.indexOf("<") > 0 && $P{SYS_DAT}.indexOf("=") > 0 && $P{SYS_DAT}.indexOf(">") < 0 ?
+                  $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf("<="),$P{SYS_DAT}.length() )
+                  : ( $P{SYS_DAT}.indexOf(">") > 0 && $P{SYS_DAT}.indexOf("=") < 0 ?
+                    $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf(">"),$P{SYS_DAT}.length() )
+                    : ($P{SYS_DAT}.indexOf("<") > 0 && $P{SYS_DAT}.indexOf("=") < 0 ?
+                      $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf("<"), $P{SYS_DAT}.length() )
+                      : ( $P{SYS_DAT}.indexOf("=") > 0 ?
+                        $P{SYS_DAT}.substring($P{SYS_DAT}.indexOf("=")+1, $P{SYS_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="180"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="92"
+						y="11"
+						width="402"
+						height="51"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatii privind platile pentru emiterea de poluanti de la autovehicule neinmatriculate in RM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="13"
+						y="76"
+						width="68"
+						height="15"
+						key="staticText-13"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Perioada:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="101"
+						y="76"
+						width="160"
+						height="15"
+						key="textField-13"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{SYS_DAT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="36"
+						y="-143"
+						width="0"
+						height="0"
+						key="staticText-12"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Static Text]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="65"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="84"
+						y="0"
+						width="125"
+						height="65"
+						key="staticText-3"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Categoriile de autovehivule]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="209"
+						y="0"
+						width="115"
+						height="65"
+						key="staticText-8"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Numarul de autovehicule]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="64"
+						y="0"
+						width="20"
+						height="65"
+						key="staticText-15"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Nr.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="324"
+						y="0"
+						width="133"
+						height="65"
+						key="staticText-8"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+				<text><![CDATA[Plata achitata, lei]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="21"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="84"
+						y="0"
+						width="125"
+						height="21"
+						key="textField-9"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ECO_CATEGOR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="64"
+						y="0"
+						width="20"
+						height="21"
+						key="textField-14"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="209"
+						y="0"
+						width="115"
+						height="21"
+						key="textField-5"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{COUNT(*)}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="0"
+						width="133"
+						height="21"
+						key="textField-5"/>
+					<box>					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{SUM(SUM_ECO)}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="107"
+						y="18"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="307"
+						y="18"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-15"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="496"
+						y="18"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-16"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="35"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="5"
+						y="16"
+						width="209"
+						height="19"
+						forecolor="#000000"
+						key="textField-18"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format(new Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="109"
+						y="18"
+						width="290"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-17"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="309"
+						y="18"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField-19"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Helvetica"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="498"
+						y="18"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-20"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

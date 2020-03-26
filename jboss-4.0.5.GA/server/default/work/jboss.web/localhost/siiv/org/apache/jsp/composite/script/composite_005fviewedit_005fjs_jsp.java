@@ -1,0 +1,608 @@
+package org.apache.jsp.composite.script;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.jsp.*;
+import ro.uti.jpf.base.composite.util.CompositePresentationConst;
+import ro.uti.jpf.base.composite.util.CompositeConstants;
+
+public final class composite_005fviewedit_005fjs_jsp extends org.apache.jasper.runtime.HttpJspBase
+    implements org.apache.jasper.runtime.JspSourceDependent {
+
+  private static java.util.List _jspx_dependants;
+
+  static {
+    _jspx_dependants = new java.util.ArrayList(1);
+    _jspx_dependants.add("/WEB-INF/tld/struts/struts-bean.tld");
+  }
+
+  private org.apache.jasper.runtime.TagHandlerPool _jspx_tagPool_bean_message_key_bundle_nobody;
+
+  public Object getDependants() {
+    return _jspx_dependants;
+  }
+
+  public void _jspInit() {
+    _jspx_tagPool_bean_message_key_bundle_nobody = org.apache.jasper.runtime.TagHandlerPool.getTagHandlerPool(getServletConfig());
+  }
+
+  public void _jspDestroy() {
+    _jspx_tagPool_bean_message_key_bundle_nobody.release();
+  }
+
+  public void _jspService(HttpServletRequest request, HttpServletResponse response)
+        throws java.io.IOException, ServletException {
+
+    JspFactory _jspxFactory = null;
+    PageContext pageContext = null;
+    HttpSession session = null;
+    ServletContext application = null;
+    ServletConfig config = null;
+    JspWriter out = null;
+    Object page = this;
+    JspWriter _jspx_out = null;
+    PageContext _jspx_page_context = null;
+
+
+    try {
+      _jspxFactory = JspFactory.getDefaultFactory();
+      response.setContentType("text/javascript; charset=iso-8859-2");
+      pageContext = _jspxFactory.getPageContext(this, request, response,
+      			null, true, 8192, true);
+      _jspx_page_context = pageContext;
+      application = pageContext.getServletContext();
+      config = pageContext.getServletConfig();
+      session = pageContext.getSession();
+      out = pageContext.getOut();
+      _jspx_out = out;
+
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("var compositeFormElementTypes = [\"hidden\", \"text\", \"password\", \"textarea\",\r\n");
+      out.write("    \"select-one\", \"select-multiple\", \"radio\", \"checkbox\",\r\n");
+      out.write("    \"file\"];\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeCallComponentPageLoadedFunction(componentID) {\r\n");
+      out.write("    if (typeof(componentID) != \"string\") {\r\n");
+      out.write("        alert(\"compositeCallComponentPageLoadedFunction: invalid component: \"\r\n");
+      out.write("                + componentID);\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var fname = componentID + \"");
+      out.print(CompositePresentationConst.COMPONENT_LOADED_JSFCT_SUFFIX);
+      out.write("\";\r\n");
+      out.write("\r\n");
+      out.write("    if (eval(\"typeof(\" + fname + \")\") != \"function\") {\r\n");
+      out.write("        alert(\"compositeCallComponentPageLoadedFunction: '\" + fname\r\n");
+      out.write("            + \"' is missing or is not a function!\");\r\n");
+      out.write("\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    eval(fname + \"()\");\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeComponentRequiresValidation(componentID) {\r\n");
+      out.write("    if (typeof(componentID) != \"string\") {\r\n");
+      out.write("        alert(\"compositeComponentRequiresValidation: invalid component ID\");\r\n");
+      out.write("        return false;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var fname = componentID\r\n");
+      out.write("        + \"");
+      out.print(CompositePresentationConst.COMPONENT_REQUIRES_VALIDATION_JSFCT_SUFFIX);
+      out.write("\";\r\n");
+      out.write("\r\n");
+      out.write("    if (eval(\"typeof(\" + fname + \")\") != \"function\") {\r\n");
+      out.write("        alert(\"compositeComponentRequiresValidation: '\" + fname\r\n");
+      out.write("            + \"' is missing or is not a function!\");\r\n");
+      out.write("\r\n");
+      out.write("        return false;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    return eval(fname + \"()\");\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeChangeComponentVisibility(componentID, visible) {\r\n");
+      out.write("    if (typeof(componentID) != \"string\") {\r\n");
+      out.write("        alert(\"compositeChangeComponentVisibility: invalid component: \" + componentID);\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var elemID = \"");
+      out.print(CompositePresentationConst.COMPONENT_ELEMENT_ID_PREFIX);
+      out.write("\"\r\n");
+      out.write("        + componentID;\r\n");
+      out.write("\r\n");
+      out.write("    var elem = document.getElementById(elemID);\r\n");
+      out.write("\r\n");
+      out.write("    if (elem == null) {\r\n");
+      out.write("        alert(\"compositeChangeComponentVisibility: element with ID=\" + elemID + \" is missing!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    visible = typeof(visible) == \"boolean\"\r\n");
+      out.write("        ? visible : (elem.className == \"composite-hidden\");\r\n");
+      out.write("\r\n");
+      out.write("    if (visible) {\r\n");
+      out.write("        if (elem.className == \"composite-hidden\") {\r\n");
+      out.write("            elem.className = typeof(elem.compositeSavedClassName) == \"undefined\"\r\n");
+      out.write("                    ? \"\" : elem.compositeSavedClassName;\r\n");
+      out.write("        }\r\n");
+      out.write("    } else {\r\n");
+      out.write("        if (elem.className != \"composite-hidden\") {\r\n");
+      out.write("            elem.compositeSavedClassName = elem.className;\r\n");
+      out.write("            elem.className = \"composite-hidden\";\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeSetComponentMessages(componentID, messages, areErrors) {\r\n");
+      out.write("    if (arguments.length != 3) {\r\n");
+      out.write("        alert(\"compositeSetComponentMessages: invalid number of arguments\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (componentID == null) {\r\n");
+      out.write("        var elemID = areErrors? \"");
+      out.print(CompositePresentationConst.GLOBAL_ERRORS_ELEMENT_ID);
+      out.write("\"\r\n");
+      out.write("                : \"");
+      out.print(CompositePresentationConst.GLOBAL_MESSAGES_ELEMENT_ID);
+      out.write("\";\r\n");
+      out.write("    } else {\r\n");
+      out.write("        var elemID = areErrors ? \"");
+      out.print(CompositePresentationConst.COMPONENT_ERRORS_ELEMENT_ID_PREFIX);
+      out.write("\"\r\n");
+      out.write("                : \"");
+      out.print(CompositePresentationConst.COMPONENT_MESSAGES_ELEMENT_ID_PREFIX);
+      out.write("\";\r\n");
+      out.write("\r\n");
+      out.write("        elemID = elemID + componentID;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var elem = document.getElementById(elemID);\r\n");
+      out.write("\r\n");
+      out.write("    if (elem == null) {\r\n");
+      out.write("        alert(\"compositeSetComponentMessages: element with ID=\" + elemID + \" is missing!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    compositeSetMessages(elem, messages, areErrors);\r\n");
+      out.write("\r\n");
+      out.write("    if ((componentID != null) && (compositeTrim(messages).length > 0)) {\r\n");
+      out.write("        compositeChangeComponentVisibility(componentID, true);\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeSetMessages(elem, messages, areErrors) {\r\n");
+      out.write("    if (arguments.length != 3) {\r\n");
+      out.write("        alert(\"compositeSetMessages: invalid number of arguments\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var content = (messages == null) ? \"\" : messages;\r\n");
+      out.write("\r\n");
+      out.write("    elem.innerHTML = content;\r\n");
+      out.write("    elem.className = content.length == 0 ? \"composite:hidden\"\r\n");
+      out.write("            : (areErrors ? \"composite-errors-cell\" : \"composite-messages-cell\");\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeReplaceFocusFunction(componentID) {\r\n");
+      out.write("    if (typeof(componentID) != \"string\") {\r\n");
+      out.write("        alert(\"compositeReplaceFocusFunction: invalid component: \" + componentID);\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var elemID = \"");
+      out.print(CompositePresentationConst.COMPONENT_ELEMENT_ID_PREFIX);
+      out.write("\"\r\n");
+      out.write("            + componentID;\r\n");
+      out.write("\r\n");
+      out.write("    var elem = document.getElementById(elemID);\r\n");
+      out.write("\r\n");
+      out.write("    if (elem == null) {\r\n");
+      out.write("        alert(\"compositeReplaceFocusFunction: element with ID=\" + elemID + \" is missing!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    compositeReplaceElementFocusFunction(elem, componentID);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeReplaceElementFocusFunction(elem, componentID) {\r\n");
+      out.write("    if ((typeof(elem) != \"object\") || (typeof(componentID) != \"string\")) {\r\n");
+      out.write("        alert(\"compositeReplaceElementFocusFunction: invalid function arguments!\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    for (var i = 0; i < compositeFormElementTypes.length; i++) {\r\n");
+      out.write("        if (elem.type == compositeFormElementTypes[i]) {\r\n");
+      out.write("            elem.compositeOldFocusFunction = elem.focus;\r\n");
+      out.write("            elem.focus = new Function(\"compositeElementFocus(this, \\\"\"\r\n");
+      out.write("                + componentID + \"\\\")\");\r\n");
+      out.write("            break;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    for (var i = 0; i < elem.childNodes.length; i++) {\r\n");
+      out.write("        compositeReplaceElementFocusFunction(elem.childNodes.item(i),\r\n");
+      out.write("                componentID);\r\n");
+      out.write("    }\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeElementFocus(elem, componentID) {\r\n");
+      out.write("    compositeChangeComponentVisibility(componentID, true);\r\n");
+      out.write("    elem.compositeOldFocusFunction();\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeValidateComponentFormData(componentID, prefix) {\r\n");
+      out.write("    if (typeof(componentID) != \"string\") {\r\n");
+      out.write("        alert(\"compositeValidateComponentFormData: invalid component: \" + componentID);\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    prefix = typeof(prefix) == \"undefined\" ? \"\" : prefix;\r\n");
+      out.write("\r\n");
+      out.write("    var form = document.getElementById(\"");
+      out.print(CompositePresentationConst.FORM_ID);
+      out.write("\");\r\n");
+      out.write("    var name = form.name;\r\n");
+      out.write("\r\n");
+      out.write("    var fullFormName = ((prefix.length > 0) ? prefix + \"_\" : \"\") + name\r\n");
+      out.write("            + \"_\" + componentID;\r\n");
+      out.write("\r\n");
+      out.write("    var fname = \"validate\" + fullFormName.substr(0, 1).toUpperCase()\r\n");
+      out.write("            + fullFormName.substring(1);\r\n");
+      out.write("\r\n");
+      out.write("    form.name = fullFormName;\r\n");
+      out.write("\r\n");
+      out.write("    var result = eval(\"typeof(\" + fname + \") == \\\"undefined\\\" ? true : \"\r\n");
+      out.write("            + fname + \"(form)\");\r\n");
+      out.write("\r\n");
+      out.write("    form.name = name;\r\n");
+      out.write("    return result;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeGetHTMLForm(fastRequest) {\r\n");
+      out.write("    if (typeof(fastRequest) != \"boolean\") {\r\n");
+      out.write("        alert(\"compositeGetHTMLForm: invalid fastRequest parameter\");\r\n");
+      out.write("        return null;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var formID = fastRequest ? \"");
+      out.print(CompositePresentationConst.FAST_FORM_ID);
+      out.write("\"\r\n");
+      out.write("            : \"");
+      out.print(CompositePresentationConst.FORM_ID);
+      out.write("\";\r\n");
+      out.write("\r\n");
+      out.write("    var form = document.getElementById(formID);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        alert(\"compositeGetHTMLForm: missing form with id=\" + formID);\r\n");
+      out.write("        return null;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    if (typeof(form.onsubmit) == \"function\") {\r\n");
+      out.write("        if (!form.onsubmit()) {\r\n");
+      out.write("            return null;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    compositePrepareFormForSubmission(form);\r\n");
+      out.write("    return form;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositePrepareFormForSubmission(form) {\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"unspecified\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_COMPONENT_ID);
+      out.write(".value = \"\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_DETAILS_RENDER_MODE);
+      out.write(".value = \"\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_OPERATION);
+      out.write(".value = \"\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_CALLBACK_FUNCTION_NAME);
+      out.write(".value = \"\";\r\n");
+      out.write("\r\n");
+      out.write("    form.target = \"");
+      out.print(CompositePresentationConst.HIDDEN_IFRAME_NAME);
+      out.write("\";\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeChangeCurrentDetail(detailID, fastRequest) {\r\n");
+      out.write("    if (arguments.length != 2) {\r\n");
+      out.write("        alert(\"compositeChangeCurrentDetail: invalid function arguments\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = compositeGetHTMLForm(fastRequest);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("\tif (!__invocationArray.run())\r\n");
+      out.write("\t\treturn;\r\n");
+      out.write("\r\n");
+      out.write("    form.target = \"");
+      out.print(CompositePresentationConst.HIDDEN_IFRAME_NAME);
+      out.write("\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"changeCurrentDetail\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_COMPONENT_ID);
+      out.write(".value = detailID;\r\n");
+      out.write("\r\n");
+      out.write("    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("\r\n");
+      out.write("\tform.");
+      out.print(CompositePresentationConst.EDIT_MODE_ID);
+      out.write(".value = false;\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeChangeDetailsRenderMode(mode, fastRequest) {\r\n");
+      out.write("    if (arguments.length != 2) {\r\n");
+      out.write("        alert(\"compositeChangeDetailRenderMode: invalid function arguments\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = compositeGetHTMLForm(fastRequest);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"changeDetailsRenderMode\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_DETAILS_RENDER_MODE);
+      out.write(".value = \"\" + mode;\r\n");
+      out.write("\r\n");
+      out.write("    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeExecuteOperation(operation, componentID,\r\n");
+      out.write("        fastRequest, callbackFunction, submit) {\r\n");
+      out.write("   \r\n");
+      out.write("    var form = compositeGetHTMLForm(fastRequest);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"operation\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_OPERATION);
+      out.write(".value = operation;\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_COMPONENT_ID);
+      out.write(".value =\r\n");
+      out.write("            componentID == null ? \"\" : componentID;\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_CALLBACK_FUNCTION_NAME);
+      out.write(".value =\r\n");
+      out.write("            typeof(callbackFunction) == \"string\"\r\n");
+      out.write("            ? callbackFunction : \"\";\r\n");
+      out.write("\r\n");
+      out.write("    if (submit == null || submit == true ) {\r\n");
+      out.write("\t    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("\tform.");
+      out.print(CompositeConstants.PARAM_CALLBACK_FUNCTION_NAME);
+      out.write(".value = \"\";\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeExecuteComponentOperation(componentID, operation,\r\n");
+      out.write("            fastRequest, callbackFunction, submit) {\r\n");
+      out.write("    compositeExecuteOperation(operation, componentID,\r\n");
+      out.write("            fastRequest, callbackFunction, submit);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeReloadComponents(components, fastRequest,\r\n");
+      out.write("            callbackFunction) {\r\n");
+      out.write("    if (arguments.length != 3) {\r\n");
+      out.write("        alert(\"compositeReloadComponents: invalid function arguments\");\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = compositeGetHTMLForm(fastRequest);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var componentsParam = new String();\r\n");
+      out.write("    for (var i = 0; i < components.length; i++) {\r\n");
+      out.write("        componentsParam = componentsParam + (i == 0 ? \"\" : \",\") + components[i];\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"reloadComponents\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_COMPONENT_ID);
+      out.write(".value = componentsParam;\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_CALLBACK_FUNCTION_NAME);
+      out.write(".value =\r\n");
+      out.write("            typeof(callbackFunction) == \"string\" ? callbackFunction : \"\";\r\n");
+      out.write("\r\n");
+      out.write("    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeSave() {\r\n");
+      out.write("    if (!confirm(\"");
+      if (_jspx_meth_bean_message_0(_jspx_page_context))
+        return;
+      out.write("\")) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = compositeGetHTMLForm(false);\r\n");
+      out.write("\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"save\";\r\n");
+      out.write("    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeDelete() {\r\n");
+      out.write("    if (!confirm(\"");
+      if (_jspx_meth_bean_message_1(_jspx_page_context))
+        return;
+      out.write("\")) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = compositeGetHTMLForm(false);\r\n");
+      out.write("    if (form == null) {\r\n");
+      out.write("        return;\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"delete\";\r\n");
+      out.write("    compositeSubmitFormToHiddenFrame(form);\r\n");
+      out.write("}\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("function compositeCloseViewEditPage(askConfirmation) {\r\n");
+      out.write("    var ask = (typeof(askConfirmation) == \"boolean\") ? askConfirmation : true;\r\n");
+      out.write("\r\n");
+      out.write("    if (ask) {\r\n");
+      out.write("        if (!confirm(\"");
+      if (_jspx_meth_bean_message_2(_jspx_page_context))
+        return;
+      out.write("\")) {\r\n");
+      out.write("            return;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
+      out.write("\r\n");
+      out.write("    var form = document.getElementById(\"");
+      out.print(CompositePresentationConst.FAST_FORM_ID);
+      out.write("\");\r\n");
+      out.write("    compositePrepareFormForSubmission(form);\r\n");
+      out.write("\r\n");
+      out.write("    form.target = \"_self\";\r\n");
+      out.write("    form.");
+      out.print(CompositeConstants.PARAM_METHOD_NAME);
+      out.write(".value = \"closeViewEdit\";\r\n");
+      out.write("    form.submit();\r\n");
+      out.write("}\r\n");
+    } catch (Throwable t) {
+      if (!(t instanceof SkipPageException)){
+        out = _jspx_out;
+        if (out != null && out.getBufferSize() != 0)
+          out.clearBuffer();
+        if (_jspx_page_context != null) _jspx_page_context.handlePageException(t);
+      }
+    } finally {
+      if (_jspxFactory != null) _jspxFactory.releasePageContext(_jspx_page_context);
+    }
+  }
+
+  private boolean _jspx_meth_bean_message_0(PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  bean:message
+    org.apache.struts.taglib.bean.MessageTag _jspx_th_bean_message_0 = (org.apache.struts.taglib.bean.MessageTag) _jspx_tagPool_bean_message_key_bundle_nobody.get(org.apache.struts.taglib.bean.MessageTag.class);
+    _jspx_th_bean_message_0.setPageContext(_jspx_page_context);
+    _jspx_th_bean_message_0.setParent(null);
+    _jspx_th_bean_message_0.setKey("composite.confirm.save_composite_record");
+    _jspx_th_bean_message_0.setBundle("composite");
+    int _jspx_eval_bean_message_0 = _jspx_th_bean_message_0.doStartTag();
+    if (_jspx_th_bean_message_0.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
+      _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_0);
+      return true;
+    }
+    _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_0);
+    return false;
+  }
+
+  private boolean _jspx_meth_bean_message_1(PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  bean:message
+    org.apache.struts.taglib.bean.MessageTag _jspx_th_bean_message_1 = (org.apache.struts.taglib.bean.MessageTag) _jspx_tagPool_bean_message_key_bundle_nobody.get(org.apache.struts.taglib.bean.MessageTag.class);
+    _jspx_th_bean_message_1.setPageContext(_jspx_page_context);
+    _jspx_th_bean_message_1.setParent(null);
+    _jspx_th_bean_message_1.setKey("composite.confirm.delete_composite_record");
+    _jspx_th_bean_message_1.setBundle("composite");
+    int _jspx_eval_bean_message_1 = _jspx_th_bean_message_1.doStartTag();
+    if (_jspx_th_bean_message_1.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
+      _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_1);
+      return true;
+    }
+    _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_1);
+    return false;
+  }
+
+  private boolean _jspx_meth_bean_message_2(PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  bean:message
+    org.apache.struts.taglib.bean.MessageTag _jspx_th_bean_message_2 = (org.apache.struts.taglib.bean.MessageTag) _jspx_tagPool_bean_message_key_bundle_nobody.get(org.apache.struts.taglib.bean.MessageTag.class);
+    _jspx_th_bean_message_2.setPageContext(_jspx_page_context);
+    _jspx_th_bean_message_2.setParent(null);
+    _jspx_th_bean_message_2.setKey("composite.confirm.close_viewedit");
+    _jspx_th_bean_message_2.setBundle("composite");
+    int _jspx_eval_bean_message_2 = _jspx_th_bean_message_2.doStartTag();
+    if (_jspx_th_bean_message_2.doEndTag() == javax.servlet.jsp.tagext.Tag.SKIP_PAGE) {
+      _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_2);
+      return true;
+    }
+    _jspx_tagPool_bean_message_key_bundle_nobody.reuse(_jspx_th_bean_message_2);
+    return false;
+  }
+}

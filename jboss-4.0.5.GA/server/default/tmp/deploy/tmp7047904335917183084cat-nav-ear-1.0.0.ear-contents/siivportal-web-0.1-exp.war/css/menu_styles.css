@@ -1,0 +1,109 @@
+
+/*---------------------------------------------------
+Global Menu formatting
+---------------------------------------------------*/
+	div.netscapemenubar,
+		div.menubar a.footerButton,
+		div.menubar a.menubutton,
+		div.menubar a.singlemenubutton,
+		div.menu,
+		div.menu a.menuitem,
+		div.footer  {
+		  font-size: 8pt;
+		  font-weight: normal;
+		  color: #FFFFFF;
+		  font-family:Geneva, Arial, Helvetica, sans-serif;
+		  text-decoration: none;
+		}
+
+		div.menubar {
+		  background-color: #2F6090;
+		  border-top: 0px solid #d5d5d5;
+		  border-left: 0px inset #ffffff;
+		  /*border-right:;*/
+		  border-bottom: 0px solid #d5d5d5;
+		  padding-top: 0px;
+		  padding-bottom: 2px;
+		  padding-left: 2px;
+		  padding-right: 2px;
+		  margin-top: 0px;
+		  text-align: left;
+		  color: #333333;
+		  text-decoration: none;
+		}
+		div.menudiv {
+		  background-color: #2F6090;
+		  text-decoration:none;
+		}
+
+		a.menubutton {
+		  background-color: #2F6090;
+		  border-left: 0px ridge #ffffff;
+		  color: #ffffff;
+		  cursor: pointer;
+		  left: 0px;
+		  padding: 3px 8px 4px 8px;
+		  line-height: .2in;
+		  text-decoration: none;
+		  top: 0px;
+		  z-index: 999;
+
+		}
+
+		a.menubutton:hover {
+		  background-color: #FFCC00;
+		  color: #0066CC;
+		  text-decoration:none;
+
+		}
+
+		a.menubuttonactive,
+		a.menubuttonactive:hover {
+		  color: #0066CC;
+		  left: 0px;
+		  top: 0px;
+		  text-decoration: none;
+
+		}
+
+		div.menu {
+		  background-color: #2F6090;
+		  border-top: 1px solid #d5d5d5;
+		  border-left: 1px solid #d5d5d5;
+		  border-right: 1px solid #d5d5d5;
+		  border-bottom: 1px solid #d5d5d5;
+		  left: 0px;
+		  margin: 1px 0px 0px 0px;
+		  padding: 0px 0px 0px 0px;
+		  top: 0px;
+		  position: absolute;
+		  visibility: hidden;
+		  z-index: 999;
+		  text-decoration: none;
+		}
+
+		div.menu a.menuitem {
+		  color: #ffffff;
+		  cursor: pointer;
+		  display: block;
+		  padding: 4px 1em;
+		  text-decoration: none;
+		  white-space: nowrap;
+		}
+
+		div.menu a.menuitem:hover, div.menu a.menuitemhighlight {
+		  background-color: #FFCC00;
+		  color: #0066CC;
+		}
+
+		div.menu a.menuitem span.menuitemtext {}
+
+		div.menu a.menuitem span.menuitemarrow {
+		  margin-right: 4px;
+		}
+
+		div.menu div.menuitemsep {
+		  border: 1px inset #e0e0e0;
+		  margin: 3px 2px;
+		}
+

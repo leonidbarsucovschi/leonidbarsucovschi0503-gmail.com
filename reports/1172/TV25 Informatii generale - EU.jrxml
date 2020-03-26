@@ -1,0 +1,2071 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="TV25 Informatii generale"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="814"
+		 columnSpacing="0"
+		 leftMargin="14"
+		 rightMargin="14"
+		 topMargin="14"
+		 bottomMargin="14"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="TV25_GEN_SEG.IDE_REG_DAT" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="91" />
+		<property name="visible" value="true" />
+		<property name="required" value="true" />
+		<property name="operators" value="0;5;" />
+		<parameterDescription><![CDATA[Data inregistrare TV25:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[" AND TV25_GEN_SEG.IDE_REG_DAT BETWEEN TO_DATE('24/09/2007','dd/mm/yyyy') AND TO_DATE('25/09/2007','dd/mm/yyyy')"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TV25_REF_NBR" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;" />
+		<parameterDescription><![CDATA[Numar TV25:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.DOC_CUO_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCUOTAB" />
+		<property name="nomenclator_id" value="CUO_COD" />
+		<property name="nomenclator_code" value="CUO_COD" />
+		<property name="nomenclator_descr" value="CUO_NAM" />
+		<parameterDescription><![CDATA[Birou/Post vamal inregistrare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.PRS_COD" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[IDNP:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.PRS_NAM" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Nume:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_NBR" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Nr. transport:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_MRK_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="MDAMCTAB" />
+		<property name="nomenclator_id" value="COD_MOD" />
+		<property name="nomenclator_code" value="COD_MOD" />
+		<property name="nomenclator_descr" value="NAM_MOD" />
+		<parameterDescription><![CDATA[Marca:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_MRK_TYP" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Tip marca:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_YER" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="2" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;" />
+		<parameterDescription><![CDATA[An producere:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_CTY_BUY_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara cumparare:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_CTY_PRD_COD" isForPrompting="false" class="java.lang.String">
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="nomenclator_table" value="UNCTYTAB" />
+		<property name="nomenclator_id" value="CTY_COD" />
+		<property name="nomenclator_code" value="CTY_COD" />
+		<property name="nomenclator_descr" value="CTY_DSC" />
+		<parameterDescription><![CDATA[Tara productie:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_CRS" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Caroserie:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_VIN" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Vin cod:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_SHS" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Sasiu:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TV25_GEN_SEG.TRS_ENG_NBR" isForPrompting="false" class="java.lang.String">
+		<property name="type" value="12" />
+		<property name="visible" value="true" />
+		<property name="required" value="false" />
+		<property name="operators" value="0;6;7;8;" />
+		<parameterDescription><![CDATA[Nr motor:]]></parameterDescription>
+		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT case when DOC_TYP=1 then 'PV14'
+            when DOC_TYP=0 then 'DV'
+            else '' end tip, DOC_REF,
+       DOC_CUO_COD,FULLNAME,IDE_REG_YER,TRS_MRK_TYP,TRS_MRK_NAM,
+       TRS_YER,TRS_VIN,TRS_ENG_NBR,TRS_ENG_VOL,TRS_CTY_PRD_COD,TRS_CTY_BUY_COD
+FROM (            
+SELECT TV25_GEN_SEG.DOC_TYP, TV25_GEN_SEG.IDE_REG_DAT,TV25_GEN_SEG.DOC_REF,
+TV25_GEN_SEG.DOC_CUO_COD,  
+TV25_GEN_SEG.FULLNAME,
+TV25_GEN_SEG.IDE_REG_YER,
+TV25_GEN_SEG.TRS_MRK_TYP,
+TV25_GEN_SEG.TRS_MRK_NAM,
+TV25_GEN_SEG.TRS_YER, 
+TV25_GEN_SEG.TRS_VIN, 
+TV25_GEN_SEG.TRS_ENG_NBR,
+TV25_GEN_SEG.TRS_ENG_VOL, 
+TV25_GEN_SEG.TRS_CTY_PRD_COD,
+TV25_GEN_SEG.TRS_CTY_BUY_COD
+FROM TV25_GEN_SEG 
+join PV14_GEN_SEG pv14 on TV25_GEN_SEG.DOC_REF=PV14.PV14_REF_NBR
+WHERE TV25_GEN_SEG.STATUS = 'Registered'
+and PV14.PV14_CTY_COD='UA'
+$P!{TV25_GEN_SEG.PRS_COD} 
+$P!{TV25_GEN_SEG.PRS_NAM} 
+$P!{TV25_GEN_SEG.IDE_REG_DAT} 
+$P!{TV25_GEN_SEG.TV25_REF_NBR} 
+$P!{TV25_GEN_SEG.DOC_CUO_COD} 
+$P!{TV25_GEN_SEG.TRS_NBR} 
+$P!{TV25_GEN_SEG.TRS_MRK_COD} 
+$P!{TV25_GEN_SEG.TRS_MRK_TYP} 
+$P!{TV25_GEN_SEG.TRS_YER} 
+$P!{TV25_GEN_SEG.TRS_CTY_BUY_COD} 
+$P!{TV25_GEN_SEG.TRS_CTY_PRD_COD} 
+$P!{TV25_GEN_SEG.TRS_CRS} 
+$P!{TV25_GEN_SEG.TRS_VIN} 
+$P!{TV25_GEN_SEG.TRS_SHS} 
+$P!{TV25_GEN_SEG.TRS_ENG_NBR} 
+union
+SELECT TV25_GEN_SEG.DOC_TYP, TV25_GEN_SEG.IDE_REG_DAT,
+TV25_GEN_SEG.DOC_REF,
+TV25_GEN_SEG.DOC_CUO_COD,  
+TV25_GEN_SEG.FULLNAME,
+TV25_GEN_SEG.IDE_REG_YER,
+TV25_GEN_SEG.TRS_MRK_TYP,
+TV25_GEN_SEG.TRS_MRK_NAM,
+TV25_GEN_SEG.TRS_YER, 
+TV25_GEN_SEG.TRS_VIN, 
+TV25_GEN_SEG.TRS_ENG_NBR,
+TV25_GEN_SEG.TRS_ENG_VOL, 
+TV25_GEN_SEG.TRS_CTY_PRD_COD,
+TV25_GEN_SEG.TRS_CTY_BUY_COD
+FROM TV25_GEN_SEG 
+join sad_general_segment sad on TV25_GEN_SEG.DOC_REF=SAD.DEC_REF_NBR
+WHERE TV25_GEN_SEG.STATUS = 'Registered'
+and (SAD.GEN_CTY_DES_COD='UA' or SAD.GEN_CTY_EPT_COD='UA')
+$P!{TV25_GEN_SEG.PRS_COD} 
+$P!{TV25_GEN_SEG.PRS_NAM} 
+$P!{TV25_GEN_SEG.IDE_REG_DAT} 
+$P!{TV25_GEN_SEG.TV25_REF_NBR} 
+$P!{TV25_GEN_SEG.DOC_CUO_COD} 
+$P!{TV25_GEN_SEG.TRS_NBR} 
+$P!{TV25_GEN_SEG.TRS_MRK_COD} 
+$P!{TV25_GEN_SEG.TRS_MRK_TYP} 
+$P!{TV25_GEN_SEG.TRS_YER} 
+$P!{TV25_GEN_SEG.TRS_CTY_BUY_COD} 
+$P!{TV25_GEN_SEG.TRS_CTY_PRD_COD} 
+$P!{TV25_GEN_SEG.TRS_CRS} 
+$P!{TV25_GEN_SEG.TRS_VIN} 
+$P!{TV25_GEN_SEG.TRS_SHS} 
+$P!{TV25_GEN_SEG.TRS_ENG_NBR} 
+)
+ORDER BY TO_CHAR(IDE_REG_DAT,'dd/mm/yyyy')]]></queryString>
+
+	<field name="TIP" class="java.lang.String"/>
+	<field name="DOC_REF" class="java.lang.String"/>
+	<field name="DOC_CUO_COD" class="java.lang.String"/>
+	<field name="FULLNAME" class="java.lang.String"/>
+	<field name="IDE_REG_YER" class="java.math.BigDecimal"/>
+	<field name="TRS_MRK_TYP" class="java.lang.String"/>
+	<field name="TRS_MRK_NAM" class="java.lang.String"/>
+	<field name="TRS_YER" class="java.math.BigDecimal"/>
+	<field name="TRS_VIN" class="java.lang.String"/>
+	<field name="TRS_ENG_NBR" class="java.lang.String"/>
+	<field name="TRS_ENG_VOL" class="java.math.BigDecimal"/>
+	<field name="TRS_CTY_PRD_COD" class="java.lang.String"/>
+	<field name="TRS_CTY_BUY_COD" class="java.lang.String"/>
+
+	<variable name="TV25_GEN_SEG.IDE_REG_DAT" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.IDE_REG_DAT}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.IDE_REG_DAT}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("'")+1,$P{TV25_GEN_SEG.IDE_REG_DAT}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.IDE_REG_DAT}.substring( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">=")+2, $P{TV25_GEN_SEG.IDE_REG_DAT}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.IDE_REG_DAT}.length() )
+              : ( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">="),$P{TV25_GEN_SEG.IDE_REG_DAT}.length() )
+                : ( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<="),$P{TV25_GEN_SEG.IDE_REG_DAT}.length() ) 
+                  : ( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf(">"),$P{TV25_GEN_SEG.IDE_REG_DAT}.length() )
+                    : ($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<") > 0 && $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("<"), $P{TV25_GEN_SEG.IDE_REG_DAT}.length() )
+                      : ( $P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.IDE_REG_DAT}.substring($P{TV25_GEN_SEG.IDE_REG_DAT}.indexOf("=")+1, $P{TV25_GEN_SEG.IDE_REG_DAT}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TV25_REF_NBR" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TV25_REF_NBR}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TV25_REF_NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("'")+1,$P{TV25_GEN_SEG.TV25_REF_NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TV25_REF_NBR}.substring( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">=")+2, $P{TV25_GEN_SEG.TV25_REF_NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TV25_REF_NBR}.length() )
+              : ( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">="),$P{TV25_GEN_SEG.TV25_REF_NBR}.length() )
+                : ( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<="),$P{TV25_GEN_SEG.TV25_REF_NBR}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf(">"),$P{TV25_GEN_SEG.TV25_REF_NBR}.length() )
+                    : ($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("<"), $P{TV25_GEN_SEG.TV25_REF_NBR}.length() )
+                      : ( $P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TV25_REF_NBR}.substring($P{TV25_GEN_SEG.TV25_REF_NBR}.indexOf("=")+1, $P{TV25_GEN_SEG.TV25_REF_NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.DOC_CUO_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.DOC_CUO_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.DOC_CUO_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("'")+1,$P{TV25_GEN_SEG.DOC_CUO_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.DOC_CUO_COD}.substring( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">=")+2, $P{TV25_GEN_SEG.DOC_CUO_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.DOC_CUO_COD}.length() )
+              : ( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">="),$P{TV25_GEN_SEG.DOC_CUO_COD}.length() )
+                : ( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<="),$P{TV25_GEN_SEG.DOC_CUO_COD}.length() ) 
+                  : ( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf(">"),$P{TV25_GEN_SEG.DOC_CUO_COD}.length() )
+                    : ($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("<"), $P{TV25_GEN_SEG.DOC_CUO_COD}.length() )
+                      : ( $P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.DOC_CUO_COD}.substring($P{TV25_GEN_SEG.DOC_CUO_COD}.indexOf("=")+1, $P{TV25_GEN_SEG.DOC_CUO_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.PRS_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.PRS_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.PRS_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.PRS_COD}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf("'")+1,$P{TV25_GEN_SEG.PRS_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.PRS_COD}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.PRS_COD}.substring( $P{TV25_GEN_SEG.PRS_COD}.indexOf(">=")+2, $P{TV25_GEN_SEG.PRS_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.PRS_COD}.length() )
+              : ( $P{TV25_GEN_SEG.PRS_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf(">="),$P{TV25_GEN_SEG.PRS_COD}.length() )
+                : ( $P{TV25_GEN_SEG.PRS_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf("<="),$P{TV25_GEN_SEG.PRS_COD}.length() ) 
+                  : ( $P{TV25_GEN_SEG.PRS_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf(">"),$P{TV25_GEN_SEG.PRS_COD}.length() )
+                    : ($P{TV25_GEN_SEG.PRS_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.PRS_COD}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf("<"), $P{TV25_GEN_SEG.PRS_COD}.length() )
+                      : ( $P{TV25_GEN_SEG.PRS_COD}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.PRS_COD}.substring($P{TV25_GEN_SEG.PRS_COD}.indexOf("=")+1, $P{TV25_GEN_SEG.PRS_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.PRS_NAM" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.PRS_NAM}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.PRS_NAM}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.PRS_NAM}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf("'")+1,$P{TV25_GEN_SEG.PRS_NAM}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.PRS_NAM}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.PRS_NAM}.substring( $P{TV25_GEN_SEG.PRS_NAM}.indexOf(">=")+2, $P{TV25_GEN_SEG.PRS_NAM}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.PRS_NAM}.length() )
+              : ( $P{TV25_GEN_SEG.PRS_NAM}.indexOf(">") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("=") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf(">="),$P{TV25_GEN_SEG.PRS_NAM}.length() )
+                : ( $P{TV25_GEN_SEG.PRS_NAM}.indexOf("<") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("=") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf("<="),$P{TV25_GEN_SEG.PRS_NAM}.length() ) 
+                  : ( $P{TV25_GEN_SEG.PRS_NAM}.indexOf(">") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf(">"),$P{TV25_GEN_SEG.PRS_NAM}.length() )
+                    : ($P{TV25_GEN_SEG.PRS_NAM}.indexOf("<") > 0 && $P{TV25_GEN_SEG.PRS_NAM}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf("<"), $P{TV25_GEN_SEG.PRS_NAM}.length() )
+                      : ( $P{TV25_GEN_SEG.PRS_NAM}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.PRS_NAM}.substring($P{TV25_GEN_SEG.PRS_NAM}.indexOf("=")+1, $P{TV25_GEN_SEG.PRS_NAM}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_NBR" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_NBR}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_NBR}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_NBR}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_NBR}.substring( $P{TV25_GEN_SEG.TRS_NBR}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_NBR}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf(">="),$P{TV25_GEN_SEG.TRS_NBR}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf("<="),$P{TV25_GEN_SEG.TRS_NBR}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf(">"),$P{TV25_GEN_SEG.TRS_NBR}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_NBR}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf("<"), $P{TV25_GEN_SEG.TRS_NBR}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_NBR}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_NBR}.substring($P{TV25_GEN_SEG.TRS_NBR}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_MRK_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_MRK_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_MRK_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_MRK_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_MRK_COD}.substring( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_MRK_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_MRK_COD}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">="),$P{TV25_GEN_SEG.TRS_MRK_COD}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<="),$P{TV25_GEN_SEG.TRS_MRK_COD}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf(">"),$P{TV25_GEN_SEG.TRS_MRK_COD}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("<"), $P{TV25_GEN_SEG.TRS_MRK_COD}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_MRK_COD}.substring($P{TV25_GEN_SEG.TRS_MRK_COD}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_MRK_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_MRK_TYP" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_MRK_TYP}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_MRK_TYP}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_MRK_TYP}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_MRK_TYP}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">="),$P{TV25_GEN_SEG.TRS_MRK_TYP}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<="),$P{TV25_GEN_SEG.TRS_MRK_TYP}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf(">"),$P{TV25_GEN_SEG.TRS_MRK_TYP}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("<"), $P{TV25_GEN_SEG.TRS_MRK_TYP}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_MRK_TYP}.substring($P{TV25_GEN_SEG.TRS_MRK_TYP}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_MRK_TYP}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_YER" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_YER}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_YER}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_YER}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_YER}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_YER}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_YER}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_YER}.substring( $P{TV25_GEN_SEG.TRS_YER}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_YER}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_YER}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_YER}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf(">="),$P{TV25_GEN_SEG.TRS_YER}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_YER}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf("<="),$P{TV25_GEN_SEG.TRS_YER}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_YER}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf(">"),$P{TV25_GEN_SEG.TRS_YER}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_YER}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_YER}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf("<"), $P{TV25_GEN_SEG.TRS_YER}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_YER}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_YER}.substring($P{TV25_GEN_SEG.TRS_YER}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_YER}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_CTY_BUY_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">="),$P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<="),$P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf(">"),$P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("<"), $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_CTY_BUY_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_CTY_PRD_COD" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">="),$P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<="),$P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf(">"),$P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("<"), $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.substring($P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_CTY_PRD_COD}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_CRS" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_CRS}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_CRS}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_CRS}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_CRS}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_CRS}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_CRS}.substring( $P{TV25_GEN_SEG.TRS_CRS}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_CRS}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_CRS}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_CRS}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf(">="),$P{TV25_GEN_SEG.TRS_CRS}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_CRS}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf("<="),$P{TV25_GEN_SEG.TRS_CRS}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_CRS}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf(">"),$P{TV25_GEN_SEG.TRS_CRS}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_CRS}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_CRS}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf("<"), $P{TV25_GEN_SEG.TRS_CRS}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_CRS}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_CRS}.substring($P{TV25_GEN_SEG.TRS_CRS}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_CRS}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_VIN" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_VIN}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_VIN}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_VIN}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_VIN}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_VIN}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_VIN}.substring( $P{TV25_GEN_SEG.TRS_VIN}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_VIN}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_VIN}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_VIN}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf(">="),$P{TV25_GEN_SEG.TRS_VIN}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_VIN}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf("<="),$P{TV25_GEN_SEG.TRS_VIN}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_VIN}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf(">"),$P{TV25_GEN_SEG.TRS_VIN}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_VIN}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_VIN}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf("<"), $P{TV25_GEN_SEG.TRS_VIN}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_VIN}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_VIN}.substring($P{TV25_GEN_SEG.TRS_VIN}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_VIN}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_SHS" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_SHS}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_SHS}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_SHS}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_SHS}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_SHS}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_SHS}.substring( $P{TV25_GEN_SEG.TRS_SHS}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_SHS}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_SHS}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_SHS}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf(">="),$P{TV25_GEN_SEG.TRS_SHS}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_SHS}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf("<="),$P{TV25_GEN_SEG.TRS_SHS}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_SHS}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf(">"),$P{TV25_GEN_SEG.TRS_SHS}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_SHS}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_SHS}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf("<"), $P{TV25_GEN_SEG.TRS_SHS}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_SHS}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_SHS}.substring($P{TV25_GEN_SEG.TRS_SHS}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_SHS}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+	<variable name="TV25_GEN_SEG.TRS_ENG_NBR" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<initialValueExpression><![CDATA[($P{TV25_GEN_SEG.TRS_ENG_NBR}.length() <= 0 ? 
+  "n-a fost indicat"
+  : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("BETWEEN") >= 0 ? 
+    $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("TO_DATE")+19)  
+    + " - " + $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().lastIndexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().lastIndexOf("TO_DATE")+19) 
+    : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("TO_DATE") >= 0 ?
+    $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("TO_DATE")+9, $P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("TO_DATE")+19)
+      : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("IS NULL") >= 0 ? 
+        "este null" 
+        : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.toUpperCase().indexOf("IS NOT NULL") >= 0 ? 
+          "nu este null" 
+          : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("'") >= 0 ?
+            $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("'")+1,$P{TV25_GEN_SEG.TRS_ENG_NBR}.lastIndexOf("'")).replaceAll("'","")
+            : ( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">=") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<=") > 0 ?
+              $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">=")+2, $P{TV25_GEN_SEG.TRS_ENG_NBR}.lastIndexOf(" AND ") )
+              + " - " +
+              $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.lastIndexOf("<=")+2, $P{TV25_GEN_SEG.TRS_ENG_NBR}.length() )
+              : ( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<") < 0 ?
+                $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">="),$P{TV25_GEN_SEG.TRS_ENG_NBR}.length() )
+                : ( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">") < 0 ?
+                  $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<="),$P{TV25_GEN_SEG.TRS_ENG_NBR}.length() ) 
+                  : ( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=") < 0 ?
+                    $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf(">"),$P{TV25_GEN_SEG.TRS_ENG_NBR}.length() )
+                    : ($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<") > 0 && $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=") < 0 ?
+                      $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("<"), $P{TV25_GEN_SEG.TRS_ENG_NBR}.length() )
+                      : ( $P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=") > 0 ?
+                        $P{TV25_GEN_SEG.TRS_ENG_NBR}.substring($P{TV25_GEN_SEG.TRS_ENG_NBR}.indexOf("=")+1, $P{TV25_GEN_SEG.TRS_ENG_NBR}.length() )
+                        : "HZ"
+                      )
+                    )
+                  )
+                )
+              )
+            ) 
+          )
+        )
+      )
+    )
+  ) 
+)
+]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="242"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="814"
+						height="26"
+						key="staticText"/>
+					<box>					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[TV25 Informatii generale]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="41"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.IDE_REG_DAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="41"
+						width="118"
+						height="13"
+						key="staticText-2"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data inregistrare TV25:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="28"
+						width="689"
+						height="13"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="93"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.PRS_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="67"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.DOC_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="80"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.PRS_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="197"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_VIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="210"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_SHS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="223"
+						width="689"
+						height="13"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_ENG_NBR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="93"
+						width="118"
+						height="13"
+						key="staticText-3"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Nume:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="67"
+						width="118"
+						height="13"
+						key="staticText-4"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Birou/Post vamal inregistrare:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="80"
+						width="118"
+						height="13"
+						key="staticText-5"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[IDNP:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="197"
+						width="118"
+						height="13"
+						key="staticText-7"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Vin cod:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="210"
+						width="118"
+						height="13"
+						key="staticText-8"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Sasiu:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="223"
+						width="118"
+						height="13"
+						key="staticText-9"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Nr motor:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="28"
+						width="118"
+						height="13"
+						key="staticText-10"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Data formare raport:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="239"
+						width="790"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="54"
+						width="689"
+						height="13"
+						key="textField-32"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TV25_REF_NBR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="54"
+						width="118"
+						height="13"
+						key="staticText-41"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Numar TV25:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="106"
+						width="689"
+						height="13"
+						key="textField-33"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_NBR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="106"
+						width="118"
+						height="13"
+						key="staticText-42"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Nr. transport:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="119"
+						width="689"
+						height="13"
+						key="textField-34"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_MRK_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="119"
+						width="118"
+						height="13"
+						key="staticText-43"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Marca:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="132"
+						width="689"
+						height="13"
+						key="textField-35"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_MRK_TYP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="132"
+						width="118"
+						height="13"
+						key="staticText-44"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Tip marca:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="145"
+						width="689"
+						height="13"
+						key="textField-36"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_YER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="145"
+						width="118"
+						height="13"
+						key="staticText-45"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[An producere:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="158"
+						width="689"
+						height="13"
+						key="textField-37"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_CTY_BUY_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="158"
+						width="118"
+						height="13"
+						key="staticText-46"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Tara cumparare:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="171"
+						width="689"
+						height="13"
+						key="textField-38"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_CTY_PRD_COD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="171"
+						width="118"
+						height="13"
+						key="staticText-47"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Tara productie:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="125"
+						y="184"
+						width="689"
+						height="13"
+						key="textField-39"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left">
+						<font fontName="Helvetica" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{TV25_GEN_SEG.TRS_CRS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="184"
+						width="118"
+						height="13"
+						key="staticText-48"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Caroserie:]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="25"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="790"
+						height="25"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="62"
+						y="0"
+						width="84"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Nr. document]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="186"
+						y="0"
+						width="62"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-12"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Inspector Vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="618"
+						y="10"
+						width="62"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-13"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Nr. eng.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="248"
+						y="0"
+						width="42"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-24"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Anul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="146"
+						y="0"
+						width="40"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-25"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Post Vamal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="62"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-28"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tip document]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="496"
+						y="10"
+						width="122"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-49"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[VIN cod]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="290"
+						y="10"
+						width="82"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-50"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tipul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="372"
+						y="10"
+						width="84"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-51"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Marca]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="456"
+						y="10"
+						width="40"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-52"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Anul]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="680"
+						y="10"
+						width="40"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-53"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Capacitatea]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="720"
+						y="10"
+						width="35"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-54"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tara Prod.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="755"
+						y="10"
+						width="35"
+						height="15"
+						forecolor="#FFFFFF"
+						key="staticText-55"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Tara Exp.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="290"
+						y="0"
+						width="500"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-56"/>
+					<box>					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6"/>
+					</textElement>
+				<text><![CDATA[Vehicul]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="62"
+						y="0"
+						width="84"
+						height="10"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DOC_REF}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="186"
+						y="0"
+						width="62"
+						height="10"
+						forecolor="#000000"
+						key="textField-2"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{FULLNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="618"
+						y="0"
+						width="62"
+						height="10"
+						forecolor="#000000"
+						key="textField-3"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_ENG_NBR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="248"
+						y="0"
+						width="42"
+						height="10"
+						forecolor="#000000"
+						key="textField-4"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{IDE_REG_YER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="146"
+						y="0"
+						width="40"
+						height="10"
+						forecolor="#000000"
+						key="textField-6"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DOC_CUO_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="62"
+						height="10"
+						forecolor="#000000"
+						key="textField-19"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TIP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="496"
+						y="0"
+						width="122"
+						height="10"
+						forecolor="#000000"
+						key="textField-40"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_VIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="290"
+						y="0"
+						width="82"
+						height="10"
+						forecolor="#000000"
+						key="textField-41"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_MRK_TYP}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="372"
+						y="0"
+						width="84"
+						height="10"
+						forecolor="#000000"
+						key="textField-42"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_MRK_NAM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="456"
+						y="0"
+						width="40"
+						height="10"
+						forecolor="#000000"
+						key="textField-43"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TRS_YER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="680"
+						y="0"
+						width="40"
+						height="10"
+						forecolor="#000000"
+						key="textField-44"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TRS_ENG_VOL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="720"
+						y="0"
+						width="35"
+						height="10"
+						forecolor="#000000"
+						key="textField-45"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_CTY_PRD_COD}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="755"
+						y="0"
+						width="35"
+						height="10"
+						forecolor="#000000"
+						key="textField-46"
+						stretchType="RelativeToTallestObject"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Helvetica" pdfFontName="Helvetica" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRS_CTY_BUY_COD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="587"
+						y="5"
+						width="188"
+						height="14"
+						forecolor="#000000"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Pagina " + $V{PAGE_NUMBER} + " din "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="778"
+						y="5"
+						width="36"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="3"
+						width="790"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="0"
+						y="5"
+						width="381"
+						height="14"
+						forecolor="#FF0033"
+						key="staticText-1"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Informatia de pe pagina data poate fi folosita numai pentru uz de serviciu ]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="20"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

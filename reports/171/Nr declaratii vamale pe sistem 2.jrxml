@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Nr declaratii vamale pe sistem 2"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="814"
+		 pageHeight="595"
+		 columnWidth="814"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="ANUL_CURENT" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["2007"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANUL_LUNA_CURENT" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["200702"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANUL_TRECUT" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["2006"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ANUL_LUNA_TRECUT" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["200602"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select ' Declaratii vamale' id, null an_curent, null luna_curent, null an_trecut, null luna_trecut, null an_devieri, null luna_devieri from dual
+UNION ALL
+select '      Import' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from sad_general_segment 
+where status IN('Assessed','Paid')
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and ide_typ_sad = 'IM' 
+UNION ALL
+select '      Export' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from sad_general_segment 
+where status IN('Assessed','Paid')
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and ide_typ_sad = 'EX' 
+UNION ALL
+select '      Tranzit (toate in afara de Anulate)' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from t1_general_segment 
+where status NOT IN('Cancelled')
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+UNION ALL
+select ' PV14' id, null an_curent, null luna_curent, null an_trecut, null luna_trecut, null an_devieri, null luna_devieri from dual
+UNION ALL
+select '      Persoane fizice' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from pv14_gen_seg
+where status='Registered'
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and prs_typ = 0
+UNION ALL
+select '      Persoane juridice' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from pv14_gen_seg
+where status='Registered'
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and prs_typ = 1
+UNION ALL
+select ' TV25' id, null an_curent, null luna_curent, null an_trecut, null luna_trecut, null an_devieri, null luna_devieri from dual
+UNION ALL
+select '      Persoane fizice' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from tv25_gen_seg
+where status='Registered'
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and prs_typ = 0
+UNION ALL
+select '      Persoane juridice' id, 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) an_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end) luna_curent,
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) an_trecut,
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end) luna_trecut,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 an_devieri,
+round(sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)/
+case sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end ,2) * 100 luna_devieri
+from tv25_gen_seg
+where status='Registered'
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and prs_typ = 1
+UNION ALL
+select ' Timpul mediu de vamuire' id, null an_curent, null luna_curent, null an_trecut, null luna_trecut, null an_devieri, null luna_devieri from dual
+UNION ALL
+select id, an_curent, luna_curent, an_trecut, luna_trecut, 
+round(an_curent / case when an_trecut = 0 then 1000000000 else an_trecut end * 100) an_devieri, 
+round(luna_curent / case when luna_trecut = 0 then 1000000000 else luna_trecut end * 100) luna_devieri 
+from ( 
+select '      De la inregistrare (minute)' id, 
+round(
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then (DATE_ASSESSED-DATE_REGISTERED)*24*60 else 0 end)/
+case
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else 
+sum(case when ide_reg_dat between to_date($P{ANUL_CURENT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)
+end) an_curent,
+round(
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then (DATE_ASSESSED-DATE_REGISTERED)*24*60 else 0 end)/
+case 
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_CURENT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm')) then 1 else 0 end)
+end) luna_curent,
+round(
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then (DATE_ASSESSED-DATE_REGISTERED)*24*60 else 0 end)/
+case 
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end) an_trecut,
+round(
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then (DATE_ASSESSED-DATE_REGISTERED)*24*60 else 0 end)/
+case 
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+when 0 then 1000000000 else
+sum(case when ide_reg_dat between to_date($P{ANUL_LUNA_TRECUT}||'01','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_TRECUT},'yyyymm')) then 1 else 0 end)
+end) luna_trecut
+from sad_general_segment,
+sad_status_datetime
+where sad_general_segment.instanceid = sad_status_datetime.instanceid
+and status in('Assessed','Paid')
+and ide_reg_dat between to_date($P{ANUL_TRECUT}||'0101','yyyymmdd') and last_day(to_date($P{ANUL_LUNA_CURENT},'yyyymm'))
+and sad_status_datetime.date_assessed-sad_status_datetime.date_registered < 0.2083
+)]]></queryString>
+
+	<field name="ID" class="java.lang.String"/>
+	<field name="AN_CURENT" class="java.math.BigDecimal"/>
+	<field name="LUNA_CURENT" class="java.math.BigDecimal"/>
+	<field name="AN_TRECUT" class="java.math.BigDecimal"/>
+	<field name="LUNA_TRECUT" class="java.math.BigDecimal"/>
+	<field name="AN_DEVIERI" class="java.math.BigDecimal"/>
+	<field name="LUNA_DEVIERI" class="java.math.BigDecimal"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="35"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="814"
+						height="35"
+						forecolor="#000000"
+						backcolor="#808080"
+						key="rectangle"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="142"
+						height="25"
+						forecolor="#FFFFFF"
+						key="staticText-50"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Denumirea indicatorului]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="142"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-65"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Cumulativ de la inceputul anului]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="254"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-69"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[inclusiv pentru luna raportata]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="366"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-70"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Cumulativ de la inceputul anului]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="478"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-71"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[inclusiv pentru luna raportata]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="142"
+						y="0"
+						width="224"
+						height="12"
+						forecolor="#FFFFFF"
+						key="staticText-72"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Perioada curenta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="366"
+						y="0"
+						width="224"
+						height="12"
+						forecolor="#FFFFFF"
+						key="staticText-73"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Perioada corespunzatoare a anului precedent]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="590"
+						y="0"
+						width="224"
+						height="12"
+						forecolor="#FFFFFF"
+						key="staticText-74"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Devieri fata de perioada corespunzatoare a anului precedent (%)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="590"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-75"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[Cumulativ de la inceputul anului]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="702"
+						y="12"
+						width="112"
+						height="13"
+						forecolor="#FFFFFF"
+						key="staticText-76"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[inclusiv pentru luna raportata]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="142"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-77"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="254"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-78"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="366"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-79"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[3]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="478"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-80"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[4]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="590"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-81"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[5 = 1 / 3 * 100%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="702"
+						y="25"
+						width="112"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-82"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[6 = 2 / 4 * 100%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="25"
+						width="142"
+						height="10"
+						forecolor="#FFFFFF"
+						key="staticText-83"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+				<text><![CDATA[A]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="10"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="142"
+						height="10"
+						forecolor="#000000"
+						key="textField"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="142"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-56"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{AN_CURENT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="254"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-58"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{LUNA_CURENT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="366"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-59"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{AN_TRECUT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="478"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-60"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{LUNA_TRECUT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="590"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-61"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{AN_DEVIERI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="702"
+						y="0"
+						width="112"
+						height="10"
+						forecolor="#000000"
+						key="textField-62"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" topPadding="1" leftBorder="None" leftBorderColor="#000000" leftPadding="1" rightBorder="Thin" rightBorderColor="#000000" rightPadding="1" bottomBorder="Thin" bottomBorderColor="#000000" bottomPadding="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial Narrow" size="6" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{LUNA_DEVIERI}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

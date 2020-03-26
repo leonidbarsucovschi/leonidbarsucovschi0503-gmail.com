@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.5.3 
+Built-By: alexb
+Created-By: 1.6.0_03-b05 (Sun Microsystems Inc.)
+
+Name: 
+Specification-Title: siivportal-web
+Implementation-Title: 
+Implementation-Version: 0.1
+Specification-Version: 0.1
+Specification-Vendor: UTI Systems
+Implementation-Vendor: UTI Systems
+
